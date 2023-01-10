@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API } from "../environment/constant";
-import { BlinkingCursorTextBuilder } from "react-animated-text-builders";
 import "./login.css";
 
 function Login() {
@@ -9,7 +8,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   const login = async (e) => {
     e.preventDefault();
@@ -55,37 +53,10 @@ function Login() {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen back">
-        <progress className="progress w-full loading"></progress>
-        <div className="wait">
-          <BlinkingCursorTextBuilder
-            textStyle={{
-              fontWeight: "bold",
-              font: "Times New Roman",
-              fontSize: "18px",
-            }}
-            style={{
-              transform: "rotate(-10deg)",
-              marginTop: "10px",
-              marginBottom: "10px",
-            }}
-            cursorComponent={<div style={{ color: "green" }}>......</div>}
-            blinkTimeAfterFinish={-1}
-          >
-            LOADING
-          </BlinkingCursorTextBuilder>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
+      {loading? <progress className="progress primary w-full loading"></progress>:""}
       <div className="hero min-h-screen bg-base-200">
-        {/* <progress className="progress w-full loading"></progress> */}
-
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
             <h1 className="text-5xl font-bold">Login now!</h1>
@@ -107,7 +78,9 @@ function Login() {
                     placeholder="email"
                     className="input input-bordered"
                     value={email}
+                    name="email"
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="form-control">
@@ -120,6 +93,9 @@ function Login() {
                     className="input input-bordered"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    maxLength={16}
                   />
                   <label className="label">
                     <a href="#" className="label-text-alt link link-hover">
