@@ -9,6 +9,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isEnabled, setEnable] = useState(false);
 
   const [fields, errors, form] = useFormInputValidation(
     {
@@ -25,7 +26,7 @@ function Login() {
     e.preventDefault();
 
     const isValid = await form.validate(e);
-    console.log(fields, errors);
+  
     if (isValid) {
       setLoading(true);
 

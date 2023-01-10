@@ -16,3 +16,7 @@
     transform: translateY(-50%);
     justify-content: center;
 }
+
+.error{
+    color: red;
+}
