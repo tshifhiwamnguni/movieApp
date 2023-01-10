@@ -40,7 +40,7 @@ function Login() {
         <div className="card w-96 bg-error shadow-xl">
           <div className="card-body">
             <h2 className="card-title">Error!</h2>
-            <p>An error occured: {error}</p>
+            <p>{error}</p>
             <div className="card-actions justify-end">
               <button
                 className="btn btn-outline btn-ghost"
