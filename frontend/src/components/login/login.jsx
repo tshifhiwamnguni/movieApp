@@ -6,10 +6,7 @@ import { useFormInputValidation } from "react-form-input-validation";
 
 function Login() {
   const [error, setError] = useState(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isEnabled, setEnable] = useState(false);
 
   const [fields, errors, form] = useFormInputValidation(
     {
@@ -21,6 +18,9 @@ function Login() {
       password: "required|min:6",
     }
   );
+
+
+  
 
   const login = async (e) => {
     e.preventDefault();
@@ -134,7 +134,7 @@ function Login() {
                   </label>
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" type="submit">
+                  <button className="btn btn-primary" type="submit" disabled={form.isValidForm}>
                     Login
                   </button>
                 </div>
