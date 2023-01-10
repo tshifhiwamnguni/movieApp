@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
+import { useFormInputValidation } from "react-form-input-validation";
 
 function Login() {
   const [error, setError] = useState(null);
@@ -9,26 +10,41 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [fields, errors, form] = useFormInputValidation(
+    {
+      identifier: "",
+      password: "",
+    },
+    {
+      identifier: "required|email",
+      password: "required|min:6",
+    }
+  );
+
   const login = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    const isValid = await form.validate(e);
+    console.log(fields, errors);
+    if (isValid) {
+      setLoading(true);
 
-    const data = {
-      identifier: email,
-      password: password,
-    };
-    await axios
-      .post(`${API}/auth/local`, data)
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error.response.data.error.details.errors);
+      const data = {
+        identifier: fields.identifier,
+        password: fields.password,
+      };
+      await axios
+        .post(`${API}/auth/local`, data)
+        .then(({ data }) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error.response.data.error.details.errors);
 
-        setError(error.response.data.error.message);
-      })
-      .finally(() => setLoading(false));
+          setError(error.response.data.error.message);
+        })
+        .finally(() => setLoading(false));
+    }
   };
 
   if (error) {
@@ -55,7 +71,11 @@ function Login() {
 
   return (
     <div>
-      {loading? <progress className="progress primary w-full loading"></progress>:""}
+      {loading ? (
+        <progress className="progress primary w-full loading"></progress>
+      ) : (
+        ""
+      )}
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
@@ -68,7 +88,7 @@ function Login() {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
-              <form onSubmit={login}>
+              <form onSubmit={login} noValidate autoComplete="off">
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
@@ -77,11 +97,15 @@ function Login() {
                     type="email"
                     placeholder="email"
                     className="input input-bordered"
-                    value={email}
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="identifier"
+                    onBlur={form.handleBlurEvent}
+                    onChange={form.handleChangeEvent}
+                    value={fields.identifier}
                     required
                   />
+                  <label className="error">
+                    {errors.identifier ? errors.identifier : ""}
+                  </label>
                 </div>
                 <div className="form-control">
                   <label className="label">
@@ -91,12 +115,17 @@ function Login() {
                     type="password"
                     placeholder="password"
                     className="input input-bordered"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    onBlur={form.handleBlurEvent}
+                    onChange={form.handleChangeEvent}
+                    value={fields.password}
                     required
                     minLength={6}
                     maxLength={16}
                   />
+                  <label className="error">
+                    {errors.password ? errors.password : ""}
+                  </label>
                   <label className="label">
                     <a href="#" className="label-text-alt link link-hover">
                       Forgot password?
