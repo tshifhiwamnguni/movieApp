@@ -3,79 +3,105 @@ import {CgMenuGridR} from 'react-icons/cg'
 import {AiTwotoneHome} from 'react-icons/ai'
 import {TbCalendarStats} from 'react-icons/tb'
 import {RiReservedFill} from 'react-icons/ri'
-import {FaHourglassHalf} from 'react-icons/fa'
+import {FaHourglassHalf, FaWindowClose} from 'react-icons/fa'
 import { CiSettings } from 'react-icons/ci'
+import {ImProfile} from 'react-icons/im'
+import {IoMdLogOut} from 'react-icons/io'
 
 function home() {
   return (
 
     <>
-    <div>home</div>
 
-    <div className="navbar bg-red-100">
+<div className="drawer">
+  <input id="my-drawer-3" type="checkbox" className="drawer-toggle" /> 
+
+  <div className="drawer-content flex flex-col overflow-scroll">
   
-  <div className="flex-1 drawer-content">
-    <label htmlFor="my-drawer" className="btn btn-primary drawer-button"><CgMenuGridR/></label>
-    <a className="btn btn-ghost normal-case text-xl">MovieApp</a>
-    
-  </div>
-  <div className="flex-none">
-    <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn btn-ghost btn-circle">
-        <div className="indicator">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-          <span className="badge badge-sm indicator-item">8</span>
-        </div>
-      </label>
-      <div tabIndex={0} className="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow">
-        <div className="card-body">
-          <span className="font-bold text-lg">8 Items</span>
-          <span className="text-info">Subtotal: $999</span>
-          <div className="card-actions">
-            <button className="btn btn-primary btn-block">View cart</button>
-          </div>
-        </div>
+    <div className="w-screen navbar bg-base-300">
+      <div className="flex-none lg:hidden">
+        <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-6 h-6 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </label>
+      </div> 
+      <div className="flex-1 px-2 mx-2">MovieApp</div>
+      <div className="flex-none hidden lg:block m-2">
+        <ul className="menu menu-horizontal flex gap-2">
+        
+        <li className='bg-green-400'><a><AiTwotoneHome />Home</a></li>
+        <li className='bg-green-400'><a><ImProfile />Profile</a></li>
+        <li className='bg-green-400'><a><RiReservedFill />Statistics</a></li>
+        <li className='bg-green-400'><a><FaHourglassHalf />Coming Soon</a></li>
+        <li className='bg-green-400'><a><IoMdLogOut />Logout</a></li>
+        </ul>
       </div>
     </div>
-    <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-        <div className="w-10 rounded-full">
-          <img src="https://placeimg.com/80/80/people" />
-        </div>
-      </label>
-      <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-        <li>
-          <a className="justify-between">
-            Profile
-            <span className="badge">New</span>
-          </a>
-        </li>
-        <li><a>Settings</a></li>
-        <li><a>Logout</a></li>
-      </ul>
-    </div>
+ 
+<div class="rounded overflow-hidden shadow-lg ">
+  <img class="w-full" src="https://placeimg.com/80/80/people" alt="Mountain"/>
+  <div class="font-bold text-xl">Mountain</div>
+  <div class="px-6 pt-4 pb-2 w-48">
+    
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+  </div>
+
+</div>
+
+<div class="rounded overflow-hidden shadow-lg">
+  <img class="w-full" src="https://placeimg.com/80/80/people" alt="River"/>
+  <div class="font-bold text-xl">River</div>
+
+  <div class="px-6 pt-4 pb-2">
+    
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#summer</span>
   </div>
 </div>
 
-<div className="drawer">
-  <input id="my-drawer" type="checkbox" className="drawer-toggle" />
- 
-  <div className="drawer-side">
-    <label htmlFor="my-drawer" className="drawer-overlay"></label>
-    <ul className="menu p-4 w-80 bg-base-100 text-base-content">
-     
-      <li className='flex flex-row'><h1><AiTwotoneHome /></h1><a>Home</a></li>
-      <li className='flex flex-row'><h1><TbCalendarStats /></h1><a>Statistics</a></li>
-      <li className='flex flex-row'><h1><RiReservedFill /></h1><a>Bookings</a></li>
+<div class="rounded overflow-hidden shadow-lg">
+  <img class="w-full" src="https://placeimg.com/80/80/people" alt="Mountain"/>
+  <div class="font-bold text-xl">Mountain</div>
+  <div class="px-6 pt-4 pb-2">
+    
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+  </div>
+</div>
+
+<div class="rounded overflow-hidden shadow-lg">
+  <img class="w-full" src="https://placeimg.com/80/80/people" alt="River"/>
+  <div class="font-bold text-xl">River</div>
+  <div class="px-6 pt-4 pb-2">
+    
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#summer</span>
+    </div>
+    </div>
+  </div> 
+
+  <div className="drawer-side relative top-16">
+    
+    <label htmlFor="my-drawer-3" className="drawer-overlay"></label> 
+    <ul className="menu p-4 w-80 bg-base-100">
+   
+    <li className='flex flex-row'><h1><AiTwotoneHome /></h1><a>Home</a></li>
+      <li className='flex flex-row'><h1><ImProfile /></h1><a>Profile</a></li>
       <li className='flex flex-row'><h1><FaHourglassHalf /></h1><a>Coming Soon</a></li>
-      <li className='flex flex-row'><h1><CiSettings /></h1><a>Settings</a></li>
+      <li className='flex flex-row'><h1><RiReservedFill /></h1><a>Statistics</a></li>
+      <li className='flex flex-row'><h1><IoMdLogOut /></h1><a>Logout</a></li>
       
     </ul>
   </div>
+
 </div>
 
 </>
-  )
+  );
 }
 
 export default home;
