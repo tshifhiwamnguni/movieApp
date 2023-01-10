@@ -10,10 +10,12 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const register = async (e) => {
+
+  const login = async (e) => {
     e.preventDefault();
 
     setLoading(true);
+
     const data = {
       identifier: email,
       password: password,
@@ -23,13 +25,34 @@ function Login() {
       .then(({ data }) => {
         console.log(data);
       })
-      .catch((error) => setError(error))
+      .catch((error) => {
+        console.log(error.response.data.error.details.errors);
+
+        setError(error.response.data.error.message);
+      })
       .finally(() => setLoading(false));
   };
 
   if (error) {
     // Print errors if any
-    return <div>An error occured: {error.message}</div>;
+    return (
+      <div className="wait">
+        <div className="card w-96 bg-error shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Error!</h2>
+            <p>An error occured: {error}</p>
+            <div className="card-actions justify-end">
+              <button
+                className="btn btn-outline btn-ghost"
+                onClick={() => window.location.reload()}
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (loading) {
@@ -74,7 +97,7 @@ function Login() {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
-              <form onSubmit={register}>
+              <form onSubmit={login}>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
