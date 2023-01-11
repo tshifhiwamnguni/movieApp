@@ -1,20 +1,37 @@
 import { React, useRef, useState, useEffect } from "react";
 import axios from "axios";
+import { useFormInputValidation } from "react-form-input-validation";
 import emailjs from "@emailjs/browser";
 import Cookies from "universal-cookie";
 function ForgotPassword() {
   const form = useRef();
+  
   const [code, setCode] = useState(12);
+  const [fields, errors, forms] = useFormInputValidation(
 
+    {
+      reply_to: "",
+      message : "",
+    },
+    {
+      reply_to: "required|email",
+      message : "required",
+    }
+  );
   const cookies = new Cookies();
 
   useEffect(() => {
     setCode(parseInt(1245444 + Math.random() * (12454443445 - 1245444)));
   }, []);
 
-  function forgot_Password(e) {
+  const  forgot_Password=async (e)=> {
     e.preventDefault();
-
+    const isValid = await forms.validate(e);
+    const data = {
+      identifier: fields.email,
+      
+    };
+    if (isValid) {
     emailjs
       .sendForm(
         "service_n92xeeo",
@@ -34,6 +51,7 @@ function ForgotPassword() {
       );
     e.target.reset();
   }
+}
 
   return (
     <>
@@ -50,9 +68,16 @@ function ForgotPassword() {
                   type="text"
                   name="reply_to"
                   placeholder="email"
+                  value={fields.reply_to}
+                  onChange={forms.handleChangeEvent}
+                  required
+                  onBlur={forms.handleBlurEvent}
                   className="input input-bordered"
-                />
+                /> <label className="error">
+                    {errors.reply_to ? errors.reply_to : ""}
+                  </label>
               </div>
+             
               <input
                 name="message"
                 hidden

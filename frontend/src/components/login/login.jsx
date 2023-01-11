@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, } from "react";
 import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
 import { setToken, setData } from "../environment/helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import ForgotPassword from "../passwords/forgot_password/ForgotPassword";
 
 function Login() {
   const [error, setError] = useState(null);
@@ -21,6 +22,11 @@ function Login() {
       password: "required|min:6",
     }
   );
+
+
+  function move(){
+    navigate('forgot',{replace: true})
+  }
 
   const login = async (e) => {
     e.preventDefault();
@@ -132,11 +138,10 @@ function Login() {
                   <label className="error">
                     {errors.password ? errors.password : ""}
                   </label>
-                  <label className="label">
-                    <a href="#" className="label-text-alt link link-hover">
-                      Forgot password?
-                    </a>
-                  </label>
+  
+                    
+                    
+                        <span>Forgot password? click <Link className="link"  to={'/forgot'}>here</Link></span>
                 </div>
                 <div className="form-control mt-6">
                   <button

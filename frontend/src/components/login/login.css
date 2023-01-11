@@ -6,7 +6,9 @@
     /* margin-top: 50%; */
     /* background-color: rgba(0, 0, 0, 0.409); */
 }
-
+.link{
+    text-decoration: underline;
+}
 .wait{
     position: absolute;
     display: flex;
