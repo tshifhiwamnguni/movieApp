@@ -3,11 +3,14 @@ import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
+import { setToken, setData } from "../environment/helpers";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   const [fields, errors, form] = useFormInputValidation(
     {
       identifier: "",
@@ -19,14 +22,11 @@ function Login() {
     }
   );
 
-
-  
-
   const login = async (e) => {
     e.preventDefault();
 
     const isValid = await form.validate(e);
-  
+
     if (isValid) {
       setLoading(true);
 
@@ -37,6 +37,11 @@ function Login() {
       await axios
         .post(`${API}/auth/local`, data)
         .then(({ data }) => {
+          const { jwt, user } = data;
+          setToken(jwt);
+          navigate("/");
+
+          window.localStorage.setItem("userData", JSON.stringify(user));
           console.log(data);
         })
         .catch((error) => {
@@ -134,7 +139,11 @@ function Login() {
                   </label>
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" type="submit" disabled={form.isValidForm}>
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                    disabled={form.isValidForm}
+                  >
                     Login
                   </button>
                 </div>

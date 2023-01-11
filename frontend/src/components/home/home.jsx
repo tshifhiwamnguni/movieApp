@@ -8,7 +8,7 @@ function Home() {
     function move(){
         navigate('log');
     }
-    
+
   return (
     <div>
       <div className="hero min-h-screen bg-base-200">

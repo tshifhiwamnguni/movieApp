@@ -14,3 +14,7 @@ export const setToken = (token) => {
 export const removeToken = () => {
   localStorage.removeItem(AUTH_TOKEN);
 };
+
+export const setData = (data) =>{
+    return data;
+}
