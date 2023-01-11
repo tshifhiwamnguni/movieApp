@@ -5,7 +5,6 @@ import "./App.css";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(()=> import('./components/home/home'));
-const Splash = lazy(()=> import('./components/splashpage/Splash'))
 
 function App() {
   return (
@@ -13,9 +12,8 @@ function App() {
       <Router>
         <Suspense fallback={<div>Loading....</div>}>
           <Routes>
-            <Route path='/' element={<Splash/>}></Route>
+            <Route path='/' element={<Home/>}></Route>
             <Route path='log' element={<Login/>}></Route>
-            <Route path='dashboard' element={<Home/>}></Route>
           </Routes>
         </Suspense>
       </Router>
