@@ -2,6 +2,7 @@ import React from "react";
 import womanKing from '../../../src/assets/womanKing.jpeg'
 function Dashboard() {
     return (
+      
       <container className="min-h-screen">
         <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 xs:grid-cols-1">
   
@@ -49,38 +50,9 @@ function Dashboard() {
             </div>
           </div>
   
-          {/* <div className="card w-96 bg-primary rounded text-primary-content mt-16">
-            <div className="card-body ">
-              <h2 className="card-title flex justify-center ">Past Events</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
-              <div className="card-actions justify-end">
-  
-              </div>
-            </div>
-          </div>
-  
-          <div className="card w-96 bg-primary rounded text-primary-content mt-16">
-            <div className="card-body">
-              <h2 className="card-title flex justify-center ">Ongoing Events</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
-              <div className="card-actions justify-end">
-  
-              </div>
-            </div>
-          </div>
-  
-          <div className="card w-96 bg-primary rounded text-primary-content mt-16">
-            <div className="card-body">
-              <h2 className="card-title flex justify-center ">Venue Events</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
-              <div className="card-actions justify-end">
-  
-              </div>
-            </div>
-          </div> */}
-  
         </div>
       </container>
+
     );
   }
 
