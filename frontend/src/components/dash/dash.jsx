@@ -6,6 +6,8 @@ function Dashboard() {
         <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 xs:grid-cols-1">
   
           <div className="card w-96 bg-primary rounded text-primary-content mt-16">
+          
+
             <div className="card-body text-center">
               <img class="w-screen" src={womanKing} alt="Mountain"/>
               <div className="flex justify-between">
