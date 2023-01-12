@@ -83,7 +83,7 @@ function Home() {
               </ul>
             </div>
           </div>
-          <div className="flex justify-evenly align-center gap-2">
+          <div className="flex justify-center align-center">
             <Dashboard />
           </div>
         </div>
