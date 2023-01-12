@@ -3,7 +3,7 @@ import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
-import { setToken, setData } from "../environment/helpers";
+import { setToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import {ERROR, SUCCESS} from '../environment/toast'
@@ -41,7 +41,7 @@ function Login() {
         .then(({ data }) => {
           const { jwt, user } = data;
           setToken(jwt);
-          SUCCESS("Successfully logged in!")
+          navigate("/dashboard");
 
           window.localStorage.setItem("userData", JSON.stringify(user));
           console.log(data);
