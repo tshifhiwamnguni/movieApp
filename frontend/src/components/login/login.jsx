@@ -39,7 +39,7 @@ function Login() {
         .then(({ data }) => {
           const { jwt, user } = data;
           setToken(jwt);
-          navigate("/");
+          navigate("/dashboard");
 
           window.localStorage.setItem("userData", JSON.stringify(user));
           console.log(data);
