@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CgMenuGridR } from 'react-icons/cg'
 import { AiTwotoneHome } from 'react-icons/ai'
 import { TbCalendarStats } from 'react-icons/tb'
@@ -7,9 +7,23 @@ import { FaHourglassHalf, FaWindowClose } from 'react-icons/fa'
 import { CiSettings } from 'react-icons/ci'
 import { ImProfile } from 'react-icons/im'
 import { IoMdLogOut } from 'react-icons/io'
-import Dashboard from '../dash/dash'
+import Dashboard from '../dash/dash';
+import { getToken, removeToken } from '../environment/helpers';
+import { useNavigate } from 'react-router-dom'
 
-function home() {
+function Home() {
+  const navigate = useNavigate();
+  
+  useEffect(()=>{
+    if(!localStorage.getItem('jwt')){
+      navigate('/admin/login/', {replace: true});
+    }
+  },[])
+
+  function logout(){
+    removeToken();
+    navigate('/admin/login/', {replace: true});
+  }
   return (
 
     <>
@@ -33,7 +47,7 @@ function home() {
                 <li className='bg-green-400'><a><ImProfile />Profile</a></li>
                 <li className='bg-green-400'><a><RiReservedFill />Statistics</a></li>
                 <li className='bg-green-400'><a><FaHourglassHalf />Coming Soon</a></li>
-                <li className='bg-green-400'><a><IoMdLogOut />Logout</a></li>
+                <li className='bg-green-400' onClick={logout}><a><IoMdLogOut />Logout</a></li>
               </ul>
             </div>
           </div>
@@ -49,7 +63,7 @@ function home() {
             <li className='flex flex-row'><h1><ImProfile /></h1><a>Profile</a></li>
             <li className='flex flex-row'><h1><FaHourglassHalf /></h1><a>Coming Soon</a></li>
             <li className='flex flex-row'><h1><RiReservedFill /></h1><a>Statistics</a></li>
-            <li className='flex flex-row'><h1><IoMdLogOut /></h1><a>Logout</a></li>
+            <li className='flex flex-row' onClick={logout}><h1><IoMdLogOut /></h1><a>Logout</a></li>
           </ul>
         </div>
 
@@ -59,4 +73,4 @@ function home() {
   );
 }
 
-export default home;
+export default Home;
