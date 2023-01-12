@@ -5,11 +5,10 @@ import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
 import { setToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import {ERROR, SUCCESS} from '../environment/toast'
+import { ToastContainer } from "react-toastify";
+import { ERROR, SUCCESS } from "../environment/toast";
 
 function Login() {
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -40,23 +39,24 @@ function Login() {
         .post(`${API}/auth/local`, data)
         .then(({ data }) => {
           const { jwt, user } = data;
-          setToken(jwt);
-          navigate("/dashboard");
 
-          window.localStorage.setItem("userData", JSON.stringify(user));
-          console.log(data);
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-          
+          console.log(user);
+
+          setToken(jwt);
+          navigate("/admin/", {replace: true})
+          SUCCESS(`Welcome ${user.username}`)
         })
         .catch((error) => {
           console.log(error.response.data.error.details.errors);
-          ERROR(error.response.data.error.message)
+          ERROR(error.response.data.error.message);
           // setError(error.response.data.error.message);
-
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2000);
+        });
     }
   };
 
@@ -80,7 +80,7 @@ function Login() {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
-              <form onSubmit={login} noValidate autoComplete="off">
+              <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
@@ -125,10 +125,7 @@ function Login() {
                   </label>
                 </div>
                 <div className="form-control mt-6">
-                  <button
-                    className="btn btn-primary"
-                    type="submit"
-                  >
+                  <button className="btn btn-primary" type="submit">
                     Login
                   </button>
                 </div>
