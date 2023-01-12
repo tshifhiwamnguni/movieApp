@@ -3,7 +3,7 @@ import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
-import { setToken, setData } from "../environment/helpers";
+import { setToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
 
 function Login() {

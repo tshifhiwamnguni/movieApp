@@ -59,8 +59,4 @@ function home() {
   );
 }
 
-<<<<<<< HEAD
 export default home;
-=======
-export default home
->>>>>>> main
