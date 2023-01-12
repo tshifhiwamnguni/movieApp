@@ -5,7 +5,7 @@ export const SUCCESS = (data) => {
     toast.success(data, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: false,
@@ -18,7 +18,7 @@ export const ERROR = (data) =>{
     toast.error(data, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: false,
