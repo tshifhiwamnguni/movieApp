@@ -1,61 +1,68 @@
-import { React, useRef, useState, useEffect } from "react";
+import { React, useRef } from "react";
 import axios from "axios";
 import { useFormInputValidation } from "react-form-input-validation";
-import emailjs from "@emailjs/browser";
-import Cookies from "universal-cookie";
-function ForgotPassword() {
-  const form = useRef();
-  
-  const [code, setCode] = useState(12);
-  const [fields, errors, forms] = useFormInputValidation(
+import "./ForgotPassword.css";
 
+
+function ForgotPassword() {
+  const [fields, errors, form] = useFormInputValidation(
     {
-      reply_to: "",
-      message : "",
+      email: "",
     },
     {
-      reply_to: "required|email",
-      message : "required",
+      email: "required|email",
     }
   );
-  const cookies = new Cookies();
 
-  useEffect(() => {
-    setCode(parseInt(1245444 + Math.random() * (12454443445 - 1245444)));
-  }, []);
+  const forms = useRef();
+  const emailInputRefs = useRef();
 
-  const  forgot_Password=async (e)=> {
-    e.preventDefault();
-    const isValid = await forms.validate(e);
-    const data = {
-      identifier: fields.email,
-      
-    };
+  const tries = async (e) => {
+    const isValid = await form.validate(e);
     if (isValid) {
-    emailjs
-      .sendForm(
-        "service_n92xeeo",
-        "template_i7z5wv2",
-        form.current,
-        "XjpWlWZjyp4WBGqeM"
-      )
-      .then(
-        (result) => {
-          cookies.set("code", code, { path: "/", maxAge: 4000 });
-          console.log(cookies.get("code"));
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
+      console.log(fields, errors);
+      forgot_Password(e)
+    }
+  };
+
+  async function forgot_Password  (e){
+
+    e.preventDefault();
+    const isValid = await form.validate(e);
+    const enteredEmail = emailInputRefs.current.value;
+    let data = {
+      email: enteredEmail,
+    };
+
+    console.log(data);
+    if (isValid) {
+    axios
+      .post(
+        "https://strapi-movie-app.onrender.com/api/auth/forgot-password",
+        data,
+        {
+          headers: {
+            Authorization:
+              "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+          },
         }
-      );
+      )
+      .then((response) => {
+        // Handle success.
+        console.log(response);
+      })
+      .catch((error) => {
+        // Handle error.
+        console.log("An error occurred:", error.response);
+      });
+    }
+        
     e.target.reset();
-  }
-}
+  };
 
   return (
     <>
-      <form ref={form} onSubmit={forgot_Password}>
+      <form ref={forms} onSubmit={tries}>
         <div className="hero min-h-screen bg-base-200">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <p className="b">Reset password</p>
@@ -66,24 +73,18 @@ function ForgotPassword() {
                 </label>
                 <input
                   type="text"
-                  name="reply_to"
+                  ref={emailInputRefs}
+                  name="email"
                   placeholder="email"
-                  value={fields.reply_to}
-                  onChange={forms.handleChangeEvent}
-                  required
-                  onBlur={forms.handleBlurEvent}
+                  value={fields.email}
+                  onChange={form.handleChangeEvent}
+                  onBlur={form.handleBlurEvent}
                   className="input input-bordered"
-                /> <label className="error">
-                    {errors.reply_to ? errors.reply_to : ""}
-                  </label>
+                />{" "}
+                <label className="error">
+                  {errors.email ? errors.email : ""}
+                </label>
               </div>
-             
-              <input
-                name="message"
-                hidden
-                onChange={() => {}}
-                value={code}
-              ></input>
 
               <div className="form-control mt-6">
                 <button className="btn btn-primary" type="submit">

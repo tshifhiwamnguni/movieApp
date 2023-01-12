@@ -3,12 +3,18 @@ import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
+<<<<<<< HEAD
 import { setToken, setData } from "../environment/helpers";
 import { useNavigate, Link } from "react-router-dom";
 import ForgotPassword from "../passwords/forgot_password/ForgotPassword";
+=======
+import { setToken } from "../environment/helpers";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { ERROR, SUCCESS } from "../environment/toast";
+>>>>>>> 420c66af63d4082004b31eed51c4bf5e0d509eaa
 
 function Login() {
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -44,45 +50,30 @@ function Login() {
         .post(`${API}/auth/local`, data)
         .then(({ data }) => {
           const { jwt, user } = data;
-          setToken(jwt);
-          navigate("/");
 
-          window.localStorage.setItem("userData", JSON.stringify(user));
-          console.log(data);
+          console.log(user);
+
+          setToken(jwt);
+          navigate("/admin/", {replace: true})
+          SUCCESS(`Welcome ${user.username}`)
         })
         .catch((error) => {
           console.log(error.response.data.error.details.errors);
-
-          setError(error.response.data.error.message);
+          ERROR(error.response.data.error.message);
+          // setError(error.response.data.error.message);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2000);
+        });
     }
   };
 
-  if (error) {
-    // Print errors if any
-    return (
-      <div className="wait">
-        <div className="card w-96 bg-error shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">Error!</h2>
-            <p>{error}</p>
-            <div className="card-actions justify-end">
-              <button
-                className="btn btn-outline btn-ghost"
-                onClick={() => window.location.reload()}
-              >
-                Retry
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
+      <ToastContainer />
       {loading ? (
         <progress className="progress primary w-full loading"></progress>
       ) : (
@@ -100,7 +91,7 @@ function Login() {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
-              <form onSubmit={login} noValidate autoComplete="off">
+              <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
@@ -144,11 +135,7 @@ function Login() {
                         <span>Forgot password? click <Link className="link"  to={'/forgot'}>here</Link></span>
                 </div>
                 <div className="form-control mt-6">
-                  <button
-                    className="btn btn-primary"
-                    type="submit"
-                    disabled={form.isValidForm}
-                  >
+                  <button className="btn btn-primary" type="submit">
                     Login
                   </button>
                 </div>
