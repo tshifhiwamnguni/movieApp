@@ -43,7 +43,6 @@ function Login() {
           setToken(jwt);
           SUCCESS("Successfully logged in!")
 
-          window.localStorage.setItem("userData", JSON.stringify(user));
           console.log(data);
           setTimeout(() => {
             navigate("/");
