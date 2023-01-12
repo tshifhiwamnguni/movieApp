@@ -12,7 +12,7 @@ function AdminProfile() {
                 <div className="card lg:card-side w-full bg-base-300 shadow-xl">
                    
                     <div className="card-body">
-                        <img src={dark_magician_girl} className="w-64 rounded-full ring ring-primary ring-offset-base-100 mx-auto"/>
+                        <img src={dark_magician_girl} className="w-64 rounded-full ring ring-primary ring-offset-base-100 mx-auto" alt="dark magician"/>
                         <h2 className="text-center">Upload a different photo...</h2>
                         
                         <div className="card-actions justify-center">
@@ -28,7 +28,7 @@ function AdminProfile() {
                 <div className="p-6 grid flex-grow  card h-3/4 w-full rounded-box place-items-cente bg-base-300" >
                     <h1 class="text-primary text-4xl text-center">Personal info</h1>
                     
-                    <hr className="divider lg:divider-horizontal" />
+                    <hr className="w-4/5 m-4" />
                     <div className="card flex-shrink-0 w-full md:w-full max-w-screen">
                         <div className="card-body w-full">
                             <div className="form-control flex flex-row w-full">

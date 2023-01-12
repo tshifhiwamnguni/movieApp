@@ -8,7 +8,9 @@ function Statistics() {
     <>
    
 
- 
+    <div className="flex justify-center stat"><h1 className="text-4xl p-4 stat-value">Usage Statistics</h1></div>
+    <hr className="w-4/5 p-2" />
+
     <container className="flex  justify-center">
 
       
