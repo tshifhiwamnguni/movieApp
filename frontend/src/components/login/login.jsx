@@ -5,6 +5,8 @@ import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
 import { setToken, setData } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import {ERROR, SUCCESS} from '../environment/toast'
 
 function Login() {
   const [error, setError] = useState(null);
@@ -39,44 +41,28 @@ function Login() {
         .then(({ data }) => {
           const { jwt, user } = data;
           setToken(jwt);
-          navigate("/");
+          SUCCESS("Successfully logged in!")
 
           window.localStorage.setItem("userData", JSON.stringify(user));
           console.log(data);
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+          
         })
         .catch((error) => {
           console.log(error.response.data.error.details.errors);
+          ERROR(error.response.data.error.message)
+          // setError(error.response.data.error.message);
 
-          setError(error.response.data.error.message);
         })
         .finally(() => setLoading(false));
     }
   };
 
-  if (error) {
-    // Print errors if any
-    return (
-      <div className="wait">
-        <div className="card w-96 bg-error shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">Error!</h2>
-            <p>{error}</p>
-            <div className="card-actions justify-end">
-              <button
-                className="btn btn-outline btn-ghost"
-                onClick={() => window.location.reload()}
-              >
-                Retry
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
+      <ToastContainer />
       {loading ? (
         <progress className="progress primary w-full loading"></progress>
       ) : (
@@ -142,7 +128,6 @@ function Login() {
                   <button
                     className="btn btn-primary"
                     type="submit"
-                    disabled={form.isValidForm}
                   >
                     Login
                   </button>
