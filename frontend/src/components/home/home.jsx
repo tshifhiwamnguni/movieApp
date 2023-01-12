@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { CgMenuGridR } from 'react-icons/cg'
 import { AiTwotoneHome } from 'react-icons/ai'
 import { TbCalendarStats } from 'react-icons/tb'
@@ -13,13 +13,12 @@ import { useNavigate } from 'react-router-dom'
 
 function Home() {
   const navigate = useNavigate();
-
+  
   useEffect(()=>{
     if(!localStorage.getItem('jwt')){
-      console.log(getToken())
       navigate('/admin/login/', {replace: true});
     }
-  })
+  },[])
 
   function logout(){
     removeToken();
