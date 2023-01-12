@@ -3,16 +3,10 @@ import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
-<<<<<<< HEAD
-import { setToken, setData } from "../environment/helpers";
-import { useNavigate, Link } from "react-router-dom";
-import ForgotPassword from "../passwords/forgot_password/ForgotPassword";
-=======
 import { setToken } from "../environment/helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ERROR, SUCCESS } from "../environment/toast";
->>>>>>> 420c66af63d4082004b31eed51c4bf5e0d509eaa
 
 function Login() {
   const [loading, setLoading] = useState(false);

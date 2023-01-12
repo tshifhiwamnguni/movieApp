@@ -1,10 +1,12 @@
 import dark_magician_girl from "../../assets/dark_magician_girl.jpeg"
 
 function AdminProfile() {
-    return (
 
+    
+
+    return (
         <>
-            <h1 class="text-primary text-4xl m-4 text-center">Edit Profile</h1>
+            <h1 className="text-primary text-4xl m-4 text-center">Edit Profile</h1>
             <hr className="w-4/5 m-4" />
 
             <div className="container flex flex-col min-w-screen min-h-full lg:flex-row m-4">
@@ -26,7 +28,7 @@ function AdminProfile() {
                 <div className="divider lg:divider-horizontal"></div>
 
                 <div className="p-6 grid flex-grow  card h-3/4 w-full rounded-box place-items-cente bg-base-300" >
-                    <h1 class="text-primary text-4xl text-center">Personal info</h1>
+                    <h1 className="text-primary text-4xl text-center">Personal info</h1>
                     
                     <hr className="w-4/5 m-4" />
                     <div className="card flex-shrink-0 w-full md:w-full max-w-screen">

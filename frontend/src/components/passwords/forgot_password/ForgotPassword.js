@@ -14,7 +14,13 @@ function ForgotPassword() {
     }
   );
 
+
+
   const forms = useRef();
+
+
+
+
   const emailInputRefs = useRef();
 
   const tries = async (e) => {
@@ -26,8 +32,8 @@ function ForgotPassword() {
   };
 
   async function forgot_Password  (e){
-
     e.preventDefault();
+
     const isValid = await form.validate(e);
     const enteredEmail = emailInputRefs.current.value;
     let data = {
@@ -36,6 +42,8 @@ function ForgotPassword() {
 
     console.log(data);
     if (isValid) {
+
+
     axios
       .post(
         "https://strapi-movie-app.onrender.com/api/auth/forgot-password",
@@ -71,6 +79,7 @@ function ForgotPassword() {
                 <label className="label">
                   <span className="label-text">email</span>
                 </label>
+
                 <input
                   type="text"
                   ref={emailInputRefs}
@@ -80,7 +89,8 @@ function ForgotPassword() {
                   onChange={form.handleChangeEvent}
                   onBlur={form.handleBlurEvent}
                   className="input input-bordered"
-                />{" "}
+                />
+
                 <label className="error">
                   {errors.email ? errors.email : ""}
                 </label>
