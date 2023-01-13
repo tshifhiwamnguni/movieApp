@@ -1,4 +1,4 @@
-import { React, useRef } from "react";
+import { React, useRef, useState } from "react";
 import { useSearchParams } from 'react-router-dom';
 import axios from "axios";
 import { ERROR, SUCCESS } from "../../environment/toast";
@@ -9,7 +9,7 @@ function ResetPassword() {
   const [searchParams, setSearchParams] = useSearchParams();
   const passwordInputRefs = useRef();
   const confirmPasswordInputRefs = useRef();
-  
+  const [loading, setLoading] = useState(false);
 
 
   const reset_Password = async(e) => {
@@ -28,8 +28,7 @@ function ResetPassword() {
       // passwordConfirmation: 'myNewPassword'
     };
     
-   
-  console.log(data)
+    setLoading(true);
     
       await axios
         .post(
@@ -51,7 +50,7 @@ function ResetPassword() {
           // Handle error.
           ERROR(error.response.data.error.message)
           console.log("An error occurred:", error.response);
-        });
+        }).finally(()=>setLoading(false));
     }
   
 
@@ -61,6 +60,11 @@ function ResetPassword() {
       <form ref={form} onSubmit={reset_Password}>
         <div className="hero min-h-screen bg-base-200">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          {loading ? (
+              <progress className="progress progress-primary w-80 h-1 loading"></progress>
+            ) : (
+              ""
+            )}
             <div className="card-body">
               <div className="card-title">Reset password</div>
               <div className="form-control">

@@ -1,4 +1,4 @@
-import { React, useRef } from "react";
+import { React, useRef, useState } from "react";
 import axios from "axios";
 import { useFormInputValidation } from "react-form-input-validation";
 import "./ForgotPassword.css";
@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import { ERROR, SUCCESS } from "../../environment/toast";
 
 function ForgotPassword() {
+  const [loading, setLoading] = useState(false);
+
   const [fields, errors, form] = useFormInputValidation(
     {
       email: "",
@@ -41,7 +43,7 @@ function ForgotPassword() {
       email: enteredEmail,
     };
 
-    console.log(data);
+    setLoading(true)
     if (isValid) {
 
 
@@ -65,7 +67,7 @@ function ForgotPassword() {
         // Handle error.
         ERROR(error.response.data.error.message)
         console.log("An error occurred:", error.response);
-      });
+      }).finally(()=>setLoading(false));
     }
         
     e.target.reset();
@@ -77,6 +79,11 @@ function ForgotPassword() {
       <form ref={forms} onSubmit={tries}>
         <div className="hero min-h-screen bg-base-200">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          {loading ? (
+              <progress className="progress progress-primary w-80 h-1 loading"></progress>
+            ) : (
+              ""
+            )}
             <div className="card-body">
               <div className="card-title">Reset password</div>
               <div className="form-control">
