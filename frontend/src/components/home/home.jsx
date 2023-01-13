@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { IoMdLogOut } from "react-icons/io";
-import Dashboard from "../dash/dash";
 import { removeToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
 import { BsHouse } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { RiMovie2Line } from "react-icons/ri";
-import {IoCloseCircleOutline} from 'react-icons/io5';
-import './home.css'
+import { IoCloseCircleOutline } from "react-icons/io5";
+import "./home.css";
+import {Outlet} from "react-router-dom" ;
 
 function Home() {
   const navigate = useNavigate();
@@ -56,13 +56,13 @@ function Home() {
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li>
-                  <a className={active ? 'active' : ""}>
+                <li  onClick={() => navigate("/admin/dashboard/")}>
+                  <a className={active ? "active" : ""}>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li>
+                <li onClick={() => navigate("/admin/profile/")}>
                   <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
                     Profile
@@ -84,23 +84,27 @@ function Home() {
             </div>
           </div>
           <div className="flex justify-center align-center">
-            <Dashboard />
+           
+          <Outlet />
           </div>
         </div>
 
         <div className="drawer-side">
           <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 bg-base-100 flex justify-center mn">
-            <label htmlFor="my-drawer-3" className="drawer-overlay ml-auto close">
-              <IoCloseCircleOutline style={{ fontSize: "2rem" }}/>
+            <label
+              htmlFor="my-drawer-3"
+              className="drawer-overlay ml-auto close"
+            >
+              <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
-            <li>
-              <a className={active ? 'active' : ""}>
+            <li onClick={() => navigate("/admin/dashboard/")}>
+              <a className={active ? "active" : ""}>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
-            <li>
+            <li onClick={() => navigate("/admin/profile/")}>
               <a>
                 <CgProfile style={{ fontSize: "1.5rem" }} />
                 Profile
