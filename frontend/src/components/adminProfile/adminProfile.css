@@ -7,3 +7,7 @@
     /* background-color: rgba(0, 0, 0, 0.409); */
 }			                
 			              
+.mload{
+    position: absolute;
+    margin-right: -20px;
+}

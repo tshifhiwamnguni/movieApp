@@ -7,7 +7,8 @@ import jwt_decode from "jwt-decode";
 import { useState, useEffect } from "react";
 import { ERROR, SUCCESS } from "../environment/toast";
 import { ToastContainer } from "react-toastify";
-import './adminProfile.css'
+import "./adminProfile.css";
+import { RiLockPasswordFill } from "react-icons/ri";
 
 function AdminProfile() {
   let ID;
@@ -16,9 +17,13 @@ function AdminProfile() {
   const [name, setName] = useState("");
   const [cellphone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const token = localStorage.getItem("jwt");
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
+    
     let decoded = jwt_decode(token);
     ID = decoded.id;
     console.log(decoded); //data is what you sent in.
@@ -64,16 +69,43 @@ function AdminProfile() {
     }
   };
 
+  const changePassword = async (e) => {
+    e.preventDefault();
+
+    setLoading(true)
+    const data = {
+      currentPassword: currentPassword,
+      password: password,
+      passwordConfirmation: confirmPassword
+    };
+
+    await axios.post(
+     `${API}/auth/change-password`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then(()=>{
+      SUCCESS('Successfully change the password');
+    }).catch((error)=>{
+      ERROR(error.response.data.error.message);
+    }).finally(()=>{
+      setLoading(false);
+    })
+  };
+
   return (
     <div>
       <ToastContainer />
       <div className="hero min-h-screen flex justify-center align-middle">
         <div className="card w-96 card-compact bg-base-100 shadow-xl">
-        {loading ? (
-        <progress className="progress h-1 progress-primary w-96 loading"></progress>
-      ) : (
-        ""
-      )}
+          {loading ? (
+            <progress className="progress h-1 progress-primary w-96 loading"></progress>
+          ) : (
+            ""
+          )}
           <div className="card-body">
             <h1 className="text-center text-5xl font-bold">Profile</h1>
             <form>
@@ -130,13 +162,92 @@ function AdminProfile() {
                 </label>
               </div>
 
-              <div className="flex justify-end mt-9">
+              <div className="flex justify-end mt-9 space-x-2">
                 <button className="btn btn-primary" onClick={update}>
                   Update
                 </button>
+                <label htmlFor="my-modal-3" className="btn btn-primary">
+                  Change password
+                </label>
               </div>
             </form>
           </div>
+        </div>
+      </div>
+      {/* Modal for change password */}
+      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+      <div className="modal">
+      
+        <div className="modal-box relative">
+          <label
+            htmlFor="my-modal-3"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold">Change your password</h3>
+
+          <form>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Current password</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <RiLockPasswordFill style={{ fontSize: "1.5rem" }} />
+                </span>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  className="input input-bordered input-primary w-full"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">New password</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <RiLockPasswordFill style={{ fontSize: "1.5rem" }} />
+                </span>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  className="input input-bordered input-primary w-full"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Confirm password</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <RiLockPasswordFill style={{ fontSize: "1.5rem" }} />
+                </span>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  className="input input-bordered input-primary w-full"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </label>
+            </div>
+
+            <div className="flex justify-end mt-9 space-x-2">
+              <button className="btn btn-primary" onClick={changePassword}>
+                Change
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
