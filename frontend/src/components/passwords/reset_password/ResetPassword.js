@@ -18,6 +18,8 @@ function ResetPassword() {
   
     const enteredPassword = passwordInputRefs.current.value;
     const enteredConfirmPassword = confirmPasswordInputRefs.current.value;
+
+    
     const data = {
       code: searchParams.get('code'),
       password: enteredPassword,
