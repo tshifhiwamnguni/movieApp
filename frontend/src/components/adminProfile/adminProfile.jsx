@@ -8,7 +8,7 @@ function AdminProfile() {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setSurname] = useState('')
-    const [email, setEmail] = useState('');
+    const [emails, setEmails] = useState('');
     const [cellPhone, setCellphone] = useState('');
     const [passWord, setPassword] = useState('');
 
@@ -19,16 +19,20 @@ function AdminProfile() {
 
     const handleSubmit = event => {
         console.log('handleSubmit ran');
+        // 👈️ prevent page refresh
+        event.preventDefault(); 
+
         axios.get("https://strapi-movie-app.onrender.com/api/users").then((response) => {
            console.log(response.data)
+         
         }).catch((err) => console.log(err));
 
         
-        event.preventDefault(); // 👈️ prevent page refresh
+        
 
         // 👇️ access input values here
         console.log('firstName 👉️', firstName);
-        console.log('email 👉️', email);
+        console.log('email 👉️', emails);
         console.log('cellPhone 👉️', cellPhone);
         console.log('passWord 👉️', passWord);
 
@@ -36,20 +40,22 @@ function AdminProfile() {
         
 
         //Post request
-        axios.put(`https://strapi-movie-app.onrender.com/api/users/10`, {
-            data: {
-                username: `${firstName}`,
-                email:`${email}`,
-                cellphone: `${cellPhone}`,
-            }
+        event.preventDefault(); 
+        axios.put(`https://strapi-movie-app.onrender.com/api/users/10`, {data:{
+            
+                username: firstName,
+                email: emails,
+                cellphone: cellPhone}
+       
         }).then((response) => {
             console.log("Details saved!")
+            console.log(response)
             
         }).catch((err) => console.log(err));
 
 
         setFirstName('');
-        setEmail('');
+        setEmails('');
         setCellphone('');
         setPassword('');
     };
@@ -88,7 +94,7 @@ function AdminProfile() {
                                 <label className="label">
                                     <span className="label-text w-24">First name:</span>
                                 </label>
-                                <input type="text" id="username" name="username" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder="email" className="input input-bordered w-full rounded" />
+                                <input type="text" id="username" name="username" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder="email" className="input input-bordered w-full rounded"/>
                             </div>
                             <div className="form-control flex flex-row">
                                 <label className="label">
@@ -101,7 +107,7 @@ function AdminProfile() {
                                 <label className="label">
                                     <span className="label-text w-24">Email</span>
                                 </label>
-                                <input type="email" id="email" name="email" value={email} placeholder="password" onChange={event => setEmail(event.target.value)} className="input input-bordered w-full rounded" />
+                                <input type="email" id="email" name="email" value={emails} placeholder="password" onChange={event => setEmails(event.target.value)} className="input input-bordered w-full rounded" />
 
                             </div>
                             <div className="form-control flex flex-row">
