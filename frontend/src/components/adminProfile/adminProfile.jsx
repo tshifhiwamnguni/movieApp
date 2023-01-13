@@ -8,19 +8,22 @@ import jwt_decode from "jwt-decode";
 import { useState, useEffect } from "react";
 
 function AdminProfile() {
-  let userId;
+  let ID;
+  const [userI, setUserId] =useState(0)
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [cellphone, setPhone] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    let decoded = jwt_decode(token); //data is what you sent in.
-    userId = decoded.id;
-    console.log(userId);
+    let decoded = jwt_decode(token);
+    ID = decoded.id
+    console.log(decoded); //data is what you sent in.
+    setUserId(ID)
+    console.log(userI);
 
     axios
-      .get(`${API}/users/${userId}`, {headers: {'jwt': 'Bearer' + token}})
+      .get(`${API}/users/${ID}`)
       .then((data) => {
         console.log(data.data);
         setEmail(data.data.email);
@@ -41,8 +44,9 @@ function AdminProfile() {
         cellphone: cellphone,
         username: name,
       };
+      console.log(userI)
 
-      await axios.put(`${API}/users/${userId}`, data).then((data) => {
+      await axios.put(`${API}/users/${userI}`, data).then((data) => {
         console.log(data);
       });
     }

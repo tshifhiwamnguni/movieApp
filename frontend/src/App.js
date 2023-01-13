@@ -31,7 +31,7 @@ function App() {
       <Router>
         <Suspense fallback={<div>Loading....</div>}>
           <Routes>
-            <Route path='/' element={<Splash/>}></Route>
+            {/* <Route path='/' element={<Splash/>}></Route>
             <Route path='log' element={<Login/>}></Route>
             <Route path='forgot' element={<ForgotPassword/>}></Route>
             <Route path='reset' element={<ResetPassword/>}></Route>
@@ -41,7 +41,7 @@ function App() {
             <Route path="/admin/" element={<Home />}></Route>
 
            
-            <Route path='/admin/profile/' element={<AdminProfile/>}></Route>
+            <Route path='/admin/profile/' element={<AdminProfile/>}></Route> */}
          
     
             <Route path="admin/login" element={<Login/>}></Route>
