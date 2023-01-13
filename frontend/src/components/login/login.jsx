@@ -1,4 +1,4 @@
-import React, { useState, } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
@@ -23,9 +23,8 @@ function Login() {
     }
   );
 
-
-  function move(){
-    navigate('forgot',{replace: true})
+  function move() {
+    navigate("forgot", { replace: true });
   }
 
   const login = async (e) => {
@@ -48,8 +47,8 @@ function Login() {
           console.log(user);
 
           setToken(jwt);
-          navigate("/admin/", {replace: true})
-          SUCCESS(`Welcome ${user.username}`)
+          navigate("/admin/", { replace: true });
+          SUCCESS(`Welcome ${user.username}`);
         })
         .catch((error) => {
           console.log(error.response.data.error.details.errors);
@@ -68,12 +67,8 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      {loading ? (
-        <progress className="progress primary w-full loading"></progress>
-      ) : (
-        ""
-      )}
-      <div className="hero min-h-screen bg-base-200">
+
+      <div className="hero min-h-screen bg-base-100">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
             {/* <h1 className="text-5xl font-bold">Login here</h1> */}
@@ -83,7 +78,12 @@ function Login() {
               et a id nisi.
             </p> */}
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="card card-compact w-80 max-w-sm shadow-2xl bg-base-100">
+            {loading ? (
+              <progress className="progress progress-primary w-80 h-1 loading"></progress>
+            ) : (
+              ""
+            )}
             <div className="card-body">
               <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
@@ -123,10 +123,13 @@ function Login() {
                   <label className="error">
                     {errors.password ? errors.password : ""}
                   </label>
-  
-                    
-                    
-                        <span>Forgot password? click <Link className="link"  to={'/forgot'}>here</Link></span>
+
+                  <span>
+                    Forgot password? click{" "}
+                    <Link className="link" to={"/forgot"}>
+                      here
+                    </Link>
+                  </span>
                 </div>
                 <div className="form-control mt-6">
                   <button className="btn btn-primary" type="submit">

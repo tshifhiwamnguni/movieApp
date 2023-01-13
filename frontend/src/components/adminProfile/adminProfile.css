@@ -1,2 +1,9 @@
-				                
+.loading{
+    position: fixed;
+    /* margin-top: -817px; */
+    display: flex;
+    align-items: center;
+    /* margin-top: 50%; */
+    /* background-color: rgba(0, 0, 0, 0.409); */
+}			                
 			              
