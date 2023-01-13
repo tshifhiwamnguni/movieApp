@@ -7,6 +7,7 @@ import { setToken } from "../environment/helpers";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ERROR, SUCCESS } from "../environment/toast";
+import Bac from "../back/back";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -22,10 +23,6 @@ function Login() {
       password: "required|min:6",
     }
   );
-
-  function move() {
-    navigate("forgot", { replace: true });
-  }
 
   const login = async (e) => {
     e.preventDefault();
@@ -67,7 +64,7 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-
+      <div className="fixed"><Bac/></div>
       <div className="hero min-h-screen bg-base-100">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
@@ -125,9 +122,8 @@ function Login() {
                   </label>
 
                   <span className="mt-4">
-                    Forgot password? click{" "}
                     <Link className="link" to={"/forgot"}>
-                      here
+                      Forgot password?
                     </Link>
                   </span>
                 </div>

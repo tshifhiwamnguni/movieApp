@@ -3,33 +3,24 @@ import "./App.css";
 import { lazy, Suspense } from "react";
 import "./App.css";
 import Dashboard from "./components/dash/dash";
-// import Login from "./components/login/login"
-// import Home from "./components/home/home";
 import { getToken } from "./components/environment/helpers";
+import Spin from "./components/Spinner/Spin";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(()=> import('./components/home/home'));
 const ForgotPassword = lazy(()=> import('./components/passwords/forgot_password/ForgotPassword'));
 const ResetPassword  = lazy(()=> import('./components/passwords/reset_password/ResetPassword'));
-
-// const AdminProfile = lazy(() =>
-//   import("./components/adminProfile/adminProfile")
-// );
 const Statistics = lazy(() => import("./components/statistics/statistics"));
 const AdminProfile = lazy(()=> import('./components/adminProfile/adminProfile'));
 // const Statistics = lazy(()=> import('./components/statistics/statistics'));
-const Test = lazy(()=> import('./components/test/test'));
-
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
-
-// const Splash = lazy(() => import("./components/splashpage/Splash"));
 
 function App() {
   return (
     <div className="App">
      
       <Router>
-        <Suspense fallback={<div>Loading....</div>}>
+        <Suspense fallback={<div><Spin/></div>}>
           <Routes>
             {/* <Route path='/' element={<Splash/>}></Route>
             <Route path='log' element={<Login/>}></Route>

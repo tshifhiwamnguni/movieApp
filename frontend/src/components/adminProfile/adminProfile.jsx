@@ -44,7 +44,7 @@ function AdminProfile() {
         console.log(error);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [ID]);
 
   const update = async (e) => {
     if (window.confirm("Are you sure you want to update these?")) {
