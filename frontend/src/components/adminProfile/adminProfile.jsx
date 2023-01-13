@@ -3,7 +3,6 @@ import { IoCall } from "react-icons/io5";
 import { BiRename } from "react-icons/bi";
 import axios from "axios";
 import { API } from "../environment/constant";
-import { getToken } from "../environment/helpers";
 import jwt_decode from "jwt-decode";
 import { useState, useEffect } from "react";
 
@@ -20,7 +19,7 @@ function AdminProfile() {
     console.log(userId);
 
     axios
-      .get(`${API}/users/${userId}`, {headers: {'jwt': 'Bearer' + token}})
+      .get(`${API}/users/${userId}`)
       .then((data) => {
         console.log(data.data);
         setEmail(data.data.email);
