@@ -2,7 +2,8 @@ import { React, useRef } from "react";
 import axios from "axios";
 import { useFormInputValidation } from "react-form-input-validation";
 import "./ForgotPassword.css";
-
+import { ToastContainer } from "react-toastify";
+import { ERROR, SUCCESS } from "../../environment/toast";
 
 function ForgotPassword() {
   const [fields, errors, form] = useFormInputValidation(
@@ -44,7 +45,7 @@ function ForgotPassword() {
     if (isValid) {
 
 
-    axios
+    await axios
       .post(
         "https://strapi-movie-app.onrender.com/api/auth/forgot-password",
         data,
@@ -58,9 +59,11 @@ function ForgotPassword() {
       .then((response) => {
         // Handle success.
         console.log(response);
+        SUCCESS('You have recieved an email to reset your password.')
       })
       .catch((error) => {
         // Handle error.
+        ERROR(error.response.data.error.message)
         console.log("An error occurred:", error.response);
       });
     }
@@ -70,11 +73,12 @@ function ForgotPassword() {
 
   return (
     <>
+    <ToastContainer/>
       <form ref={forms} onSubmit={tries}>
         <div className="hero min-h-screen bg-base-200">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <p className="b">Reset password</p>
             <div className="card-body">
+              <div className="card-title">Reset password</div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">email</span>

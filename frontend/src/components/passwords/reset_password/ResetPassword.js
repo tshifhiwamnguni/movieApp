@@ -1,19 +1,18 @@
-import { React, useRef, useState, useEffect } from "react";
-import Cookies from "universal-cookie";
+import { React, useRef } from "react";
 import { useSearchParams } from 'react-router-dom';
 import axios from "axios";
+import { ERROR, SUCCESS } from "../../environment/toast";
+import { ToastContainer } from "react-toastify";
 
 function ResetPassword() {
   const form = useRef();
-  const cookies = new Cookies();
   const [searchParams, setSearchParams] = useSearchParams();
-  const codeInputRefs = useRef();
   const passwordInputRefs = useRef();
   const confirmPasswordInputRefs = useRef();
   
 
 
-  function reset_Password(e) {
+  const reset_Password = async(e) => {
     e.preventDefault();
   
     const enteredPassword = passwordInputRefs.current.value;
@@ -32,7 +31,7 @@ function ResetPassword() {
    
   console.log(data)
     
-      axios
+      await axios
         .post(
           'https://strapi-movie-app.onrender.com/api/auth/reset-password',data,
           {
@@ -44,11 +43,13 @@ function ResetPassword() {
         )
         .then((response) => {
           // Handle success.
+          SUCCESS('Password has been reseted');
           console.log(response);
            
         })
         .catch((error) => {
           // Handle error.
+          ERROR(error.response.data.error.message)
           console.log("An error occurred:", error.response);
         });
     }
@@ -56,12 +57,12 @@ function ResetPassword() {
 
   return (
     <>
+    <ToastContainer />
       <form ref={form} onSubmit={reset_Password}>
         <div className="hero min-h-screen bg-base-200">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <p className="b">Reset password</p>
             <div className="card-body">
-              
+              <div className="card-title">Reset password</div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Password</span>
@@ -78,7 +79,7 @@ function ResetPassword() {
                   <span className="label-text">Conform password</span>
                 </label>
                 <input
-                  type="text"
+                  type="password"
                   ref={confirmPasswordInputRefs}
                   placeholder="confirm password"
                   className="input input-bordered"

@@ -124,7 +124,7 @@ function Login() {
                     {errors.password ? errors.password : ""}
                   </label>
 
-                  <span>
+                  <span className="mt-4">
                     Forgot password? click{" "}
                     <Link className="link" to={"/forgot"}>
                       here

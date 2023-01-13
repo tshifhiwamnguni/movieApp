@@ -47,6 +47,8 @@ function App() {
             <Route path="admin/login" element={<Login/>}></Route>
             <Route path="/" element={<Splash/>}></Route>
             <Route path="*" element={<Splash/>}></Route>
+            <Route path="forgot" element={<ForgotPassword/>}></Route>
+            <Route path="reset" element={<ResetPassword/>}></Route>
             <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="admin/login"/>} >
               <Route path="/admin" element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
