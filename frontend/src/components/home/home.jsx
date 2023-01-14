@@ -49,33 +49,33 @@ function Home() {
               </label>
             </div>
             <div className="flex-1 px-2 mx-2">
-              <a href="#" style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
-              <a href="#" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
+              <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
+              <a style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
                 Theatre
               </a>
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
                 <li  onClick={() => navigate("/admin/dashboard/")}>
-                  <a href="#" className={active ? "active" : ""}>
+                  <a  className={active ? "active" : ""}>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
                 <li onClick={() => navigate("/admin/profile/")}>
-                  <a href="#">
+                  <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
                     Profile
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a>
                     <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                     All movies
                   </a>
                 </li>
                 <li onClick={logout}>
-                  <a href="#">
+                  <a>
                     <IoMdLogOut style={{ fontSize: "1.5rem" }} />
                     Logout
                   </a>
@@ -99,25 +99,25 @@ function Home() {
               <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
             <li onClick={() => navigate("/admin/dashboard/")}>
-              <a className={active ? "active" : ""} href="#">
+              <a className={active ? "active" : ""}>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
             <li onClick={() => navigate("/admin/profile/")}>
-              <a href="#">
+              <a>
                 <CgProfile style={{ fontSize: "1.5rem" }} />
                 Profile
               </a>
             </li>
             <li>
-              <a href="#">
+              <a>
                 <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                 All movies
               </a>
             </li>
             <li onClick={logout}>
-              <a href="#">
+              <a>
                 <IoMdLogOut style={{ fontSize: "1.5rem" }} />
                 Logout
               </a>
