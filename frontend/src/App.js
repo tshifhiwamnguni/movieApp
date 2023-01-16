@@ -2,12 +2,12 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
+  // Navigate,
 } from "react-router-dom";
 import "./App.css";
 import { lazy, Suspense } from "react";
 import "./App.css";
-import { getToken } from "./components/environment/helpers";
+// import { getToken } from "./components/environment/helpers";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(()=> import('./components/home/home'));
@@ -28,7 +28,7 @@ function App() {
             <Route path="/" element={<Splash />}></Route>
             <Route path="/admin/login/" element={<Login />}></Route>
             <Route path="/admin/" element={<Home />}></Route>
-
+            <Route path="/admin/test" element={<Test />}></Route>
            
             <Route path='/admin/profile/' element={<AdminProfile/>}></Route>
          

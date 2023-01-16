@@ -2,19 +2,19 @@ import dark_magician_girl from "../../assets/dark_magician_girl.jpeg"
 import { useState } from 'react';
 // import userService from "../../services/users.crudService";
 import axios from "axios"
-import { info } from "daisyui/src/colors";
+// import { info } from "daisyui/src/colors";
 
 function AdminProfile() {
 
     const [firstName, setFirstName] = useState('');
-    const [lastName, setSurname] = useState('')
+    // const [lastName, setSurname] = useState('')
     const [emails, setEmails] = useState('');
     const [cellPhone, setCellphone] = useState('');
     const [passWord, setPassword] = useState('');
-
+    let info = ''
     //API request
    
-       
+    // useEffect and jwt
    
 
     const handleSubmit = event => {
@@ -24,24 +24,20 @@ function AdminProfile() {
 
         axios.get("https://strapi-movie-app.onrender.com/api/users").then((response) => {
            console.log(response.data)
-         
+            info = response.data[0].username
         }).catch((err) => console.log(err));
 
         
         
 
-        // 👇️ access input values here
-        console.log('firstName 👉️', firstName);
-        console.log('email 👉️', emails);
-        console.log('cellPhone 👉️', cellPhone);
-        console.log('passWord 👉️', passWord);
+        
 
         
         
 
         //Post request
-        event.preventDefault(); 
-        axios.put(`https://strapi-movie-app.onrender.com/api/users/10`, {data:{
+        // event.preventDefault(); 
+        axios.put(`https://strapi-movie-app.onrender.com/api/users/9`, {data:{
             
                 username: firstName,
                 email: emails,
@@ -53,6 +49,11 @@ function AdminProfile() {
             
         }).catch((err) => console.log(err));
 
+        // 👇️ access input values here
+        console.log('firstName 👉️', firstName);
+        console.log('email 👉️', emails);
+        console.log('cellPhone 👉️', cellPhone);
+        console.log('passWord 👉️', passWord);
 
         setFirstName('');
         setEmails('');
@@ -94,7 +95,7 @@ function AdminProfile() {
                                 <label className="label">
                                     <span className="label-text w-24">First name:</span>
                                 </label>
-                                <input type="text" id="username" name="username" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder="email" className="input input-bordered w-full rounded"/>
+                                <input type="text" id="username" name="username" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder={info} className="input input-bordered w-full rounded"/>
                             </div>
                             <div className="form-control flex flex-row">
                                 <label className="label">
