@@ -5,12 +5,12 @@ import "./App.css";
 import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
+import Allmovies from "./components/AllMovies/Allmovies";
 
 const Login = lazy(() => import("./components/login/login"));
-const Home = lazy(()=> import('./components/home/home'));
+const Home = lazy(()=> import('./components/Navbar/navbar'));
 const ForgotPassword = lazy(()=> import('./components/passwords/forgot_password/ForgotPassword'));
 const ResetPassword  = lazy(()=> import('./components/passwords/reset_password/ResetPassword'));
-const Statistics = lazy(() => import("./components/statistics/statistics"));
 const AdminProfile = lazy(()=> import('./components/adminProfile/adminProfile'));
 
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
@@ -26,17 +26,7 @@ function App() {
       <Router>
         <Suspense fallback={<div><Spin/></div>}>
           <Routes>
-            {/* <Route path='/' element={<Splash/>}></Route>
-            <Route path='log' element={<Login/>}></Route>
-            <Route path='forgot' element={<ForgotPassword/>}></Route>
-            <Route path='reset' element={<ResetPassword/>}></Route>
-            <Route path='dashboard' element={<Home/>}></Route>
-            <Route path="/" element={<Splash />}></Route>
-            <Route path="/admin/login/" element={<Login />}></Route>
-            <Route path="/admin/" element={<Home />}></Route>
-            <Route path='/admin/profile/' element={<AdminProfile/>}></Route> */}
-         
-    
+            {/* Public routes */}
             <Route path="login" element={<Login/>}></Route>
             <Route path="customer" element={<Customer/>}></Route>
 
@@ -50,14 +40,15 @@ function App() {
             <Route path="/register" element={<Register/>}></Route>
 
             <Route path="*" element={<Splash/>}></Route>
-            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
+            
             <Route path="forgot" element={<ForgotPassword/>}></Route>
             <Route path="reset" element={<ResetPassword/>}></Route>
-            <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="admin/login"/>} >
+            {/* Admin routes */}
+            <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="/login"/>} >
               <Route path="/admin" element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              <Route path="stats" element={<Statistics />} />
+              <Route path="movies" element={<Allmovies/>} />
             </Route>
           </Routes>
        
