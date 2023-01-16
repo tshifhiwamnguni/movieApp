@@ -8,6 +8,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ERROR, SUCCESS } from "../environment/toast";
 import jwt_decode from "jwt-decode";
+import Bac from "../back/back";
+
 function Login() {
   const [loading, setLoading] = useState(false);
 
@@ -91,22 +93,21 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      {loading ? (
-        <progress className="progress primary w-full loading"></progress>
-      ) : (
-        ""
-      )}
-      <div className="hero min-h-screen bg-base-200">
+      <div className="fixed"><Bac/></div>
+      <div className="hero min-h-screen bg-base-100">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            {/* <h1 className="text-5xl font-bold">Login here</h1> */}
-            {/* <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p> */}
+            <h1 className="text-5xl font-bold">Login</h1>
+            <p className="py-6">
+            Stream the world's best movies, all in one place.
+            </p>
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="card flex-shrink-0 w-96 max-w-sm shadow-2xl bg-base-100">
+            {loading ? (
+              <progress className="progress progress-primary flex-shrink-0 w-96 h-1 loading"></progress>
+            ) : (
+              ""
+            )}
             <div className="card-body">
               <h1 className="text-center text-5xl font-bold">Login</h1>
               <form onSubmit={login} noValidate autoComplete="on">

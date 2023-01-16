@@ -16,7 +16,7 @@ function Home() {
     if (!localStorage.getItem("jwt")) {
       navigate("/admin/login/", { replace: true });
     }
-  }, []);
+  });
 
   function logout() {
     removeToken();
@@ -30,7 +30,7 @@ function Home() {
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
-          <div className="w-screen navbar bg-base-300">
+          <div className="w-screen navbar bg-base-300 fixed">
             <div className="flex-none lg:hidden">
               <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
                 <svg
@@ -57,7 +57,7 @@ function Home() {
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
                 <li  onClick={() => navigate("/admin/dashboard/")}>
-                  <a className={active ? "active" : ""}>
+                  <a  className={active ? "active" : ""}>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>

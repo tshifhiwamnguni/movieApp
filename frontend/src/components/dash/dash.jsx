@@ -6,7 +6,7 @@ import { TbCurrencyReal } from "react-icons/tb";
 
 function Dashboard() {
   return (
-    <div className="min-h-screen mt-10">
+    <div className="hero min-h-screen mt-10">
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-2 gap-5 justify-center">
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
