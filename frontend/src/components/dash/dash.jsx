@@ -2,7 +2,7 @@ import React from "react";
 import { BsFillBookmarkPlusFill } from "react-icons/bs";
 import { HiUsers } from "react-icons/hi";
 import { MdMovie } from "react-icons/md";
-import { TbCurrencyReal } from "react-icons/tb";
+import { ImBlocked } from "react-icons/im";
 
 function Dashboard() {
   return (
@@ -50,10 +50,10 @@ function Dashboard() {
 
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title">Income</h2>
+            <h2 className="card-title">Blocked</h2>
             <div className="flex space-x-2 justify-center">
-              <TbCurrencyReal style={{ fontSize: "2rem" }} />
-              <p className="text-2xl font-bold">1000.00</p>
+              <ImBlocked style={{ fontSize: "2rem" }} />
+              <p className="text-2xl font-bold">50</p>
             </div>
             <div className="card-actions justify-end">
               <button className="btn btn-primary">More info</button>

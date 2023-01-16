@@ -54,21 +54,18 @@ function Login() {
           const token = localStorage.getItem("jwt");
           let decoded = jwt_decode(token);
           let ID = decoded.id;
-      
+
           axios
             .get(`${API}/users/${ID}?populate=*`)
             .then((data) => {
-
               console.log("role ", data.data.role.id);
 
-              if ( data.data.role.id===4) {
-                navigate('../customer')
+              if (data.data.role.id === 4) {
+                navigate("../customer");
               }
-              if ( data.data.role.id===3) {
-                navigate("/admin/", { replace: true })
+              if (data.data.role.id === 3) {
+                navigate("/admin/", { replace: true });
               }
-
-              
             })
             .catch((error) => {
               console.log(error);
@@ -93,13 +90,15 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      <div className="fixed"><Bac/></div>
+      <div className="fixed">
+        <Bac />
+      </div>
       <div className="hero min-h-screen bg-base-100">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
             <h1 className="text-5xl font-bold">Login</h1>
             <p className="py-6">
-            Stream the world's best movies, all in one place.
+              Stream the world's best movies, all in one place.
             </p>
           </div>
           <div className="card flex-shrink-0 w-96 max-w-sm shadow-2xl bg-base-100">
@@ -109,7 +108,6 @@ function Login() {
               ""
             )}
             <div className="card-body">
-             
               <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
                   <label className="label">
@@ -149,10 +147,9 @@ function Login() {
                     {errors.password ? errors.password : ""}
                   </label>
 
-                  <span>
-                    Forgot password? click{" "}
+                  <span className="mt-3">
                     <Link className="link" to={"/forgot"}>
-                      here
+                      Forgot password?
                     </Link>
                   </span>
                 </div>

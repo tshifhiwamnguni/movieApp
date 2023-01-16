@@ -19,9 +19,7 @@ function Splash() {
           <div>
             <h1 className="text-5xl font-bold">Movie Theatre</h1>
             <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+            Stream the world's best movies, all in one place.
             </p>
             <button className="btn btn-primary" onClick={move}>
               Get Started
