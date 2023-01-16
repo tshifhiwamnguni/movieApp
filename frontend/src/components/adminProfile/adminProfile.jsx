@@ -21,6 +21,8 @@ function AdminProfile() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const token = localStorage.getItem("jwt");
+  const [firstname, setFirstname]=useState('');
+  const [lastname, setLastname]=useState('');
 
   useEffect(() => {
     
@@ -39,6 +41,8 @@ function AdminProfile() {
         setEmail(data.data.email);
         setName(data.data.username);
         setPhone(data.data.cellphone);
+        setFirstname(data.data.firstname);
+        setLastname(data.data.lastname);
       })
       .catch((error) => {
         console.log(error);
@@ -54,6 +58,8 @@ function AdminProfile() {
         email: email,
         cellphone: cellphone,
         username: name,
+        firstname: firstname,
+        lastname: lastname
       };
       console.log(userI);
 
@@ -129,7 +135,7 @@ function AdminProfile() {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Your Name</span>
+                  <span className="label-text">Your username</span>
                 </label>
                 <label className="input-group">
                   <span>
@@ -144,6 +150,43 @@ function AdminProfile() {
                   />
                 </label>
               </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your firstname</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <BiRename style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className="input input-bordered input-primary w-full"
+                    onChange={(e) => setFirstname(e.target.value)}
+                    value={firstname}
+                  />
+                </label>
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your lastname</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <BiRename style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className="input input-bordered input-primary w-full"
+                    onChange={(e) => setLastname(e.target.value)}
+                    value={lastname}
+                  />
+                </label>
+              </div>
+
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Your Cellphone</span>

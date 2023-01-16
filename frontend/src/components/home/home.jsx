@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,7 @@ function Home() {
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
-          <div className="w-screen navbar bg-base-300 fixed">
+          <div className="w-screen navbar bg-base-300 fixed z-10">
             <div className="flex-none lg:hidden">
               <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
                 <svg
@@ -57,7 +57,7 @@ function Home() {
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
                 <li  onClick={() => navigate("/admin/dashboard/")}>
-                  <a  className={active ? "active" : ""}>
+                  <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
