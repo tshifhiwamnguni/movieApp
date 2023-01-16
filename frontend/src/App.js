@@ -14,12 +14,9 @@ const Statistics = lazy(() => import("./components/statistics/statistics"));
 const AdminProfile = lazy(()=> import('./components/adminProfile/adminProfile'));
 // const Statistics = lazy(()=> import('./components/statistics/statistics'));
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
-<<<<<<< HEAD
 const Register = lazy(()=> import('./components/register/Register') )
 const Customer = lazy(()=> import('./components/tester/Customers'))
 // const Splash = lazy(() => import("./components/splashpage/Splash"));
-=======
->>>>>>> cdc04cb2fd993ecb4459593f0c42604ae6a017fa
 
 function App() {
   return (
@@ -45,13 +42,10 @@ function App() {
             <Route path="/" element={<Splash/>}></Route>
             <Route path="/register" element={<Register/>}></Route>
             <Route path="*" element={<Splash/>}></Route>
-<<<<<<< HEAD
-            <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} >
-=======
+            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
             <Route path="forgot" element={<ForgotPassword/>}></Route>
             <Route path="reset" element={<ResetPassword/>}></Route>
             <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="admin/login"/>} >
->>>>>>> cdc04cb2fd993ecb4459593f0c42604ae6a017fa
               <Route path="/admin" element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />

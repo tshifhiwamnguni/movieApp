@@ -109,7 +109,7 @@ function Login() {
               ""
             )}
             <div className="card-body">
-              <h1 className="text-center text-5xl font-bold">Login</h1>
+             
               <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
                   <label className="label">
