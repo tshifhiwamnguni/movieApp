@@ -1,137 +1,300 @@
-import dark_magician_girl from "../../assets/dark_magician_girl.jpeg"
-import { useState } from 'react';
-// import userService from "../../services/users.crudService";
-import axios from "axios"
-// import { info } from "daisyui/src/colors";
+import { MdEmail } from "react-icons/md";
+import { IoCall } from "react-icons/io5";
+import { BiRename } from "react-icons/bi";
+import axios from "axios";
+import { API } from "../environment/constant";
+import jwt_decode from "jwt-decode";
+import { useState, useEffect } from "react";
+import { ERROR, SUCCESS } from "../environment/toast";
+import { ToastContainer } from "react-toastify";
+import "./adminProfile.css";
+import { RiLockPasswordFill } from "react-icons/ri";
 
 function AdminProfile() {
+  let ID;
+  const [userI, setUserId] = useState(0);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [cellphone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const token = localStorage.getItem("jwt");
+  const [firstname, setFirstname]=useState('');
+  const [lastname, setLastname]=useState('');
 
-    const [firstName, setFirstName] = useState('');
-    // const [lastName, setSurname] = useState('')
-    const [emails, setEmails] = useState('');
-    const [cellPhone, setCellphone] = useState('');
-    const [passWord, setPassword] = useState('');
-    let info = ''
-    //API request
-   
-    // useEffect and jwt
-   
+  useEffect(() => {
+    
+    let decoded = jwt_decode(token);
+    ID = decoded.id;
+    console.log(decoded); //data is what you sent in.
+    setUserId(ID);
+    console.log(userI);
 
-    const handleSubmit = event => {
-        console.log('handleSubmit ran');
-        // 👈️ prevent page refresh
-        event.preventDefault(); 
+    setLoading(true);
 
-        axios.get("https://strapi-movie-app.onrender.com/api/users").then((response) => {
-           console.log(response.data)
-            info = response.data[0].username
-        }).catch((err) => console.log(err));
+    axios
+      .get(`${API}/users/${ID}`)
+      .then((data) => {
+        console.log(data.data);
+        setEmail(data.data.email);
+        setName(data.data.username);
+        setPhone(data.data.cellphone);
+        setFirstname(data.data.firstname);
+        setLastname(data.data.lastname);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => setLoading(false));
+  }, [ID]);
 
-        //Post request
-        // event.preventDefault(); 
-        axios.put(`https://strapi-movie-app.onrender.com/api/users/9`, {data:{
-            
-                username: firstName,
-                email: emails,
-                cellphone: cellPhone}
-       
-        }).then((response) => {
-            console.log("Details saved!")
-            console.log(response)
-            
-        }).catch((err) => console.log(err));
+  const update = async (e) => {
+    if (window.confirm("Are you sure you want to update these?")) {
+      e.preventDefault();
+      setLoading(true);
+      const data = {
+        email: email,
+        cellphone: cellphone,
+        username: name,
+        firstname: firstname,
+        lastname: lastname
+      };
+      console.log(userI);
 
-        // 👇️ access input values here
-        console.log('firstName 👉️', firstName);
-        console.log('email 👉️', emails);
-        console.log('cellPhone 👉️', cellPhone);
-        console.log('passWord 👉️', passWord);
+      await axios
+        .put(`${API}/users/${userI}`, data)
+        .then((data) => {
+          SUCCESS("Profile updated.");
+        })
+        .catch((error) => {
+          ERROR(error.response.data.error.message);
+        })
+        .finally(() => setLoading(false));
+    }
+  };
 
-        setFirstName('');
-        setEmails('');
-        setCellphone('');
-        setPassword('');
+  const changePassword = async (e) => {
+    e.preventDefault();
+
+    setLoading(true)
+    const data = {
+      currentPassword: currentPassword,
+      password: password,
+      passwordConfirmation: confirmPassword
     };
 
-    return (
+    await axios.post(
+     `${API}/auth/change-password`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then(()=>{
+      SUCCESS('Successfully change the password');
+    }).catch((error)=>{
+      ERROR(error.response.data.error.message);
+    }).finally(()=>{
+      setLoading(false);
+    })
+  };
 
-        <>
-            <h1 className="text-primary text-4xl m-4 text-center">Edit Profile</h1>
-            <hr className="w-4/5 m-4" />
+  return (
+    <div>
+      <ToastContainer />
+      <div className="hero min-h-screen flex justify-center align-middle">
+        <div className="card w-96 card-compact bg-base-100 shadow-xl">
+          {loading ? (
+            <progress className="progress h-1 progress-primary w-96 loading"></progress>
+          ) : (
+            ""
+          )}
+          <div className="card-body">
+            <h1 className="text-center text-5xl font-bold">Profile</h1>
+            <form>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your Email</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <MdEmail style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="email"
+                    placeholder="info@site.com"
+                    className="input input-bordered input-primary w-full"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                  />
+                </label>
+              </div>
 
-            <div className="container flex flex-col min-w-screen min-h-full lg:flex-row m-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your username</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <BiRename style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className="input input-bordered input-primary w-full"
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
+                  />
+                </label>
+              </div>
 
-                <div className="card lg:card-side w-full bg-base-300 shadow-xl">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your firstname</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <BiRename style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className="input input-bordered input-primary w-full"
+                    onChange={(e) => setFirstname(e.target.value)}
+                    value={firstname}
+                  />
+                </label>
+              </div>
 
-                    <div className="card-body">
-                        <img src={dark_magician_girl} className="w-64 rounded-full ring ring-primary ring-offset-base-100 mx-auto" alt="dark magician" />
-                        <h2 className="text-center">Upload a different photo...</h2>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your lastname</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <BiRename style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className="input input-bordered input-primary w-full"
+                    onChange={(e) => setLastname(e.target.value)}
+                    value={lastname}
+                  />
+                </label>
+              </div>
 
-                        <div className="card-actions justify-center">
-                            <input type="file" className="file-input file-input-bordered file-input-primary w-4/5 max-w-xs rounded" />
-                        </div>
-                    </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Your Cellphone</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <IoCall style={{ fontSize: "1.5rem" }} />
+                  </span>
+                  <input
+                    type="tel"
+                    placeholder="e.g 0712345678"
+                    className="input input-bordered input-primary w-full"
+                    value={cellphone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </label>
+              </div>
 
-                </div>
+              <div className="flex justify-end mt-9 space-x-2">
+                <button className="btn btn-primary" onClick={update}>
+                  Update
+                </button>
+                <label htmlFor="my-modal-3" className="btn btn-primary">
+                  Change password
+                </label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {/* Modal for change password */}
+      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+      <div className="modal">
+      
+        <div className="modal-box relative">
+          <label
+            htmlFor="my-modal-3"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold">Change your password</h3>
 
-
-                <div className="divider lg:divider-horizontal"></div>
-
-                <div className="p-6 grid flex-grow  card h-3/4 w-full rounded-box place-items-cente bg-base-300" >
-                    <h1 className="text-primary text-4xl text-center">Personal info</h1>
-
-                    <hr className="w-4/5 m-4" />
-                    <form className="card flex-shrink-0 w-full md:w-full max-w-screen" onSubmit={handleSubmit}>
-                        <div className="card-body w-full">
-                            <div className="form-control flex flex-row w-full">
-                                <label className="label">
-                                    <span className="label-text w-24">First name:</span>
-                                </label>
-                                <input type="text" id="username" name="username" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder={info} className="input input-bordered w-full rounded"/>
-                            </div>
-                            <div className="form-control flex flex-row">
-                                <label className="label">
-                                    <span className="label-text w-24">Last name:</span>
-                                </label>
-                                <input type="text" placeholder="Surname" id="surname" name="surname" className="input input-bordered w-full rounded" />
-
-                            </div>
-                            <div className="form-control flex flex-row">
-                                <label className="label">
-                                    <span className="label-text w-24">Email</span>
-                                </label>
-                                <input type="email" id="email" name="email" value={emails} placeholder="password" onChange={event => setEmails(event.target.value)} className="input input-bordered w-full rounded" />
-
-                            </div>
-                            <div className="form-control flex flex-row">
-                                <label className="label">
-                                    <span className="label-text w-24">Password</span>
-                                </label>
-                                <input type="text" id="email" name="email" value={passWord} placeholder="Password" onChange={event => setPassword(event.target.value)} className="input input-bordered w-full rounded" />
-
-                            </div>
-                            <div className="form-control flex flex-row">
-                                <label className="label">
-                                    <span className="label-text w-24">Phone no:</span>
-                                </label>
-                                <input type="text" id="cellphone" name="cellphone" value={cellPhone} placeholder="Phone number" onChange={event => setCellphone(event.target.value)} className="input input-bordered w-full rounded" />
-                            </div>
-
-                            <div className=" flex flex-row justify-end align-end gap-2">
-                                <button className="btn btn-primary w-24 rounded" type="submit">Save</button>
-                                <button className="btn btn-secondary w-24 rounded">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
+          <form>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Current password</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <RiLockPasswordFill style={{ fontSize: "1.5rem" }} />
+                </span>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  className="input input-bordered input-primary w-full"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+              </label>
             </div>
 
-        </>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">New password</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <RiLockPasswordFill style={{ fontSize: "1.5rem" }} />
+                </span>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  className="input input-bordered input-primary w-full"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </label>
+            </div>
 
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Confirm password</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <RiLockPasswordFill style={{ fontSize: "1.5rem" }} />
+                </span>
+                <input
+                  type="password"
+                  placeholder="*****************"
+                  className="input input-bordered input-primary w-full"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </label>
+            </div>
 
-    );
+            <div className="flex justify-end mt-9 space-x-2">
+              <button className="btn btn-primary" onClick={changePassword}>
+                Change
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-
-export default AdminProfile
+export default AdminProfile;

@@ -4,9 +4,11 @@ import { API } from "../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
 import { setToken } from "../environment/helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ERROR, SUCCESS } from "../environment/toast";
+import jwt_decode from "jwt-decode";
+import Bac from "../back/back";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,10 @@ function Login() {
       password: "required|min:6",
     }
   );
+
+  function move() {
+    navigate("forgot", { replace: true });
+  }
 
   const login = async (e) => {
     e.preventDefault();
@@ -43,8 +49,29 @@ function Login() {
           console.log(user);
 
           setToken(jwt);
-          navigate("/admin/", {replace: true})
-          SUCCESS(`Welcome ${user.username}`)
+          // navigate("/admin/", { replace: true });
+
+          const token = localStorage.getItem("jwt");
+          let decoded = jwt_decode(token);
+          let ID = decoded.id;
+
+          axios
+            .get(`${API}/users/${ID}?populate=*`)
+            .then((data) => {
+              console.log("role ", data.data.role.id);
+
+              if (data.data.role.id === 4) {
+                navigate("../customer");
+              }
+              if (data.data.role.id === 3) {
+                navigate("/admin/", { replace: true });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          SUCCESS(`Welcome ${user.username}`);
         })
         .catch((error) => {
           console.log(error.response.data.error.details.errors);
@@ -63,22 +90,23 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      {loading ? (
-        <progress className="progress primary w-full loading"></progress>
-      ) : (
-        ""
-      )}
-      <div className="hero min-h-screen bg-base-200">
+      <div className="fixed">
+        <Bac />
+      </div>
+      <div className="hero min-h-screen bg-base-100">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
+            <h1 className="text-5xl font-bold">Login</h1>
             <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+              Stream the world's best movies, all in one place.
             </p>
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="card flex-shrink-0 w-96 max-w-sm shadow-2xl bg-base-100">
+            {loading ? (
+              <progress className="progress progress-primary flex-shrink-0 w-96 h-1 loading"></progress>
+            ) : (
+              ""
+            )}
             <div className="card-body">
               <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
@@ -118,17 +146,24 @@ function Login() {
                   <label className="error">
                     {errors.password ? errors.password : ""}
                   </label>
-                  <label className="label">
-                    <a href="#" className="label-text-alt link link-hover">
+
+                  <span className="mt-3">
+                    <Link className="link" to={"/forgot"}>
                       Forgot password?
-                    </a>
-                  </label>
+                    </Link>
+                  </span>
                 </div>
                 <div className="form-control mt-6">
                   <button className="btn btn-primary" type="submit">
                     Login
                   </button>
                 </div>
+                <span>
+                  Don't have an account?{" "}
+                  <Link className="link" to={"/register"}>
+                    register
+                  </Link>
+                </span>
               </form>
             </div>
           </div>

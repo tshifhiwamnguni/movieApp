@@ -1,59 +1,68 @@
 import React from "react";
-import womanKing from '../../../src/assets/womanKing.jpeg'
+import { BsFillBookmarkPlusFill } from "react-icons/bs";
+import { HiUsers } from "react-icons/hi";
+import { MdMovie } from "react-icons/md";
+import { ImBlocked } from "react-icons/im";
+
 function Dashboard() {
-    return (
-      
-      <container className="min-h-screen">
-        <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 xs:grid-cols-1">
-  
-          <div className="card w-96 bg-primary rounded text-primary-content mt-16">
-          
+  return (
+    <div className="hero min-h-screen xs:mt-28">
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-2 gap-5 justify-center">
+        <div className="card w-96 bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Number of booking</h2>
+            <div className="flex space-x-2 justify-center">
+              <BsFillBookmarkPlusFill style={{ fontSize: "2rem" }} />
+              <p className="text-2xl font-bold">1000</p>
+            </div>
 
-            <div className="card-body text-center">
-              <img class="w-screen" src={womanKing} alt="Mountain"/>
-              <div className="flex justify-between">
-                <h2 className="card-title flex justify-center">Woman King</h2>
-                <div className="badge badge-secondary">PG 16 | DRAMA</div>
-              </div>
-              <p>A historical epic inspired by the true events that happened in The Kingdom of Dahomey, one of the most powerful states of Africa in the 18th and 19th centuries.</p>
-              <div className="flex flex-col justify-center text-center">
-                <h2 className="card-title flex">Total Bookings: <span className="bg-white px-2 square text-xl ml-auto">100</span></h2>
-              </div>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary">More info</button>
             </div>
           </div>
-
-          <div className="card w-96 bg-primary rounded text-primary-content mt-16">
-            <div className="card-body text-center">
-              <img class="w-screen" src={womanKing} alt="Mountain"/>
-              <div className="flex justify-between">
-                <h2 className="card-title flex justify-center">Woman King</h2>
-                <div className="badge badge-secondary">PG 16 | DRAMA</div>
-              </div>
-              <p>A historical epic inspired by the true events that happened in The Kingdom of Dahomey, one of the most powerful states of Africa in the 18th and 19th centuries.</p>
-              <div className="flex flex-col justify-center text-center">
-                <h2 className="card-title flex">Total Bookings: <span className="bg-white px-2 square text-xl ml-auto">100</span></h2>
-              </div>
-            </div>
-          </div>
-
-          <div className="card w-96 bg-primary rounded text-primary-content mt-16">
-            <div className="card-body text-center">
-              <img class="w-screen" src={womanKing} alt="Mountain"/>
-              <div className="flex justify-between">
-                <h2 className="card-title flex justify-center">Woman King</h2>
-                <div className="badge badge-secondary">PG 16 | DRAMA</div>
-              </div>
-              <p>A historical epic inspired by the true events that happened in The Kingdom of Dahomey, one of the most powerful states of Africa in the 18th and 19th centuries.</p>
-              <div className="flex flex-col justify-center text-center">
-                <h2 className="card-title flex">Total Bookings: <span className="bg-white px-2 square text-xl ml-auto">100</span></h2>
-              </div>
-            </div>
-          </div>
-  
         </div>
-      </container>
 
-    );
-  }
+        <div className="card w-96 bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Number of users</h2>
+            <div className="flex space-x-2 justify-center">
+              <HiUsers style={{ fontSize: "2rem" }} />
+              <p className="text-2xl font-bold">1000</p>
+            </div>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary">More info</button>
+            </div>
+          </div>
+        </div>
 
-  export default Dashboard;
+        <div className="card w-96 bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Number of movies</h2>
+            <div className="flex space-x-2 justify-center">
+              <MdMovie style={{ fontSize: "2rem" }} />
+              <p className="text-2xl font-bold">1000</p>
+            </div>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary">More info</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="card w-96 bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Blocked</h2>
+            <div className="flex space-x-2 justify-center">
+              <ImBlocked style={{ fontSize: "2rem" }} />
+              <p className="text-2xl font-bold">50</p>
+            </div>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary">More info</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Dashboard;
