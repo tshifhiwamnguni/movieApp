@@ -74,7 +74,7 @@ function Login() {
             </p>
           </div>
           <div className="card flex-shrink-0 w-96 max-w-sm shadow-2xl bg-base-100">
-            {!loading ? (
+            {loading ? (
               <progress className="progress progress-primary flex-shrink-0 w-96 h-1 loading"></progress>
             ) : (
               ""
