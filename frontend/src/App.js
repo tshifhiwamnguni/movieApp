@@ -12,8 +12,12 @@ const ForgotPassword = lazy(()=> import('./components/passwords/forgot_password/
 const ResetPassword  = lazy(()=> import('./components/passwords/reset_password/ResetPassword'));
 const Statistics = lazy(() => import("./components/statistics/statistics"));
 const AdminProfile = lazy(()=> import('./components/adminProfile/adminProfile'));
-// const Statistics = lazy(()=> import('./components/statistics/statistics'));
+
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
+const Register = lazy(()=> import('./components/register/Register') )
+const Customer = lazy(()=> import('./components/Customer/Customer'))
+const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
+const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
 
 function App() {
   return (
@@ -30,14 +34,23 @@ function App() {
             <Route path="/" element={<Splash />}></Route>
             <Route path="/admin/login/" element={<Login />}></Route>
             <Route path="/admin/" element={<Home />}></Route>
-
-           
             <Route path='/admin/profile/' element={<AdminProfile/>}></Route> */}
          
     
-            <Route path="admin/login" element={<Login/>}></Route>
+            <Route path="login" element={<Login/>}></Route>
+            <Route path="customer" element={<Customer/>}></Route>
+
+            <Route path="/register" element={<Register/>}></Route>
+            <Route path="/cinema" element={<Cinema/>}></Route>
+            <Route path="/theatre" element={<Theatre/>}></Route>
+
+
+            <Route path='forgot' element={<ForgotPassword/>}></Route>
             <Route path="/" element={<Splash/>}></Route>
+            <Route path="/register" element={<Register/>}></Route>
+
             <Route path="*" element={<Splash/>}></Route>
+            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
             <Route path="forgot" element={<ForgotPassword/>}></Route>
             <Route path="reset" element={<ResetPassword/>}></Route>
             <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="admin/login"/>} >
