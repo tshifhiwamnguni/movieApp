@@ -41,6 +41,8 @@ function AdminProfile() {
         setEmail(data.data.email);
         setName(data.data.username);
         setPhone(data.data.cellphone);
+        setFirstname(data.data.firstname);
+        setLastname(data.data.lastname);
       })
       .catch((error) => {
         console.log(error);
