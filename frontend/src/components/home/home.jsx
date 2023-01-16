@@ -50,7 +50,7 @@ function Home() {
             </div>
             <div className="flex-1 px-2 mx-2">
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
-              <a style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
+              <a className="" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
                 Theatre
               </a>
             </div>
