@@ -1,4 +1,4 @@
-import React, { useState, } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { API } from "../environment/constant";
 import "./login.css";
@@ -7,7 +7,7 @@ import { setToken } from "../environment/helpers";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ERROR, SUCCESS } from "../environment/toast";
-
+import jwt_decode from "jwt-decode";
 function Login() {
   const [loading, setLoading] = useState(false);
 
@@ -23,9 +23,8 @@ function Login() {
     }
   );
 
-
-  function move(){
-    navigate('forgot',{replace: true})
+  function move() {
+    navigate("forgot", { replace: true });
   }
 
   const login = async (e) => {
@@ -48,8 +47,32 @@ function Login() {
           console.log(user);
 
           setToken(jwt);
-          navigate("/admin/", {replace: true})
-          SUCCESS(`Welcome ${user.username}`)
+          // navigate("/admin/", { replace: true });
+
+          const token = localStorage.getItem("jwt");
+          let decoded = jwt_decode(token);
+          let ID = decoded.id;
+      
+          axios
+            .get(`${API}/users/${ID}?populate=*`)
+            .then((data) => {
+
+              console.log("role ", data.data.role.id);
+
+              if ( data.data.role.id===4) {
+                navigate('../customer')
+              }
+              if ( data.data.role.id===3) {
+                navigate("/admin/", { replace: true })
+              }
+
+              
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          SUCCESS(`Welcome ${user.username}`);
         })
         .catch((error) => {
           console.log(error.response.data.error.details.errors);
@@ -85,6 +108,7 @@ function Login() {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
+              <h1 className="text-center text-5xl font-bold">Login</h1>
               <form onSubmit={login} noValidate autoComplete="on">
                 <div className="form-control">
                   <label className="label">
@@ -123,16 +147,25 @@ function Login() {
                   <label className="error">
                     {errors.password ? errors.password : ""}
                   </label>
-  
-                    
-                    
-                        <span>Forgot password? click <Link className="link"  to={'/forgot'}>here</Link></span>
+
+                  <span>
+                    Forgot password? click{" "}
+                    <Link className="link" to={"/forgot"}>
+                      here
+                    </Link>
+                  </span>
                 </div>
                 <div className="form-control mt-6">
                   <button className="btn btn-primary" type="submit">
                     Login
                   </button>
                 </div>
+                <span>
+                  Don't have an account?{" "}
+                  <Link className="link" to={"/register"}>
+                    register
+                  </Link>
+                </span>
               </form>
             </div>
           </div>

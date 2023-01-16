@@ -5,7 +5,7 @@ function Splash() {
     const navigate = useNavigate();
 
     function move(){
-        navigate('admin/login');
+        navigate('login');
     }
   return (
     <div>

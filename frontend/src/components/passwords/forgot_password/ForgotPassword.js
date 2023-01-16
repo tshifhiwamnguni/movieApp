@@ -73,8 +73,9 @@ function ForgotPassword() {
       <form ref={forms} onSubmit={tries}>
         <div className="hero min-h-screen bg-base-200">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <p className="b">Reset password</p>
+            
             <div className="card-body">
+            <h1 className="text-center text-5xl font-bold">Forgot password</h1>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">email</span>
