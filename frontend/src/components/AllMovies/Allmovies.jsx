@@ -3,7 +3,7 @@ import './allmov.css';
 
 function Allmovies() {
   return (
-    <div>Allmovies</div>
+    <div className='hero min-h-screen'>Allmovies</div>
   )
 }
 

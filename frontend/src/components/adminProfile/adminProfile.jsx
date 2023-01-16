@@ -28,16 +28,13 @@ function AdminProfile() {
     
     let decoded = jwt_decode(token);
     ID = decoded.id;
-    console.log(decoded); //data is what you sent in.
     setUserId(ID);
-    console.log(userI);
 
     setLoading(true);
 
     axios
       .get(`${API}/users/${ID}`)
       .then((data) => {
-        console.log(data.data);
         setEmail(data.data.email);
         setName(data.data.username);
         setPhone(data.data.cellphone);
@@ -45,7 +42,7 @@ function AdminProfile() {
         setLastname(data.data.lastname);
       })
       .catch((error) => {
-        console.log(error);
+        ERROR(error.response.data.error.message);
       })
       .finally(() => setLoading(false));
   }, [ID]);
@@ -61,7 +58,6 @@ function AdminProfile() {
         firstname: firstname,
         lastname: lastname
       };
-      console.log(userI);
 
       await axios
         .put(`${API}/users/${userI}`, data)
