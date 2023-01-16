@@ -30,7 +30,7 @@ function Home() {
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
-          <div className="w-screen navbar bg-base-300 fixed">
+          <div className="w-screen navbar bg-base-300 fixed z-10">
             <div className="flex-none lg:hidden">
               <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
                 <svg
