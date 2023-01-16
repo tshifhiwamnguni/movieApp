@@ -27,14 +27,6 @@ function AdminProfile() {
             info = response.data[0].username
         }).catch((err) => console.log(err));
 
-        
-        
-
-        
-
-        
-        
-
         //Post request
         // event.preventDefault(); 
         axios.put(`https://strapi-movie-app.onrender.com/api/users/9`, {data:{

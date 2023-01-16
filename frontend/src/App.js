@@ -28,11 +28,11 @@ function App() {
             <Route path="/" element={<Splash />}></Route>
             <Route path="/admin/login/" element={<Login />}></Route>
             <Route path="/admin/" element={<Home />}></Route>
-            <Route path="/admin/test" element={<Test />}></Route>
+            <Route path="/admin/test/" element={<Test />}></Route>
            
-            <Route path='/admin/profile/' element={<AdminProfile/>}></Route>
+            <Route path='/admin/profile/' element={<AdminProfile />}></Route>
          
-            <Route path='/admin/stats/' element={<Statistics/>}></Route>
+            <Route path='/admin/stats/' element={<Statistics />}></Route>
 
           </Routes>
         </Suspense>
