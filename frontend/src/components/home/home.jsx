@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +57,7 @@ function Home() {
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
                 <li  onClick={() => navigate("/admin/dashboard/")}>
-                  <a  className={active ? "active" : ""}>
+                  <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
@@ -68,7 +68,7 @@ function Home() {
                     Profile
                   </a>
                 </li>
-                <li>
+                <li onClick={() => navigate("/admin/movies/")}>
                   <a>
                     <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                     All movies
