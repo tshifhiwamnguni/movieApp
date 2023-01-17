@@ -101,10 +101,11 @@ function Allmovies() {
   //   update the movie
   const updateMovie = (e) => {
       e.preventDefault();
-    const movieData ={
+    const movieData ={data:{
         title: title,
         movieImage: moviePoster,
         cinema: selectedCinema
+    }
     }
 
     console.log(movieData);
