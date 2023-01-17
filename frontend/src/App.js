@@ -10,6 +10,7 @@ import "./App.css";
 import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
+import AllMovies from "./components/AllMovies/AllMovies";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(() => import("./components/home/home"));
@@ -72,7 +73,7 @@ function App() {
               <Route path="/admin" element={<Navigate replace to="dashboard" />}/>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              <Route path="stats" element={<Statistics />} />
+              <Route path="movies" element={<AllMovies/>} />
             </Route>
           </Routes>
         </Suspense>
