@@ -68,7 +68,7 @@ function Home() {
                     Profile
                   </a>
                 </li>
-                <li>
+                <li onClick={() => navigate("/admin/movies/")}>
                   <a>
                     <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                     All movies
