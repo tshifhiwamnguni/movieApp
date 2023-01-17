@@ -84,7 +84,7 @@ function App() {
               />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              <Route path="movies" element={<AllMovies />} />
+              {/* <Route path="movies" element={<AllMovies />} /> */}
             </Route>
           </Routes>
         </Suspense>
