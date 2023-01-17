@@ -19,6 +19,7 @@ const Customer = lazy(()=> import('./components/tester/Customers'))
 // const Splash = lazy(() => import("./components/splashpage/Splash"));
 const Landing = lazy(()=> import('./components/customers/landing/landing'))
 const History = lazy(()=> import('./components/customers/bookingHistory/history'))
+const Review = lazy(()=> import('./components/customers/review/review'))
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
 
             <Route path="/landing" element={<Landing/>}></Route>
             <Route path="/history" element={<History/>}></Route>
+            <Route path="/review" element={<Review/>}></Route>
           </Routes>
        
         </Suspense>
