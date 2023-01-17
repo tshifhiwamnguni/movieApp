@@ -14,13 +14,13 @@ function ClientSide() {
 
     useEffect(() => {
       if (!localStorage.getItem("jwt")) {
-        navigate("/admin/login/", { replace: true });
+        navigate("/login/", { replace: true });
       }
     });
   
     function logout() {
       removeToken();
-      navigate("/admin/login/", { replace: true });
+      navigate("/login/", { replace: true });
     }
   
     const active = true;
@@ -57,22 +57,23 @@ function ClientSide() {
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/admin/dashboard/")}>
+                <li  onClick={() => navigate("/client/clientHome/")}>
                   <a  className={active ? "active" : ""}>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/profile/")}>
+
+                <li onClick={() => navigate("/client/movie/")}>
                   <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
-                    Profile
+                    All Movies
                   </a>
                 </li>
                 <li>
                   <a>
                     <RiMovie2Line style={{ fontSize: "1.5rem" }} />
-                    All movies
+                    All plays
                   </a>
                 </li>
                 <li onClick={logout}>

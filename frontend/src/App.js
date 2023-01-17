@@ -32,6 +32,11 @@ const Cinema = lazy(() => import("./components/Cinema/Cinema"));
 const Theatre = lazy(() => import("./components/Theatre/Theatre"));
 const Booking = lazy(() => import("./components/Booking/Booking"));
 
+const ClientHome = lazy(() =>
+  import("./components/clientSide/ClientHome/ClientHome")
+);
+const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
+
 
 
 function App() {
@@ -46,21 +51,21 @@ function App() {
           }
         >
           <Routes>
-           
-
             <Route path="book" element={<Booking />}></Route>
             <Route path="login" element={<Login />}></Route>
- <Route path="customer" element={<Customer />}></Route>
+            <Route path="customer" element={<Customer />}></Route>
 
-           
-            <Route path="client" element={<ClientSide />}>
-
+            <Route path="/client" element={<ClientSide />}>
+              {/* <Route path="/client" element={<Navigate replace to='clientHome' />} /> */}
+              <Route path="clientHome" element={<ClientHome/>}/>
+              <Route path="movieList" element={<Movies/>}/>
             </Route>
+            
             <Route path="/cinema" element={<Cinema />}></Route>
             <Route path="/theatre" element={<Theatre />}></Route>
 
             <Route path="/register" element={<Register />}></Route>
-           
+
             <Route path="forgot" element={<ForgotPassword />}></Route>
             <Route path="/" element={<Splash />}></Route>
             <Route path="/register" element={<Register />}></Route>
@@ -69,11 +74,17 @@ function App() {
             {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
             <Route path="forgot" element={<ForgotPassword />}></Route>
             <Route path="reset" element={<ResetPassword />}></Route>
-            <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="admin/login" />}>
-              <Route path="/admin" element={<Navigate replace to="dashboard" />}/>
+            <Route
+              path="/admin"
+              element={!getToken() ? <Home /> : <Navigate to="admin/login" />}
+            >
+              <Route
+                path="/admin"
+                element={<Navigate replace to="dashboard" />}
+              />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              <Route path="movies" element={<AllMovies/>} />
+              <Route path="movies" element={<AllMovies />} />
             </Route>
           </Routes>
         </Suspense>
