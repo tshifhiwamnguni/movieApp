@@ -6,6 +6,7 @@ import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
 
+
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(()=> import('./components/home/home'));
 const ForgotPassword = lazy(()=> import('./components/passwords/forgot_password/ForgotPassword'));
@@ -20,6 +21,7 @@ const Customer = lazy(()=> import('./components/tester/Customers'))
 const Landing = lazy(()=> import('./components/customers/landing/landing'))
 const History = lazy(()=> import('./components/customers/bookingHistory/history'))
 const Review = lazy(()=> import('./components/customers/review/review'))
+const Test = lazy(() => import("./components/test/test"))
 
 function App() {
   return (
@@ -58,6 +60,7 @@ function App() {
             <Route path="/landing" element={<Landing/>}></Route>
             <Route path="/history" element={<History/>}></Route>
             <Route path="/review" element={<Review/>}></Route>
+            <Route path="/test" element={<Test/>}></Route>
           </Routes>
        
         </Suspense>

@@ -16,17 +16,17 @@ const Test = () => {
     console.log('cellphone 👉️', cellphone);
 
     //Api call
-    axios.get("https://strapi-movie-app.onrender.com/api/users/").then((response) => {
-      console.log(response)
-      let id = response.data[0].id;
-      axios.put("https://strapi-movie-app.onrender.com/api/users/" + id, {data: {
-        username: firstName,
-        email: email,
-        cellphone: cellphone}
-      }).then((res) => {
-        console.log(res)
-      });
-    }); 
+    // axios.get("https://strapi-movie-app.onrender.com/api/users/").then((response) => {
+    //   console.log(response)
+    //   let id = response.data[0].id;
+    //   axios.put("https://strapi-movie-app.onrender.com/api/users/" + id, {data: {
+    //     username: firstName,
+    //     email: email,
+    //     cellphone: cellphone}
+    //   }).then((res) => {
+    //     console.log(res)
+    //   });
+    // }); 
 
     // 👇️ clear all input values in the form
     setFirstName('');
@@ -36,7 +36,7 @@ const Test = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form >
         <input
           id="first_name"
           name="first_name"
@@ -44,22 +44,18 @@ const Test = () => {
           onChange={event => setFirstName(event.target.value)}
           value={firstName}
         />
+        <label onClick={event => setEmail(event.target.value)} className="bg-green-500" value={7}>$$$</label>
+        <label onClick={event => setEmail(event.target.value)} className="bg-green-500" value={9}>###</label>
         <input
           id="last_name"
           name="last_name"
           type="text"
           value={email}
-          onChange={event => setEmail(event.target.value)}
+          
         />
-        <input
-          id="last_name"
-          name="last_name"
-          type="text"
-          value={cellphone}
-          onChange={event => setCellphone(event.target.value)}
-        />
+       
 
-        <button type="submit">Submit form</button>
+        <button type="submit" onSubmit={handleSubmit}>Submit form</button>
       </form>
     </div>
   );

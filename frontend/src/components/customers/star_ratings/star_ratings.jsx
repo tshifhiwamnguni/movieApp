@@ -4,8 +4,13 @@ import "./star_ratings.css"
 const StarRatings = () => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
+   
 
     console.log(rating);
+    const parentToChild = () => {
+        setRating(rating)
+      }
+   
     return (
         <div className="star-rating text-2xl">
             {[...Array(5)].map((star, index) => {
@@ -15,7 +20,7 @@ const StarRatings = () => {
                         type="button"
                         key={index}
                         className={index <= (hover || rating) ? "on" : "off"}
-                        onClick={() => setRating(index)}
+                        onClick={() => parentToChild()}
                         onMouseEnter={() => setHover(index)}
                         onMouseLeave={() => setHover(rating)}
                     >
