@@ -32,7 +32,7 @@ const Cinema = lazy(() => import("./components/Cinema/Cinema"));
 const Theatre = lazy(() => import("./components/Theatre/Theatre"));
 const Booking = lazy(() => import("./components/Booking/Booking"));
 
-const 
+
 
 function App() {
   return (
