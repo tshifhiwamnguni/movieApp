@@ -39,8 +39,8 @@ const iframeRef = useRef()
   }
 
   function stop(){
-  
-        iframeRef.current.remove();
+        console.log(iframeRef.current.contentWindow.frames);
+        iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
   }
   return (
     <>
@@ -88,6 +88,7 @@ const iframeRef = useRef()
                           <h3 className="font-bold text-lg">
                             {modelData.attributes.title}
                           </h3>
+
                           <iframe
                           ref={iframeRef}
                               width="966"
@@ -96,8 +97,12 @@ const iframeRef = useRef()
                               title="Avatar: The Way of Water | Official Trailer"
                               frameborder="0"
                               
-                              allow="autoplay"
+                            //   allow="autoplay"
                             ></iframe>
+
+
+
+
                           <div className="modal-action">
                             <label onClick={stop} htmlFor="my-modal-5" className="btn">
                           close
