@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { BsHouse } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { RiMovie2Line } from "react-icons/ri";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import "./home.css";
+import "./navbar.css";
 import {Outlet} from "react-router-dom" ;
 
 function Home() {
@@ -50,7 +50,7 @@ function Home() {
             </div>
             <div className="flex-1 px-2 mx-2">
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
-              <a style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
+              <a className="" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
                 Theatre
               </a>
             </div>
@@ -110,7 +110,7 @@ function Home() {
                 Profile
               </a>
             </li>
-            <li>
+            <li onClick={() => navigate("/admin/movies/")}>
               <a>
                 <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                 All movies
