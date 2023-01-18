@@ -104,7 +104,7 @@ function AdminProfile() {
       <div className="hero min-h-screen flex justify-center align-middle">
         <div className="card w-96 card-compact bg-base-100 shadow-xl">
           {loading ? (
-            <progress className="progress h-1 progress-primary w-96 loading"></progress>
+            <progress className="progress progress-primary w-96 loading"></progress>
           ) : (
             ""
           )}

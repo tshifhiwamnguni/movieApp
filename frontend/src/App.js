@@ -5,7 +5,6 @@ import "./App.css";
 import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
-import Allmovies from "./components/AllMovies/Allmovies";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(()=> import('./components/Navbar/navbar'));
@@ -18,6 +17,7 @@ const Register = lazy(()=> import('./components/register/Register') )
 const Customer = lazy(()=> import('./components/Customer/Customer'))
 const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
 const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
+const AllMovies = lazy(()=>import('./components/AllMovies/Allmovies'));
 
 function App() {
   return (
@@ -48,7 +48,7 @@ function App() {
               <Route path="/admin" element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              <Route path="movies" element={<Allmovies/>} />
+              <Route path="movies" element={<AllMovies/>} />
             </Route>
           </Routes>
        

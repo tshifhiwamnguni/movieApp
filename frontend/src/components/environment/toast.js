@@ -8,7 +8,7 @@ export const SUCCESS = (data) => {
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: false,
+        draggable: true,
         progress: undefined,
         theme: "colored",
         });
@@ -21,7 +21,7 @@ export const ERROR = (data) =>{
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: false,
+        draggable: true,
         progress: undefined,
         theme: "colored",
         });

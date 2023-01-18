@@ -1,164 +1,226 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { API, TOKEN } from "../environment/constant";
-import { ERROR } from "../environment/toast";
 import "./allmov.css";
-import { MdAddAPhoto } from "react-icons/md";
-import { BiRename, BiTimeFive } from "react-icons/bi";
-import { TbMovie, TbFileDescription } from "react-icons/tb";
+import moment from "moment";
+import { BiRename } from "react-icons/bi";
+import { TbFileDescription } from "react-icons/tb";
+import { IoMdTime } from "react-icons/io";
+import { MdAddPhotoAlternate } from "react-icons/md";
+import { ERROR, SUCCESS } from "../environment/toast";
+import { ToastContainer } from "react-toastify";
 
-function Allmovies() {
+function AllMovies() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedData, setSelectedData] = useState();
-  const [cinemas, setCinemas] = useState([]);
-  const [selectedCinema, setSelectedCinema] = useState();
-  const [moviePoster, setMoviePoster] = useState();
   const [title, setTitle] = useState("");
+  const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState("");
+  const [cinemaId, setCinemaId] = useState();
+  const [image, setImage] = useState('');
+  const [cinemas, setCinemas] = useState([]);
+  const movieId = useRef();
+  const [movID, setMovId] = useState();
+  const movieFile = useRef();
+  const imgUrl = useRef();
 
-  //   get movies
-  const movie = () => {
+  const getMovies = async () => {
     setLoading(true);
-
-    axios
+    await axios
       .get(`${API}/movies?populate=*`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
-      .then((res) => {
-        setMovies(res.data.data);
-        console.log(res.data.data[0].attributes);
+      .then((movie) => {
+        console.log(movie.data.data[1]);
+        setMovies(movie.data.data);
       })
       .catch((error) => {
-        ERROR(error.response.data.error.message);
+        console.log(error);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
 
-  //   get cinemas
-  const getCinema = () => {
+  function getCinema() {
     axios
       .get(`${API}/cinemas`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
-      .then((res) => {
-        setCinemas(res.data.data);
-        console.log(res.data.data);
+      .then((cinema) => {
+        console.log(cinema.data.data);
+        setCinemas(cinema.data.data);
       })
       .catch((error) => {
-        ERROR(error.response.data.error.message);
-      })
-      .finally(() => {
-        setLoading(false);
+        console.log(error);
       });
-  };
+  }
 
-  //   get selected on the table
-  const handleSelected = (data) => {
-    setSelectedData(data);
+  function selectedEdit(mov) {
+    console.log(mov.id);
+    setTitle(mov.attributes.title);
+    setDuration(mov.attributes.duration);
+    setDescription(mov.attributes.description);
+    setCinemaId(mov.attributes.cinema.data.id);
+    setImage(mov.attributes.movieImage);
+    movieId.current = mov.id;
+    setMovId(mov.id);
+  }
 
-    setTitle(data.attributes.title);
-    setDescription(data.attributes.description);
-    setDuration(data.attributes.duration);
-    console.log(title);
-    console.log(data);
-  };
-
-  useEffect(() => {
-    movie();
-    getCinema();
-  }, []);
-
-  const fileInput = useRef(null);
-
-  //   show file dialog
   const handleClick = () => {
-    fileInput.current.click();
+    const input = document.createElement("input");
+    input.type = "file";
+
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      movieFile.current = file;
+      console.log(movieFile.current);
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    };
+
+    input.click();
   };
 
-  //   get selected cinema ID
-  const selectCinema = (e) => {
-    setSelectedCinema(e.target.value);
-    console.log(e.target.value);
-  };
-
-  //   get the picture
-
-  const handleChange = (event) => {
-    console.log(event.target.files[0]);
-    setMoviePoster(event.target.files[0]);
-  };
-
-  //   update the movie
-  const updateMovie = (e) => {
-    e.preventDefault();
+  const updateMovie = () => {
+    setLoading(true);
+  
     const movieData = {
       data: {
         title: title,
-        movieImage: moviePoster,
-        cinema: selectedCinema,
+        description: description,
+        movieImage: image,
         duration: duration,
-        description: description
+        cinema: parseInt(cinemaId),
       },
     };
-
-    console.log(movieData);
-
+    console.log(movieId);
+    
     axios
-      .put(`${API}/movies/${selectedData?.id}`, movieData, {
+      .put(`${API}/movies/${movieId.current}?populate=*`, movieData, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((data) => {
         console.log(data);
+        SUCCESS("Successfully updated");
+      })
+      .catch((error) => {
+        console.log(error)
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const deleteMovie = async () => {
+    setLoading(true);
+    await axios
+      .delete(`${API}/movies/${movieId.current}`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        console.log(data);
+        SUCCESS("Successfully deleted");
       })
       .catch((error) => {
         console.log(error);
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const uploadMoviePoster = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    console.log(movID)
+    formData.append("files", movieFile.current);
+    formData.append("refID", movieId.current);
+    formData.append("field", "movieImage");
+    formData.append("ref", "api::movie.movie");
+    
+    
+    await axios
+      .post(`${API}/upload`, formData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        console.log(data.data[0].url);
+        imgUrl.current = data.data[0].url;
+        // SUCCESS("Successfully uploaded");
+        axios
+          .put(
+            `${API}/movies/${movieId.current}?populate=*`,
+            { data: { movieImage: imgUrl.current } },
+            {
+              headers: {
+                Authorization: `Bearer ${TOKEN}`,
+              },
+            }
+          )
+          .then((data) => {
+            console.log(data);
+            // SUCCESS("Successfully updated");
+          })
+          .catch((error) => {
+            // ERROR(error.response.data.error.message);
+          })
+      })
+      .catch((error) => {
+        console.log(error);
+        // ERROR(error.response.data.error.message);
       });
   };
 
+  useEffect(() => {
+    getMovies();
+    getCinema();
+  }, []);
+
   return (
-    <div className=" min-h-screen z-0 mt-24">
-      <div className="flex justify-center">
+    <div className="min-h-screen mt-24 overflow-x-scroll z-0">
+      <ToastContainer className="z-0" />
+      <div className="overflow-x-auto w-full">
         {loading ? (
-          <div className="loader">
-            <div className="loadings"></div>
-          </div>
+          <progress className="progress progress-primary w-full"></progress>
         ) : (
           ""
         )}
-      </div>
-      <div className="overflow-x-auto w-full">
         <table className="table w-full">
           <thead>
             <tr>
               <th></th>
-              <th>Name & Genre</th>
+              <th>Title & Genre</th>
               <th>Duration</th>
               <th>Cinema</th>
-              <th>Bookings</th>
-              <th>Action</th>
+              <th>Created at</th>
+              <th>Updated at</th>
+              <th> Action</th>
+              <th></th>
             </tr>
           </thead>
-
-          {movies.map((data) => {
-            return (
-              <tbody>
-                <tr key={data.id}>
+          <tbody>
+            {movies.map((mov) => {
+              return (
+                <tr key={mov.id}>
                   <td>
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img lazy='true'
-                            src={data?.attributes.movieImage.data.attributes.url}
+                          <img
+                            src={mov.attributes.movieImage}
                             alt="Avatar Tailwind CSS Component"
                           />
                         </div>
@@ -166,47 +228,62 @@ function Allmovies() {
                     </div>
                   </td>
                   <td>
-                    {data.attributes.title}
+                    {mov.attributes.title}
                     <br />
-                    <span className="badge badge-ghost badge-sm">
-                      <ul className="flex gap-2">
-                        {data.attributes.genres.data.map((item, index) => (
-                          <li key={index}>{item.attributes.name}</li>
-                        ))}
-                      </ul>
-                    </span>
+
+                    {mov.attributes.genres.data.map((genre) => (
+                      <span
+                        key={genre.id}
+                        className="badge badge-ghost badge-sm"
+                      >
+                        {genre.attributes.name}
+                      </span>
+                    ))}
                   </td>
                   <td>
-                    <div>
-                      {Math.floor(data.attributes.duration / 60) +
-                        "h:" +
-                        (
-                          Math.round((data.attributes.duration % 60) * 100) /
-                          100
-                        ).toFixed(0) +
-                        "m"}
-                    </div>
+                    {Math.floor(mov.attributes.duration / 60) +
+                      "h:" +
+                      (
+                        Math.round((mov.attributes.duration % 60) * 100) / 100
+                      ).toFixed(0)}
                   </td>
-                  <td>{data.attributes.cinema.data.attributes.name}</td>
-                  <td>{data.attributes.booking_cinemas.data.length}</td>
-                  <th className="flex gap-2">
-                    <label
-                      htmlFor="my-modal-3"
-                      className="btn btn-success btn-xs"
-                      onClick={() => handleSelected(data)}
-                    >
-                      Edit
-                    </label>
-                    <button className="btn btn-error btn-xs">Delete</button>
+                  <td>{mov.attributes.cinema.data.attributes.name}</td>
+                  <td>
+                    {moment(mov.attributes.createdAt).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )}
+                  </td>
+                  <td>
+                    {moment(mov.attributes.updatedAt).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )}
+                  </td>
+                  <th>
+                    <div className="space-x-3">
+                      <label
+                        htmlFor="my-modal-3"
+                        className="btn btn-success btn-xs"
+                        onClick={() => selectedEdit(mov)}
+                      >
+                        Edit
+                      </label>
+                      <label
+                        htmlFor="my-modal-4"
+                        className="btn btn-error btn-xs"
+                        onClick={() => selectedEdit(mov)}
+                      >
+                        Delete
+                      </label>
+                    </div>
                   </th>
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
       </div>
 
-      {/* modal for edit */}
+      {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative">
@@ -218,27 +295,26 @@ function Allmovies() {
           </label>
           <h3 className="text-lg font-bold">Edit movie</h3>
           <div className="py-4">
-            <div className="avatar flex justify-center">
-              <div className="w-24 rounded-full">
-                <img
-                  src={selectedData?.attributes.movieImage.data.attributes.url}
-                  alt="now"
+            <div className="flex justify-center">
+              <div className="avatar">
+                <div className="w-24 rounded-full">
+                  <img src={image} />
+                </div>
+                <MdAddPhotoAlternate
+                  onClick={handleClick}
+                  className="cursor-pointer"
                 />
               </div>
-              <span className="flex justify-center add" onClick={handleClick}>
-                <MdAddAPhoto />
-              </span>
+              <button
+                className="btn btn-primary btn-xs"
+                onClick={uploadMoviePoster}
+              >
+                Upload
+              </button>
             </div>
-            <input
-              ref={fileInput}
-              type="file"
-              style={{ display: "none" }}
-              onChange={handleChange}
-            />
-
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Title</span>
+                <span className="label-text">Movie title</span>
               </label>
               <label className="input-group">
                 <span>
@@ -246,9 +322,9 @@ function Allmovies() {
                 </span>
                 <input
                   type="text"
-                  value={title}
-                  placeholder="Title"
+                  placeholder="Avatar"
                   onChange={(e) => setTitle(e.target.value)}
+                  value={title}
                   className="input input-bordered w-full"
                 />
               </label>
@@ -256,7 +332,7 @@ function Allmovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Description</span>
+                <span className="label-text">Movie Description</span>
               </label>
               <label className="input-group">
                 <span>
@@ -265,54 +341,53 @@ function Allmovies() {
                 <input
                   type="text"
                   value={description}
-                  placeholder="Title"
                   onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe the movie"
                   className="input input-bordered w-full"
                 />
               </label>
+            </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Duration in minutes</span>
-                </label>
-                <label className="input-group">
-                  <span>
-                    <BiTimeFive />
-                  </span>
-                  <input
-                    type="number"
-                    value={duration}
-                    placeholder="Title"
-                    onChange={(e) => setDuration(e.target.value)}
-                    className="input input-bordered w-full"
-                  />
-                </label>
-              </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Movie Duration in minutes</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Cinema</span>
-                </label>
-                <label className="input-group">
-                  <span>
-                    <TbMovie />
-                  </span>
-                  <select
-                    value={selectedCinema}
-                    onChange={selectCinema}
-                    className="select select-primary w-full max-w-xs"
-                  >
-                    <option disabled selected>
-                      Selected the cinema
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Cinema</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <TbFileDescription />
+                </span>
+                <select
+                  defaultValue={cinemaId}
+                  onChange={(e) => setCinemaId(e.target.value)}
+                  className="select select-bordered max-w-md"
+                >
+                  <option disabled>Pick a cinema</option>
+                  {cinemas.map((cin) => (
+                    <option key={cin.id} value={cin.id}>
+                      {cin.attributes.name}
                     </option>
-                    {cinemas.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.attributes.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+                  ))}
+                </select>
+              </label>
+
             </div>
             <div className="flex justify-end mt-3">
               <button className="btn btn-success" onClick={updateMovie}>
@@ -322,8 +397,26 @@ function Allmovies() {
           </div>
         </div>
       </div>
+
+      {/* delete modal */}
+      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+      <label htmlFor="my-modal-4" className="modal cursor-pointer">
+        <label className="modal-box relative" htmlFor="">
+          <h3 className="text-lg font-bold">
+            Are you sure you want to delete {title}?
+          </h3>
+          <div className="py-4">
+            <button className="btn btn-error" onClick={deleteMovie}>
+              Delete
+            </button>
+            <h1 className="mt-4 text-green-500">
+              Click outside the card to cancel
+            </h1>
+          </div>
+        </label>
+      </label>
     </div>
   );
 }
 
-export default Allmovies;
+export default AllMovies;
