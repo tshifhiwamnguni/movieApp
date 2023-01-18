@@ -5,7 +5,7 @@ import "./App.css";
 import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
-import Allmovies from "./components/AllMovies/Allmovies";
+import Allmovies from "./components/AllMovies/AllMovies";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(()=> import('./components/Navbar/navbar'));
