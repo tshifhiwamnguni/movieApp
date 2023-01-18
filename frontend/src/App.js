@@ -17,7 +17,7 @@ const Register = lazy(()=> import('./components/register/Register') )
 const Customer = lazy(()=> import('./components/Customer/Customer'))
 const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
 const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
-const AllMovies = lazy(()=>import('./components/AllMovies/Allmovies'));
+const AllMovies = lazy(()=>import('./components/CinemaMovies/Allmovies'));
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { API, TOKEN } from "../environment/constant";
-import "./allmov.css";
+import "./Allmov.css";
 import moment from "moment";
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
