@@ -9,6 +9,7 @@ import { IoMdTime } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { ERROR, SUCCESS } from "../environment/toast";
 import { ToastContainer } from "react-toastify";
+import { RiVideoAddFill } from "react-icons/ri";
 
 function AllMovies() {
   const [movies, setMovies] = useState([]);
@@ -17,7 +18,7 @@ function AllMovies() {
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState("");
   const [cinemaId, setCinemaId] = useState();
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const [cinemas, setCinemas] = useState([]);
   const movieId = useRef();
   const [movID, setMovId] = useState();
@@ -91,7 +92,7 @@ function AllMovies() {
 
   const updateMovie = () => {
     setLoading(true);
-  
+
     const movieData = {
       data: {
         title: title,
@@ -102,7 +103,7 @@ function AllMovies() {
       },
     };
     console.log(movieId);
-    
+
     axios
       .put(`${API}/movies/${movieId.current}?populate=*`, movieData, {
         headers: {
@@ -114,7 +115,7 @@ function AllMovies() {
         SUCCESS("Successfully updated");
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         ERROR(error.response.data.error.message);
       })
       .finally(() => setLoading(false));
@@ -141,15 +142,15 @@ function AllMovies() {
 
   const uploadMoviePoster = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData();
-    console.log(movID)
+    console.log(movID);
     formData.append("files", movieFile.current);
     formData.append("refID", movieId.current);
     formData.append("field", "movieImage");
     formData.append("ref", "api::movie.movie");
-    
-    
+
     await axios
       .post(`${API}/upload`, formData, {
         headers: {
@@ -159,7 +160,7 @@ function AllMovies() {
       .then((data) => {
         console.log(data.data[0].url);
         imgUrl.current = data.data[0].url;
-        // SUCCESS("Successfully uploaded");
+        SUCCESS("Successfully uploaded");
         axios
           .put(
             `${API}/movies/${movieId.current}?populate=*`,
@@ -172,16 +173,17 @@ function AllMovies() {
           )
           .then((data) => {
             console.log(data);
-            // SUCCESS("Successfully updated");
+            SUCCESS("Successfully updated");
           })
           .catch((error) => {
-            // ERROR(error.response.data.error.message);
-          })
+            ERROR(error.response.data.error.message);
+          });
       })
       .catch((error) => {
         console.log(error);
-        // ERROR(error.response.data.error.message);
-      });
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -190,15 +192,25 @@ function AllMovies() {
   }, []);
 
   return (
-    <div className="min-h-screen mt-24 overflow-x-scroll z-0">
-      <ToastContainer className="z-0" />
+    <div className="min-h-screen mt-24 overflow-x-scroll">
+      <ToastContainer />
+      <div className="mb-3">
+        <label
+          htmlFor="my-modal"
+          className="btn glass text-green-600 max-w-xs gap-2 flex"
+        >
+          <RiVideoAddFill className="text-2xl" />
+          Add movies
+        </label>
+      </div>
+
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
         ) : (
           ""
         )}
-        <table className="table w-full">
+        <table className="table w-full z-0">
           <thead>
             <tr>
               <th></th>
@@ -298,15 +310,17 @@ function AllMovies() {
             <div className="flex justify-center">
               <div className="avatar">
                 <div className="w-24 rounded-full">
-                  <img src={image} />
+                  <img src={image} alt="" />
                 </div>
                 <MdAddPhotoAlternate
                   onClick={handleClick}
                   className="cursor-pointer"
                 />
               </div>
+            </div>
+            <div className="flex justify-center mt-2">
               <button
-                className="btn btn-primary btn-xs"
+                className="btn btn-success btn-xs"
                 onClick={uploadMoviePoster}
               >
                 Upload
@@ -387,7 +401,6 @@ function AllMovies() {
                   ))}
                 </select>
               </label>
-
             </div>
             <div className="flex justify-end mt-3">
               <button className="btn btn-success" onClick={updateMovie}>
@@ -415,6 +428,26 @@ function AllMovies() {
           </div>
         </label>
       </label>
+
+      {/* modal for adding movies */}
+      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">
+            Congratulations random Internet user!
+          </h3>
+          <p className="py-4">
+            You've been selected for a chance to get one year of subscription to
+            use Wikipedia for free!
+          </p>
+          <div className="modal-action">
+            <label htmlFor="my-modal" className="btn">
+              Yay!
+            </label>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
