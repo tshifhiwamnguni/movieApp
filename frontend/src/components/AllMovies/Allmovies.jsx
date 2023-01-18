@@ -190,7 +190,7 @@ function AllMovies() {
   }, []);
 
   return (
-    <div className="min-h-screen mt-24 overflow-scroll z-0">
+    <div className="min-h-screen mt-24 overflow-x-scroll z-0">
       <ToastContainer className="z-0" />
       <div className="overflow-x-auto w-full">
         {loading ? (
@@ -368,7 +368,7 @@ function AllMovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Movie Description</span>
+                <span className="label-text">Cinema</span>
               </label>
               <label className="input-group">
                 <span>
@@ -387,10 +387,10 @@ function AllMovies() {
                   ))}
                 </select>
               </label>
-            </div>
 
-            <div className="flex justify-end">
-              <button className="btn btn-primary mt-3" onClick={updateMovie}>
+            </div>
+            <div className="flex justify-end mt-3">
+              <button className="btn btn-success" onClick={updateMovie}>
                 Update
               </button>
             </div>
