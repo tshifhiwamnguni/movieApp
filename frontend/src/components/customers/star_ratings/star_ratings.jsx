@@ -5,7 +5,6 @@ const StarRatings = () => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
    
-
     console.log(rating);
     
     const parentToChild = () => {
