@@ -1,25 +1,23 @@
 import axios from "axios";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { API, TOKEN } from "../environment/constant";
 import { ERROR } from "../environment/toast";
 import "./allmov.css";
 import { MdAddAPhoto } from "react-icons/md";
-import { BiRename } from "react-icons/bi";
-import jwt_decode from "jwt-decode";
+import { BiRename, BiTimeFive } from "react-icons/bi";
+import { TbMovie, TbFileDescription } from "react-icons/tb";
 
 function Allmovies() {
-    let ID;
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedData, setSelectedData] = useState();
   const [cinemas, setCinemas] = useState([]);
   const [selectedCinema, setSelectedCinema] = useState();
   const [moviePoster, setMoviePoster] = useState();
-  const [title, setTitle] = useState();
-  const [userI, setUserId] = useState(0);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [duration, setDuration] = useState("");
 
-
-  const token = localStorage.getItem("jwt");
   //   get movies
   const movie = () => {
     setLoading(true);
@@ -32,7 +30,7 @@ function Allmovies() {
       })
       .then((res) => {
         setMovies(res.data.data);
-        console.log(res.data.data[0].attributes.cinema.data.attributes.name);
+        console.log(res.data.data[0].attributes);
       })
       .catch((error) => {
         ERROR(error.response.data.error.message);
@@ -65,15 +63,15 @@ function Allmovies() {
   //   get selected on the table
   const handleSelected = (data) => {
     setSelectedData(data);
-    {setTitle(data.attributes.title)}
-    console.log(title)
-    console.log(data.attributes);
+
+    setTitle(data.attributes.title);
+    setDescription(data.attributes.description);
+    setDuration(data.attributes.duration);
+    console.log(title);
+    console.log(data);
   };
 
   useEffect(() => {
-    let decoded = jwt_decode(token);
-    ID = decoded.id;
-    setUserId(ID);
     movie();
     getCinema();
   }, []);
@@ -100,26 +98,31 @@ function Allmovies() {
 
   //   update the movie
   const updateMovie = (e) => {
-      e.preventDefault();
-    const movieData ={data:{
+    e.preventDefault();
+    const movieData = {
+      data: {
         title: title,
         movieImage: moviePoster,
-        cinema: selectedCinema
-    }
-    }
+        cinema: selectedCinema,
+        duration: duration,
+        description: description
+      },
+    };
 
     console.log(movieData);
 
-    axios.put(`${API}/movies/${userI}`, movieData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((data)=>{
+    axios
+      .put(`${API}/movies/${selectedData?.id}`, movieData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
         console.log(data);
-    }).catch((error)=>{
-        console.log(error)
-    })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -154,8 +157,8 @@ function Allmovies() {
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img
-                            src={data.attributes.movieImage.data.attributes.url}
+                          <img lazy='true'
+                            src={data?.attributes.movieImage.data.attributes.url}
                             alt="Avatar Tailwind CSS Component"
                           />
                         </div>
@@ -219,6 +222,7 @@ function Allmovies() {
               <div className="w-24 rounded-full">
                 <img
                   src={selectedData?.attributes.movieImage.data.attributes.url}
+                  alt="now"
                 />
               </div>
               <span className="flex justify-center add" onClick={handleClick}>
@@ -244,7 +248,7 @@ function Allmovies() {
                   type="text"
                   value={title}
                   placeholder="Title"
-                  onChange={(e)=>setTitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                   className="input input-bordered w-full"
                 />
               </label>
@@ -252,31 +256,69 @@ function Allmovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Cinema</span>
+                <span className="label-text">Description</span>
               </label>
               <label className="input-group">
                 <span>
-                  <BiRename />
+                  <TbFileDescription />
                 </span>
-                <select
-                  value={selectedCinema}
-                  onChange={selectCinema}
-                  className="select select-primary w-full max-w-xs"
-                >
-                  <option disabled selected>
-                    Selected the cinema
-                  </option>
-                  {cinemas.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.attributes.name}
-                    </option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  value={description}
+                  placeholder="Title"
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="input input-bordered w-full"
+                />
               </label>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Duration in minutes</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <BiTimeFive />
+                  </span>
+                  <input
+                    type="number"
+                    value={duration}
+                    placeholder="Title"
+                    onChange={(e) => setDuration(e.target.value)}
+                    className="input input-bordered w-full"
+                  />
+                </label>
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Cinema</span>
+                </label>
+                <label className="input-group">
+                  <span>
+                    <TbMovie />
+                  </span>
+                  <select
+                    value={selectedCinema}
+                    onChange={selectCinema}
+                    className="select select-primary w-full max-w-xs"
+                  >
+                    <option disabled selected>
+                      Selected the cinema
+                    </option>
+                    {cinemas.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.attributes.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-end mt-3">
-            <button className="btn btn-success" onClick={updateMovie}>Update</button>
+            <div className="flex justify-end mt-3">
+              <button className="btn btn-success" onClick={updateMovie}>
+                Update
+              </button>
+            </div>
           </div>
         </div>
       </div>
