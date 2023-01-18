@@ -7,7 +7,7 @@ function Review() {
 
     const [review, setReview] = useState('');
     const [firstname, setFirstname] = useState('');
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(1);
 
     axios.get(`${API}/review-cinemas`).then((response) => {
         console.log(response);
@@ -63,7 +63,7 @@ function Review() {
                                 <span className="label-text">Rating</span>
 
 
-                                <input id="firstname" name="firstname" type="number" required min="0" max="5" className="relative block appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="No between 1 -5" onChange={(e) => setRating(e.target.value)} value={rating} />
+                                <input id="firstname" name="firstname" type="number" min="1" max="5" className="relative block appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="No between 1 -5" onChange={(e) => setRating(e.target.value)} value={rating} />
                             </div>
                         </div>
 

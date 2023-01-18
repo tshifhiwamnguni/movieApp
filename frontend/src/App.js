@@ -22,6 +22,7 @@ const Landing = lazy(()=> import('./components/customers/landing/landing'))
 const History = lazy(()=> import('./components/customers/bookingHistory/history'))
 const Review = lazy(()=> import('./components/customers/review/review'))
 const Test = lazy(() => import("./components/test/test"))
+const StarRatings = lazy(() => import("./components/customers/star_ratings/star_ratings"))
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
             <Route path="/review" element={<Review/>}></Route>
             <Route path="/test" element={<Test/>}></Route>
             <Route path="/reviews" element={<Reviews/>}></Route>
+            <Route path="/stars" element={<StarRatings/>}></Route>
 
           </Routes>
        
