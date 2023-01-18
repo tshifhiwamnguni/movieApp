@@ -1,30 +1,35 @@
 import { useState } from "react";
 import womenKing from "../../../assets/womanKing.jpeg"
 import axios from "axios";
+const API = "https://strapi-movie-app.onrender.com/api";
 
 function Review() {
+
     const [review, setReview] = useState('');
     const [firstname, setFirstname] = useState('');
     const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
+
+    axios.get(`${API}/review-cinemas`).then((response) => {
+        console.log(response);
+    }).catch((error) => {
+        console.log(error);
+    });
 
 
-    const API = "https://strapi-movie-app.onrender.com/api";
     console.log(rating);
     console.log(review);
     console.log(firstname);
 
     const addReview = () => {
         console.log("Hello, World!")
-        // axios.post(`${API}/review-cinemas`, {
-
-        //     rating: rating,
-        //     comment: review
-        // }).then(function (response) {
-        //     console.log(response);
-        // }).catch(function (error) {
-        //     console.log(error);
-        // });
+        axios.post(`${API}/review-cinemas`, {
+            data: {comment: review,
+            rating: rating}
+          }).then((response) => {
+            console.log(response);
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     return (
@@ -38,8 +43,8 @@ function Review() {
                         <h2 className="h-12 w-auto text-center text-xl font-bold text-gray-900">Pirates of the carribean</h2>
 
                     </div>
-                    <form className="mt-2 border-4 px-8 rounded-md py-8 space-y-6" action="#" method="POST">
-                        <input type="hidden" name="remember" value="true" />
+                    <form className="mt-2 border-4 px-8 rounded-md py-8 space-y-6" onSubmit={addReview}>
+
 
                         <div className="flex gap-2 flex-col rounded-md shadow-sm">
 
@@ -54,17 +59,17 @@ function Review() {
                             </div>
 
                             <div className="form-control w-full max-w-xs">
-                              
+
                                 <span className="label-text">Rating</span>
-                                    
-                              
+
+
                                 <input id="firstname" name="firstname" type="number" required min="0" max="5" className="relative block appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="No between 1 -5" onChange={(e) => setRating(e.target.value)} value={rating} />
                             </div>
                         </div>
 
-                        <div class="bg-gray-50 flex justify-end gap-2">
+                        <div className="bg-gray-50 flex justify-end gap-2">
                             <button className="btn text-white bg-rose-500 rounded ">Cancel Review</button>
-                            <button className="btn text-white bg-sky-500 rounded" onClick={addReview}>Add Review</button>
+                            <button type="submit" className="btn text-white bg-sky-500 rounded">Add Review</button>
                         </div>
                     </form>
                 </div>

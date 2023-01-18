@@ -30,17 +30,7 @@ function App() {
       <Router>
         <Suspense fallback={<div><Spin/></div>}>
           <Routes>
-            {/* <Route path='/' element={<Splash/>}></Route>
-            <Route path='log' element={<Login/>}></Route>
-            <Route path='forgot' element={<ForgotPassword/>}></Route>
-            <Route path='reset' element={<ResetPassword/>}></Route>
-            <Route path='dashboard' element={<Home/>}></Route>
-            <Route path="/" element={<Splash />}></Route>
-            <Route path="/admin/login/" element={<Login />}></Route>
-            <Route path="/admin/" element={<Home />}></Route>
-            <Route path='/admin/profile/' element={<AdminProfile/>}></Route> */}
-         
-    
+       
             <Route path="login" element={<Login/>}></Route>
             <Route path="customer" element={<Customer/>}></Route>
             <Route path='forgot' element={<ForgotPassword/>}></Route>
@@ -61,6 +51,7 @@ function App() {
             <Route path="/history" element={<History/>}></Route>
             <Route path="/review" element={<Review/>}></Route>
             <Route path="/test" element={<Test/>}></Route>
+            
           </Routes>
        
         </Suspense>
