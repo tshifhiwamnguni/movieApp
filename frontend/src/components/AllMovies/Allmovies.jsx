@@ -91,13 +91,7 @@ function AllMovies() {
 
   const updateMovie = () => {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("files", movieFile.current);
-    formData.append("refID", movieId.current);
-    formData.append("field", "movieImage");
-    formData.append("ref", "api::movie.movie");
-    console.log(formData);
-
+  
     const movieData = {
       data: {
         title: title,
@@ -165,7 +159,7 @@ function AllMovies() {
       .then((data) => {
         console.log(data.data[0].url);
         imgUrl.current = data.data[0].url;
-        SUCCESS("Successfully uploaded");
+        // SUCCESS("Successfully uploaded");
         axios
           .put(
             `${API}/movies/${movieId.current}?populate=*`,
@@ -178,15 +172,15 @@ function AllMovies() {
           )
           .then((data) => {
             console.log(data);
-            SUCCESS("Successfully updated");
+            // SUCCESS("Successfully updated");
           })
           .catch((error) => {
-            ERROR(error.response.data.error.message);
+            // ERROR(error.response.data.error.message);
           })
       })
       .catch((error) => {
         console.log(error);
-        ERROR(error.response.data.error.message);
+        // ERROR(error.response.data.error.message);
       });
   };
 
@@ -197,6 +191,7 @@ function AllMovies() {
 
   return (
     <div className="min-h-screen mt-24 overflow-scroll z-0">
+      <ToastContainer className="z-0" />
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
@@ -291,7 +286,6 @@ function AllMovies() {
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
-        <ToastContainer className="z-50" />
         <div className="modal-box relative">
           <label
             htmlFor="my-modal-3"
