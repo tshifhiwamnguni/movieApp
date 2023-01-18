@@ -37,6 +37,13 @@ const ClientHome = lazy(() =>
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
 
+// client side lazyLoads
+const CinemaList = lazy(()=> import('./components/clientSide/cinemaList/CinemaList'))
+const TheatreList = lazy(()=> import('./components/clientSide/theatreList/TheareList'))
+
+
+
+
 
 
 function App() {
@@ -51,16 +58,26 @@ function App() {
           }
         >
           <Routes>
+
+
+            {/* client related routes */}
             <Route path="book" element={<Booking />}></Route>
             <Route path="login" element={<Login />}></Route>
-            <Route path="customer" element={<Customer />}></Route>
+          
 
             <Route path="/client" element={<ClientSide />}>
               {/* <Route path="/client" element={<Navigate replace to='clientHome' />} /> */}
               <Route path="clientHome" element={<ClientHome/>}/>
               <Route path="movieList" element={<Movies/>}/>
+              <Route path="cinemaList" element={<CinemaList/>}/>
+              <Route path="theatreList" element={<TheatreList/>}/>
             </Route>
-            
+
+
+{/* ========================================================================================================= */}
+
+
+              <Route path="customer" element={<Customer />}></Route>
             <Route path="/cinema" element={<Cinema />}></Route>
             <Route path="/theatre" element={<Theatre />}></Route>
 

@@ -1,14 +1,14 @@
+
+
+
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import './CinemaList.css'
 
-import ReactPlayer from "react-player";
-import Iframe from "react-iframe";
-
-function Movies() {
-
+function CinemaList() {
 
   const [movies, setMovies] = useState([]);
-  const iframeRef = useRef()
+
   const initData = {
     id: 1,
     attributes: {
@@ -22,6 +22,7 @@ function Movies() {
   };
   const [modelData, setModelData] = useState(initData);
   useEffect(() => {
+    console.log('on');
     axios
       .get("https://strapi-movie-app.onrender.com/api/movies")
       .then((response) => {
@@ -34,22 +35,18 @@ function Movies() {
       });
   }, []);
 
-  const _movies = [1, 2, 3, 5, 45, 67];
+
 
   function select(index) {
     setModelData(movies[index - 1]);
     console.log(index - 1);
   }
 
-  function stop() {
-    console.log(iframeRef.current.contentWindow.frames);
-    iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
-  }
   return (
-    <>
-      <div className="mt-24">
-        <div>
-          <h1 className="text-center text-5xl font-bold mb-4">Movies</h1>
+    <div className='mt-24 '>
+
+<div>
+          <h1 className="text-center text-5xl font-bold mb-4">Cinema list</h1>
           <div className="container">
             {movies.map((element) => {
               return (
@@ -69,7 +66,7 @@ function Movies() {
                     <p>{element.attributes.description}</p>
 
                     <div className="card-actions">
-                      <button className="btn btn-primary">book now</button>
+                      <button className="btn btn-primary">Select</button>
                       <label
                         onClick={() => {
                           select(element.id);
@@ -77,7 +74,7 @@ function Movies() {
                         htmlFor="my-modal-5"
                         className="btn"
                       >
-                        open modal
+                       view details
                       </label>
 
                       {/* Put this part before </body> tag */}
@@ -92,22 +89,10 @@ function Movies() {
                             {modelData.attributes.title}
                           </h3>
 
-                          <iframe
-                            ref={iframeRef}
-                            width="966"
-                            height="543"
-                            src="https://www.youtube.com/embed/d9MyW72ELq0"
-                            title="Avatar: The Way of Water | Official Trailer"
-                            frameborder="0"
-
-                          //   allow="autoplay"
-                          ></iframe>
-
-
 
 
                           <div className="modal-action">
-                            <label onClick={stop} htmlFor="my-modal-5" className="btn">
+                            <label  htmlFor="my-modal-5" className="btn">
                               close
                             </label>
                           </div>
@@ -120,10 +105,8 @@ function Movies() {
             })}{" "}
           </div>
         </div>
-
-      </div>
-    </>
-  );
+    </div>
+  )
 }
 
-export default Movies;
+export default CinemaList
