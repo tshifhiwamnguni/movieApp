@@ -15,17 +15,16 @@ function Review() {
     console.log(firstname);
 
     const addReview = () => {
-       
-        axios.post(`${API}/review-cinemas`, {
+        console.log("Hello, World!")
+        // axios.post(`${API}/review-cinemas`, {
 
-            rating: rating,
-            comment: review
-
-        }).then(function (response) {
-            console.log(response);
-        }).catch(function (error) {
-            console.log(error);
-        });
+        //     rating: rating,
+        //     comment: review
+        // }).then(function (response) {
+        //     console.log(response);
+        // }).catch(function (error) {
+        //     console.log(error);
+        // });
     }
 
     return (
@@ -46,7 +45,7 @@ function Review() {
 
                             <div>
                                 <label className="text-xl">Firstname</label>
-                                <input id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" onChange={(e) => setFirstname(e.target.value)} value={"Fhatuwani"} />
+                                <input id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" onChange={(e) => setFirstname(e.target.value)} value={firstname} />
                             </div>
 
                             <div>
@@ -54,31 +53,18 @@ function Review() {
                                 <textarea id="review" rows="4" name="review" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="comments" onChange={(e) => setReview(e.target.value)} value={review} />
                             </div>
 
-                            <div>
-                                <label className="text-lg">Rating</label>
-                                <div className="star-rating text-2xl">
-                                    {[...Array(5)].map((star, index) => {
-                                        index += 1;
-                                        return (
-                                            <button
-                                                type="button"
-                                                key={index}
-                                                className={index <= (hover || rating) ? "on" : "off"}
-                                                onClick={() => setRating(index)}
-                                                onMouseEnter={() => setHover(index)}
-                                                onMouseLeave={() => setHover(rating)}
-                                            >
-                                                <span className="star">&#9733;</span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
+                            <div className="form-control w-full max-w-xs">
+                              
+                                <span className="label-text">Rating</span>
+                                    
+                              
+                                <input id="firstname" name="firstname" type="number" required min="0" max="5" className="relative block appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="No between 1 -5" onChange={(e) => setRating(e.target.value)} value={rating} />
                             </div>
                         </div>
 
                         <div class="bg-gray-50 flex justify-end gap-2">
                             <button className="btn text-white bg-rose-500 rounded ">Cancel Review</button>
-                            <button className="btn text-white bg-sky-500 rounded" >Add Review</button>
+                            <button className="btn text-white bg-sky-500 rounded" onClick={addReview}>Add Review</button>
                         </div>
                     </form>
                 </div>
