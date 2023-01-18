@@ -17,7 +17,7 @@ const AdminProfile = lazy(()=> import('./components/adminProfile/adminProfile'))
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
 const Register = lazy(()=> import('./components/register/Register') )
 const Customer = lazy(()=> import('./components/tester/Customers'))
-// const Splash = lazy(() => import("./components/splashpage/Splash"));
+const Reviews = lazy(() => import("./components/customers/reviews/reviews"))
 const Landing = lazy(()=> import('./components/customers/landing/landing'))
 const History = lazy(()=> import('./components/customers/bookingHistory/history'))
 const Review = lazy(()=> import('./components/customers/review/review'))
@@ -51,7 +51,8 @@ function App() {
             <Route path="/history" element={<History/>}></Route>
             <Route path="/review" element={<Review/>}></Route>
             <Route path="/test" element={<Test/>}></Route>
-            
+            <Route path="/reviews" element={<Reviews/>}></Route>
+
           </Routes>
        
         </Suspense>
