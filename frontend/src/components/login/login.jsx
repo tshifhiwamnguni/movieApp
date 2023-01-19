@@ -63,6 +63,9 @@ function Login() {
               if (data.data.role.id === 4) {
                 navigate("../customer");
               }
+              if (data.data.role.id === 1) {
+                navigate("/client/clientHome");
+              }
               if (data.data.role.id === 3) {
                 navigate("/admin/", { replace: true });
               }
