@@ -22,7 +22,11 @@ function TheareList() {
     useEffect(() => {
       console.log('on');
       axios
-        .get("https://strapi-movie-app.onrender.com/api/movies")
+        .get("https://strapi-movie-app.onrender.com/api/theatres",{
+          headers: {
+            Authorization:
+              "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+          }})
         .then((response) => {
           // Handle success.
           console.log(response.data.data);
@@ -30,6 +34,7 @@ function TheareList() {
         })
         .catch((error) => {
           // Handle error.
+          console.log(error);
         });
     }, []);
   
@@ -37,7 +42,7 @@ function TheareList() {
   
     function select(index) {
       setModelData(movies[index - 1]);
-      console.log(index - 1);
+      console.log(index);
     }
   
     return (
@@ -83,9 +88,21 @@ function TheareList() {
                         />
                         <div className="modal">
                           <div className="modal-box w-11/12 max-w-5xl">
-                            <h3 className="font-bold text-lg">
-                              {modelData.attributes.title}
-                            </h3>
+                          <h3 className="font-bold text-lg">
+                           Cinema: {modelData.attributes.name}
+                        </h3>
+                        <h3 className="font-bold text-lg">
+                          city: {modelData.attributes.city}
+                        </h3>
+                        <h3 className="font-bold text-lg">
+                         Postal code:{modelData.attributes.postalCode}
+                        </h3>
+                        <h3 className="font-bold text-lg">
+                          province: {modelData.attributes.province}
+                        </h3>
+                        <h3 className="font-bold text-lg">
+                          suburb:  {modelData.attributes.surbub}
+                        </h3>
   
   
   

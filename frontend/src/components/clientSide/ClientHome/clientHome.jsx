@@ -16,10 +16,10 @@ function ClientHome() {
     
        <div className="mt-24  flex flex-row justify-center">
         <div className="container">
-        <div className="card" onClick={moveToCinemas}>
-          <h1 className="child">Movsie</h1>
+        <div className="cardz" onClick={moveToCinemas}>
+          <h1 className="child">Movies</h1>
         </div>
-        <div className="card" onClick={moveToTheatres} >
+        <div className="cardz" onClick={moveToTheatres} >
             <h1 className="child">Theatre</h1>
         </div>
         </div>

@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 
+import CinemaContext from '../../../context/CinemaContext'
 import ReactPlayer from "react-player";
 import Iframe from "react-iframe";
-
+import { useNavigate } from "react-router-dom";
 function Movies() {
 
-
+  const cinemaCtx = useContext(CinemaContext)
   const [movies, setMovies] = useState([]);
+  const [cinemaID,setCinemaID] = useState('')
+  const navigate = useNavigate()
   const iframeRef = useRef()
   const initData = {
     id: 1,
@@ -20,13 +23,26 @@ function Movies() {
       updatedAt: "2023-01-17T06:05:41.504Z",
     },
   };
+
+  
+  let id=true
   const [modelData, setModelData] = useState(initData);
   useEffect(() => {
+
     axios
-      .get("https://strapi-movie-app.onrender.com/api/movies")
+      .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
+        headers: {
+          Authorization:
+            "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+  }})
       .then((response) => {
         // Handle success.
-        console.log(response.data.data);
+        // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
+        console.log(response.data.data)
+  
+        console.log(cinemaCtx.cinemaId);
+        setCinemaID(cinemaCtx.cinemaId.cinemaId)
+       
         setMovies(response.data.data);
       })
       .catch((error) => {
@@ -34,7 +50,7 @@ function Movies() {
       });
   }, []);
 
-  const _movies = [1, 2, 3, 5, 45, 67];
+
 
   function select(index) {
     setModelData(movies[index - 1]);
@@ -45,6 +61,17 @@ function Movies() {
     console.log(iframeRef.current.contentWindow.frames);
     iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
   }
+
+
+  function selectMovie(_id) {
+   
+      cinemaCtx._setMovieId({
+        movieId:_id
+      })
+      console.log(cinemaCtx.movieId)
+      navigate('../book')
+   
+  }
   return (
     <>
       <div className="mt-24">
@@ -52,14 +79,20 @@ function Movies() {
           <h1 className="text-center text-5xl font-bold mb-4">Movies</h1>
           <div className="container">
             {movies.map((element) => {
+              
               return (
-                <div
+                <div>
+                 
+               {element.attributes.cinema.data.id == cinemaID ?
+                <div 
                   key={element.id}
-                  className="card w-96 bg-base-100 shadow-xl"
+                  className="card red w-96 bg-base-100 shadow-xl"
                 >
+                  
+                 
                   <figure className="px-10 pt-10">
                     <img
-                      src="https://placeimg.com/400/225/arch"
+                      src={element.attributes.movieImage}
                       alt="Shoes"
                       className="rounded-xl"
                     />
@@ -69,7 +102,7 @@ function Movies() {
                     <p>{element.attributes.description}</p>
 
                     <div className="card-actions">
-                      <button className="btn btn-primary">book now</button>
+                      <button className="btn btn-primary" onClick={()=>{selectMovie(element.id)}}>book now</button>
                       <label
                         onClick={() => {
                           select(element.id);
@@ -115,6 +148,8 @@ function Movies() {
                       </div>
                     </div>
                   </div>
+                </div>
+                :<div></div>}
                 </div>
               );
             })}{" "}

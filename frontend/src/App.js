@@ -12,6 +12,9 @@ import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
 import AllMovies from "./components/AllMovies/AllMovies";
 
+
+
+
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(() => import("./components/home/home"));
 const ForgotPassword = lazy(() =>
@@ -33,7 +36,7 @@ const Theatre = lazy(() => import("./components/Theatre/Theatre"));
 const Booking = lazy(() => import("./components/Booking/Booking"));
 
 const ClientHome = lazy(() =>
-  import("./components/clientSide/ClientHome/ClientHome")
+  import("./components/clientSide/ClientHome/clientHome")
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
 
@@ -61,7 +64,7 @@ function App() {
 
 
             {/* client related routes */}
-            <Route path="book" element={<Booking />}></Route>
+            
             <Route path="login" element={<Login />}></Route>
           
 
@@ -71,6 +74,7 @@ function App() {
               <Route path="movieList" element={<Movies/>}/>
               <Route path="cinemaList" element={<CinemaList/>}/>
               <Route path="theatreList" element={<TheatreList/>}/>
+              <Route path="book" element={<Booking />}></Route>
             </Route>
 
 
