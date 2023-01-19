@@ -36,7 +36,12 @@ td:nth-child(2n) {background-color: #8b818186;} */
   text-align: center;
 
 }
-
+.greyed{
+  border: solid 1px black;
+  width: 120px;
+  height: 60px;
+  background-color: grey;
+}
 .block{
   border: solid 1px black;
   width: 120px;
