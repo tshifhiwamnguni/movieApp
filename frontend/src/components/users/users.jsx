@@ -6,6 +6,7 @@ import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
 import { ERROR, SUCCESS } from "../environment/toast";
+import './users.css'
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,6 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
-  const [isBlocked, setIsBlocked] = useState(false);
 
   const getUsers = async () => {
     setLoading(true);
@@ -66,54 +66,60 @@ function Users() {
     setEmail(user.email);
     setUserRole(user.role.id);
     userID.current = user.id;
-    setIsBlocked(user.blocked)
   }
 
-  const deleteUser = async()=>{
-      setLoading(true)
-      axios.delete(`${API}/users/${userID.current}`,{
-          headers: {
-              Authorization: `Bearer ${TOKEN}`
-          }
-      }).then((data)=>{
-          SUCCESS('Successfully deleted')
-      }).catch((error)=>{
-        ERROR(error.response.data.error.message);
-      }).finally(()=>{
-          setLoading(false);
-          window.location.reload();
+  const deleteUser = async () => {
+    setLoading(true);
+    axios
+      .delete(`${API}/users/${userID.current}`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
       })
-  }
+      .then((data) => {
+        SUCCESS("Successfully deleted");
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+        getUsers();
+      });
+  };
 
-  const blockingUser = (data) =>{
+  const blockingUser = (data) => {
     setLoading(true);
     userID.current = data.id;
     let newBlock = !data.blocked;
 
-    const blocked ={
-        blocked: newBlock
-    }
+    const blocked = {
+      blocked: newBlock,
+    };
 
-    console.log(newBlock)
+    console.log(newBlock);
 
-    axios.put(`${API}/users/${userID.current}`,blocked,
-    {
-        headers:{
-            Authorization: `Bearer ${TOKEN}`
+    axios
+      .put(`${API}/users/${userID.current}`, blocked, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        if (newBlock) {
+          SUCCESS("Successfully blocked");
+        } else {
+          SUCCESS("Successfully unblocked");
         }
-    }).then((data)=>{
-        if(newBlock){
-            SUCCESS('Successfully blocked');
-        }else{
-            SUCCESS('Successfully unblocked')
-        }
-    }).catch((error)=>{
+      })
+      .catch((error) => {
         ERROR(error.response.data.error.message);
-    }).finally(()=>{
+      })
+      .finally(() => {
         setLoading(false);
-        window.location.reload();
-    })
-  }
+        getUsers();
+      });
+  };
 
   const updateUser = async () => {
     setLoading(true);
@@ -135,7 +141,7 @@ function Users() {
       })
       .then((data) => {
         console.log(data);
-        SUCCESS('Successfully updated')
+        SUCCESS("Successfully updated");
       })
       .catch((error) => {
         ERROR(error.response.data.error.message);
@@ -178,7 +184,7 @@ function Users() {
               return (
                 <tr key={user.id}>
                   <td>
-                    <div className="flex items-center space-x-3">
+                    {!loading || user.id !== userID.current ? <div className="flex items-center space-x-3">
                       <div className="avatar placeholder">
                         <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
                           <span className="text-3xl">
@@ -186,7 +192,15 @@ function Users() {
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </div>:
+
+                    <div className="d-flex justify-content-center">
+                      <div className="spinner">
+                        <div className="bounce1"></div>
+                        <div className="bounce2"></div>
+                        <div className="bounce3"></div>
+                      </div>
+                    </div>}
                   </td>
                   <td>
                     {user.firstname} {user.lastname}
@@ -205,7 +219,16 @@ function Users() {
                   <td>{user.email}</td>
                   <td>{user.role.name}</td>
                   <td>
-                  <button className={user.blocked ? 'btn btn-outline btn-success btn-xs':"btn btn-outline btn-warning btn-xs"} onClick={()=>blockingUser(user)}>{user.blocked ? 'Unblock': 'Block'}</button>
+                    <button
+                      className={
+                        user.blocked
+                          ? "btn btn-outline btn-success btn-xs"
+                          : "btn btn-outline btn-warning btn-xs"
+                      }
+                      onClick={() => blockingUser(user)}
+                    >
+                      {user.blocked ? "Unblock" : "Block"}
+                    </button>
                   </td>
                   <th>
                     <div className="space-x-3">
@@ -329,9 +352,7 @@ function Users() {
                   onChange={(e) => setUserRole(e.target.value)}
                   className="select select-primary w-full max-w-xs"
                 >
-                  <option disabled>
-                    Select your role
-                  </option>
+                  <option disabled>Select your role</option>
                   {roles.map((role) => (
                     <option key={role.id} value={role.id}>
                       {role.name?.toUpperCase()}
@@ -357,7 +378,9 @@ function Users() {
             Are you sure you want to delete?
           </h3>
           <div className="py-4">
-            <button className="btn btn-error" onClick={deleteUser}>Delete</button>
+            <button className="btn btn-error" onClick={deleteUser}>
+              Delete
+            </button>
             <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
             </h1>
