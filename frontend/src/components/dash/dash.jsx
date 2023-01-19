@@ -127,7 +127,7 @@ function Dashboard() {
               <p className="text-2xl font-bold">{countUsers}</p>
             </div>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">More info</button>
+              <button className="btn btn-primary" onClick={()=>navigate('/admin/users/', {replace: true})}>More info</button>
             </div>
           </div>
         </div>
@@ -163,7 +163,7 @@ function Dashboard() {
               <p className="text-2xl font-bold">{countBlocked.current}</p>
             </div>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">More info</button>
+              <button className="btn btn-primary" onClick={()=>navigate('/admin/users/', {replace: true})}>More info</button>
             </div>
           </div>
         </div>
