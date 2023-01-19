@@ -10,6 +10,8 @@ import "./App.css";
 import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
+import CinemaBooking from "./components/cinemaBooking/CinemaBooking";
+import TheatreBooking from "./components/theatreBooking/TheatreBooking";
 
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(() => import("./components/Navbar/navbar"));
@@ -93,6 +95,8 @@ function App() {
               <Route path="profile" element={<AdminProfile />} />
               <Route path="movies" element={<AllMovies/>} />
               <Route path="users" element={<Users/>}/>
+              <Route path="cinemabooking" element={<CinemaBooking/>}/>
+              <Route path="theatrebooking" element={<TheatreBooking/>}/>
             </Route>
           </Routes>
         </Suspense>
