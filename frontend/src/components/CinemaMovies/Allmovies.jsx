@@ -194,6 +194,7 @@ function AllMovies() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
+      <h1 className="text-center font-bold text-3xl mb-4">Movies</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
