@@ -10,30 +10,24 @@ import "./App.css";
 import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
-import AllMovies from "./components/AllMovies/AllMovies";
 
 
 
 
 const Login = lazy(() => import("./components/login/login"));
-const Home = lazy(() => import("./components/home/home"));
+const Home = lazy(() => import("./components/Navbar/navbar"));
 const ForgotPassword = lazy(() =>
   import("./components/passwords/forgot_password/ForgotPassword")
 );
 const ResetPassword = lazy(() =>
   import("./components/passwords/reset_password/ResetPassword")
 );
-const Statistics = lazy(() => import("./components/statistics/statistics"));
+const Booking = lazy(() => import("./components/Booking/Booking"));
 const AdminProfile = lazy(() =>
   import("./components/adminProfile/adminProfile")
 );
 const ClientSide = lazy(() => import("./components/clientSide/ClientSide"));
-const Splash = lazy(() => import("./components/splashpage/Splash"));
-const Register = lazy(() => import("./components/register/Register"));
-const Customer = lazy(() => import("./components/Customer/Customer"));
-const Cinema = lazy(() => import("./components/Cinema/Cinema"));
-const Theatre = lazy(() => import("./components/Theatre/Theatre"));
-const Booking = lazy(() => import("./components/Booking/Booking"));
+
 
 const ClientHome = lazy(() =>
   import("./components/clientSide/ClientHome/clientHome")
@@ -48,6 +42,13 @@ const TheatreList = lazy(()=> import('./components/clientSide/theatreList/Theare
 
 
 
+const Splash = lazy(()=> import('./components/splashpage/Splash'))
+const Register = lazy(()=> import('./components/register/Register') )
+const Customer = lazy(()=> import('./components/Customer/Customer'))
+const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
+const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
+const AllMovies = lazy(()=>import('./components/CinemaMovies/Allmovies'));
+const Users = lazy(()=>import('./components/users/users'));
 
 function App() {
   return (
@@ -95,17 +96,31 @@ function App() {
             {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
             <Route path="forgot" element={<ForgotPassword />}></Route>
             <Route path="reset" element={<ResetPassword />}></Route>
-            <Route
-              path="/admin"
-              element={!getToken() ? <Home /> : <Navigate to="admin/login" />}
-            >
-              <Route
-                path="/admin"
-                element={<Navigate replace to="dashboard" />}
-              />
+          
+            {/* Public routes */}
+            <Route path="login" element={<Login/>}></Route>
+            <Route path="customer" element={<Customer/>}></Route>
+
+            <Route path="/register" element={<Register/>}></Route>
+            <Route path="/cinema" element={<Cinema/>}></Route>
+            <Route path="/theatre" element={<Theatre/>}></Route>
+
+
+            <Route path='forgot' element={<ForgotPassword/>}></Route>
+            <Route path="/" element={<Splash/>}></Route>
+            <Route path="/register" element={<Register/>}></Route>
+
+            <Route path="*" element={<Splash/>}></Route>
+            
+            <Route path="forgot" element={<ForgotPassword/>}></Route>
+            <Route path="reset" element={<ResetPassword/>}></Route>
+            {/* Admin routes */}
+            <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="/login"/>} >
+              <Route path="/admin" element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              {/* <Route path="movies" element={<AllMovies />} /> */}
+              <Route path="movies" element={<AllMovies/>} />
+              <Route path="users" element={<Users/>}/>
             </Route>
           </Routes>
         </Suspense>

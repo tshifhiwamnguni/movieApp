@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
 import { BsHouse } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
-import { RiMovie2Line } from "react-icons/ri";
+import { FiUsers } from "react-icons/fi";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import "./home.css";
+import "./navbar.css";
 import {Outlet} from "react-router-dom" ;
 
 function Home() {
@@ -26,7 +26,7 @@ function Home() {
   const active = true;
   return (
     <>
-      <div className="drawer">
+      <div className="drawer" data-theme='lofi'>
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
@@ -68,10 +68,10 @@ function Home() {
                     Profile
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/movies/")}>
+                <li onClick={() => navigate("/admin/users/")}>
                   <a>
-                    <RiMovie2Line style={{ fontSize: "1.5rem" }} />
-                    All movies
+                    <FiUsers style={{ fontSize: "1.5rem" }} />
+                    All users
                   </a>
                 </li>
                 <li onClick={logout}>
@@ -110,10 +110,10 @@ function Home() {
                 Profile
               </a>
             </li>
-            <li>
+            <li onClick={() => navigate("/admin/users/")}>
               <a>
-                <RiMovie2Line style={{ fontSize: "1.5rem" }} />
-                All movies
+                <FiUsers style={{ fontSize: "1.5rem" }} />
+                All users
               </a>
             </li>
             <li onClick={logout}>

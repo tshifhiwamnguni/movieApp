@@ -28,16 +28,13 @@ function AdminProfile() {
     
     let decoded = jwt_decode(token);
     ID = decoded.id;
-    console.log(decoded); //data is what you sent in.
     setUserId(ID);
-    console.log(userI);
 
     setLoading(true);
 
     axios
       .get(`${API}/users/${ID}`)
       .then((data) => {
-        console.log(data.data);
         setEmail(data.data.email);
         setName(data.data.username);
         setPhone(data.data.cellphone);
@@ -45,7 +42,7 @@ function AdminProfile() {
         setLastname(data.data.lastname);
       })
       .catch((error) => {
-        console.log(error);
+        ERROR(error.response.data.error.message);
       })
       .finally(() => setLoading(false));
   }, [ID]);
@@ -61,7 +58,6 @@ function AdminProfile() {
         firstname: firstname,
         lastname: lastname
       };
-      console.log(userI);
 
       await axios
         .put(`${API}/users/${userI}`, data)
@@ -108,7 +104,7 @@ function AdminProfile() {
       <div className="hero min-h-screen flex justify-center align-middle">
         <div className="card w-96 card-compact bg-base-100 shadow-xl">
           {loading ? (
-            <progress className="progress h-1 progress-primary w-96 loading"></progress>
+            <progress className="progress progress-primary w-96 loading"></progress>
           ) : (
             ""
           )}
