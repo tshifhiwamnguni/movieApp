@@ -1,4 +1,4 @@
-import React,{ useRef, useEffect, useState} from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { BsFillBookmarkPlusFill } from "react-icons/bs";
 import { HiUsers } from "react-icons/hi";
 import { MdMovie } from "react-icons/md";
@@ -17,67 +17,77 @@ function Dashboard() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     setLoading(true);
 
-    axios.get(`${API}/movies`,{
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
-    }).then((res)=>{
-      SetMoviesCount(res.data.data.length);
-    }).catch((error)=>{
-      ERROR(error.response.data.error.message);
-    });
+    axios
+      .get(`${API}/movies`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((res) => {
+        SetMoviesCount(res.data.data.length);
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      });
 
-    axios.get(`${API}/booking-cinemas`,{
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
-    }).then((res)=>{
-      setBookingCinema(res.data.data.length)
-    }).catch((error)=>{
-      ERROR(error.response.data.error.message);
-    });
+    axios
+      .get(`${API}/booking-cinemas`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((res) => {
+        setBookingCinema(res.data.data.length);
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      });
 
-    axios.get(`${API}/booking-theatres`,{
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
-    }).then((res)=>{
-      setBookingTheatre(res.data.data.length)
-    }).catch((error)=>{
-      ERROR(error.response.data.error.message);
-    });
+    axios
+      .get(`${API}/booking-theatres`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((res) => {
+        setBookingTheatre(res.data.data.length);
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      });
 
-    axios.get(`${API}/users`,{
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
-    }).then((res)=>{
-      let count = 0;
-      for (let index = 0; index < res.data.length; index++) {
-      if(res.data[index].blocked === true){
-          count = count + 1;
-          countBlocked.current = count;
+    axios
+      .get(`${API}/users`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((res) => {
+        let count = 0;
+        for (let index = 0; index < res.data.length; index++) {
+          if (res.data[index].blocked === true) {
+            count = count + 1;
+            countBlocked.current = count;
+          }
         }
-      }
-      SetUsersCount(res.data.length);
-    }).catch((error)=>{
-      ERROR(error.response.data.error.message);
-    }).finally(()=>{
-      setLoading(false)
-    });
+        SetUsersCount(res.data.length);
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [countUsers]);
 
-  },[countUsers])
-
-
-  
   return (
     <div className="hero min-h-screen xs:mt-28">
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-5 justify-center">
         <div className="card w-96 bg-base-100 shadow-xl">
-        {loading ? (
+          {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
             ""
@@ -90,13 +100,20 @@ function Dashboard() {
             </div>
 
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">More info</button>
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  navigate("/admin/cinemaBooking/", { replace: true })
+                }
+              >
+                More info
+              </button>
             </div>
           </div>
         </div>
 
         <div className="card w-96 bg-base-100 shadow-xl">
-        {loading ? (
+          {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
             ""
@@ -109,13 +126,20 @@ function Dashboard() {
             </div>
 
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">More info</button>
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  navigate("/admin/theatreBooking/", { replace: true })
+                }
+              >
+                More info
+              </button>
             </div>
           </div>
         </div>
 
         <div className="card w-96 bg-base-100 shadow-xl">
-        {loading ? (
+          {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
             ""
@@ -127,13 +151,18 @@ function Dashboard() {
               <p className="text-2xl font-bold">{countUsers}</p>
             </div>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary" onClick={()=>navigate('/admin/users/', {replace: true})}>More info</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate("/admin/users/", { replace: true })}
+              >
+                More info
+              </button>
             </div>
           </div>
         </div>
 
         <div className="card w-96 bg-base-100 shadow-xl">
-        {loading ? (
+          {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
             ""
@@ -145,13 +174,18 @@ function Dashboard() {
               <p className="text-2xl font-bold">{countMovies}</p>
             </div>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary" onClick={()=>navigate('/admin/movies', {replace: 'true'})}>More info</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate("/admin/movies", { replace: "true" })}
+              >
+                More info
+              </button>
             </div>
           </div>
         </div>
 
         <div className="card w-96 bg-base-100 shadow-xl">
-        {loading ? (
+          {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
             ""
@@ -163,7 +197,12 @@ function Dashboard() {
               <p className="text-2xl font-bold">{countBlocked.current}</p>
             </div>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary" onClick={()=>navigate('/admin/users/', {replace: true})}>More info</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate("/admin/users/", { replace: true })}
+              >
+                More info
+              </button>
             </div>
           </div>
         </div>

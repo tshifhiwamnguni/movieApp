@@ -69,6 +69,22 @@ function Users() {
     setIsBlocked(user.blocked)
   }
 
+  const deleteUser = async()=>{
+      setLoading(true)
+      axios.delete(`${API}/users/${userID.current}`,{
+          headers: {
+              Authorization: `Bearer ${TOKEN}`
+          }
+      }).then((data)=>{
+          SUCCESS('Successfully deleted')
+      }).catch((error)=>{
+        ERROR(error.response.data.error.message);
+      }).finally(()=>{
+          setLoading(false);
+          window.location.reload();
+      })
+  }
+
   const blockingUser = (data) =>{
     setLoading(true);
     userID.current = data.id;
@@ -203,6 +219,7 @@ function Users() {
                       <label
                         htmlFor="my-modal-4"
                         className="btn btn-error btn-xs"
+                        onClick={() => getSelected(user)}
                       >
                         Delete
                       </label>
@@ -225,7 +242,7 @@ function Users() {
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold">Edit movie</h3>
+          <h3 className="text-lg font-bold">Edit user profile</h3>
           <div className="py-4">
             <div className="form-control">
               <label className="label">
@@ -340,7 +357,7 @@ function Users() {
             Are you sure you want to delete?
           </h3>
           <div className="py-4">
-            <button className="btn btn-error">Delete</button>
+            <button className="btn btn-error" onClick={deleteUser}>Delete</button>
             <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
             </h1>
