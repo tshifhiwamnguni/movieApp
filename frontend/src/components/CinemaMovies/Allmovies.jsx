@@ -194,16 +194,6 @@ function AllMovies() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <div className="mb-3">
-        <label
-          htmlFor="my-modal"
-          className="btn glass text-green-600 max-w-xs gap-2 flex"
-        >
-          <RiVideoAddFill className="text-2xl" />
-          Add movies
-        </label>
-      </div>
-
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
@@ -391,7 +381,7 @@ function AllMovies() {
                 <select
                   defaultValue={cinemaId}
                   onChange={(e) => setCinemaId(e.target.value)}
-                  className="select select-bordered max-w-md"
+                  className="select select-bordered max-w-lg"
                 >
                   <option disabled>Pick a cinema</option>
                   {cinemas.map((cin) => (
@@ -428,26 +418,6 @@ function AllMovies() {
           </div>
         </label>
       </label>
-
-      {/* modal for adding movies */}
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
-      <div className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">
-            Congratulations random Internet user!
-          </h3>
-          <p className="py-4">
-            You've been selected for a chance to get one year of subscription to
-            use Wikipedia for free!
-          </p>
-          <div className="modal-action">
-            <label htmlFor="my-modal" className="btn">
-              Yay!
-            </label>
-          </div>
-        </div>
-      </div>
-
     </div>
   );
 }

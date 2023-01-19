@@ -18,6 +18,7 @@ const Customer = lazy(()=> import('./components/Customer/Customer'))
 const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
 const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
 const AllMovies = lazy(()=>import('./components/CinemaMovies/Allmovies'));
+const Users = lazy(()=>import('./components/users/users'));
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
               <Route path="movies" element={<AllMovies/>} />
+              <Route path="users" element={<Users/>}/>
             </Route>
           </Routes>
        
