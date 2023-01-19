@@ -18,10 +18,9 @@ useEffect(()=>{
       console.log("booked")
       console.log(props);
     
-// console.log( )
+
       handleDelete(bookedSeat.findIndex(seat=> seat===props))
-      // setIsActive(false)
-      // console.log('new ', bookedSeat);
+   
     }else{
         setBookedSeat(bookedSeat=>[...bookedSeat, props])
          console.log("state: ",bookedSeat)
