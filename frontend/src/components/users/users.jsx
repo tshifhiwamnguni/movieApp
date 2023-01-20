@@ -7,7 +7,6 @@ import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
 import { ERROR, SUCCESS } from "../environment/toast";
 import './users.css'
-import Spin from "../Spinner/Spin";
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -19,8 +18,6 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [deleteLoader, setDeleteLoader]=useState(false);
 
   const getUsers = async () => {
     setLoading(true);
@@ -69,7 +66,6 @@ function Users() {
     setEmail(user.email);
     setUserRole(user.role.id);
     userID.current = user.id;
-    setIsBlocked(user.blocked);
   }
 
   const deleteUser = async () => {
@@ -188,7 +184,7 @@ function Users() {
               return (
                 <tr key={user.id}>
                   <td>
-                    <div className="flex items-center space-x-3">
+                    {!loading || user.id !== userID.current ? <div className="flex items-center space-x-3">
                       <div className="avatar placeholder">
                         <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
                           <span className="text-3xl">
@@ -196,7 +192,15 @@ function Users() {
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </div>:
+
+                    <div className="d-flex justify-content-center">
+                      <div className="spinner">
+                        <div className="bounce1"></div>
+                        <div className="bounce2"></div>
+                        <div className="bounce3"></div>
+                      </div>
+                    </div>}
                   </td>
                   <td>
                     {user.firstname} {user.lastname}
