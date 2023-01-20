@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Cinema() {
+function CinemaDashboard() {
   return (
-    <div>Cinema</div>
+    <div className='hero min-h-screen'>Cinema</div>
   )
 }
 
-export default Cinema
+export default CinemaDashboard

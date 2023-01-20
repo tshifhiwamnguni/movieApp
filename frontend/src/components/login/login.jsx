@@ -73,7 +73,7 @@ function Login() {
                 navigate('/theatre', {replace: true});
               }
               if(data.data.role.id === 5){
-                navigate('/cinema', {replace: true});
+                navigate('/cinema/dash', {replace: true});
               }
             })
             .catch((error) => {

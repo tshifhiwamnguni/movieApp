@@ -14,13 +14,13 @@ function Home() {
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
-      navigate("/admin/login/", { replace: true });
+      navigate("/login/", { replace: true });
     }
   });
 
   function logout() {
     removeToken();
-    navigate("/admin/login/", { replace: true });
+    navigate("/login/", { replace: true });
   }
 
   const active = true;

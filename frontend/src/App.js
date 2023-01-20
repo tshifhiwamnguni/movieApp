@@ -43,7 +43,7 @@ const TheatreList = lazy(() =>
 const Splash = lazy(() => import("./components/splashpage/Splash"));
 const Register = lazy(() => import("./components/register/Register"));
 const Customer = lazy(() => import("./components/Customer/Customer"));
-const Cinema = lazy(() => import("./components/Cinema/cinemaDashboard/Cinema"));
+const CinemaDashboard = lazy(() => import("./components/Cinema/cinemaDashboard/Cinema"));
 const Theatre = lazy(() =>
   import("./components/Theatre/TheatreDashboard/Theatre")
 );
@@ -131,13 +131,13 @@ function App() {
             {/* Admin for cinema path/routes */}
             <Route
               path="/cinema"
-              element={!getToken() ? <Cinema /> : <Navigate to="/login" />}
+              element={!getToken() ? <CinemaNavbar /> : <Navigate to={"/login"} />}
             >
               <Route
-                path="/cinema"
-                element={<Navigate replace to="/navbar" />}
+                path="cinema/"
+                element={<Navigate replace to="dash" />}
               />
-              <Route path="navbar" element={<CinemaNavbar />} />
+              <Route path="dash" element={<CinemaDashboard />} />
             </Route>
           </Routes>
         </Suspense>
