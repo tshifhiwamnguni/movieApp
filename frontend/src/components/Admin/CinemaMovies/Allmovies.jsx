@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import { API, TOKEN } from "../environment/constant";
+import { API, TOKEN } from "../../environment/constant";
 import "./Allmov.css";
 import moment from "moment";
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { RiVideoAddFill } from "react-icons/ri";
 
