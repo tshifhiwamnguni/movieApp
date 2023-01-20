@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
-import { API, TOKEN } from "../environment/constant";
+import { API, TOKEN } from "../../environment/constant";
 import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import './users.css'
 
 function Users() {

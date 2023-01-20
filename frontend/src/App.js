@@ -7,17 +7,17 @@ import {
 import "./App.css";
 import { lazy, Suspense } from "react";
 import "./App.css";
-import Dashboard from "./components/dash/dash";
+import Dashboard from "./components/Admin/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
-import CinemaBooking from "./components/cinemaBooking/CinemaBooking";
-import TheatreBooking from "./components/theatreBooking/TheatreBooking";
+import CinemaBooking from "./components/Admin/cinemaBooking/CinemaBooking";
+import TheatreBooking from "./components/Admin/theatreBooking/TheatreBooking";
 
 
 
 
 const Login = lazy(() => import("./components/login/login"));
-const Home = lazy(() => import("./components/Navbar/navbar"));
+const Home = lazy(() => import("./components/Admin/Navbar/navbar"));
 const ForgotPassword = lazy(() =>
   import("./components/passwords/forgot_password/ForgotPassword")
 );
@@ -26,7 +26,7 @@ const ResetPassword = lazy(() =>
 );
 const Booking = lazy(() => import("./components/Booking/Booking"));
 const AdminProfile = lazy(() =>
-  import("./components/adminProfile/adminProfile")
+  import("./components/Admin/adminProfile/adminProfile")
 );
 const ClientSide = lazy(() => import("./components/clientSide/ClientSide"));
 
@@ -49,8 +49,8 @@ const Register = lazy(()=> import('./components/register/Register') )
 const Customer = lazy(()=> import('./components/Customer/Customer'))
 const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
 const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
-const AllMovies = lazy(()=>import('./components/CinemaMovies/Allmovies'));
-const Users = lazy(()=>import('./components/users/users'));
+const AllMovies = lazy(()=>import('./components/Admin/CinemaMovies/Allmovies'));
+const Users = lazy(()=>import('./components/Admin/users/users'));
 
 function App() {
   return (
