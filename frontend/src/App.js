@@ -83,8 +83,6 @@ function App() {
             {/* ========================================================================================================= */}
 
             <Route path="customer" element={<Customer />}></Route>
-            <Route path="/cinema" element={<Cinema />}></Route>
-            <Route path="/theatre" element={<Theatre />}></Route>
 
             <Route path="/register" element={<Register />}></Route>
 
@@ -136,7 +134,7 @@ function App() {
               element={!getToken() ? <Cinema /> : <Navigate to="/login" />}
             >
               <Route
-                path="cinema"
+                path="/cinema"
                 element={<Navigate replace to="/navbar" />}
               />
               <Route path="navbar" element={<CinemaNavbar />} />
