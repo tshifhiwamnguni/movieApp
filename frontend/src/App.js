@@ -43,7 +43,7 @@ const TheatreList = lazy(() =>
 const Splash = lazy(() => import("./components/splashpage/Splash"));
 const Register = lazy(() => import("./components/register/Register"));
 const Customer = lazy(() => import("./components/Customer/Customer"));
-const CinemaDashboard = lazy(() => import("./components/Cinema/cinemaDashboard/Cinema"));
+const CinemaDashboard = lazy(() => import("./components/Cinema/cinemaDashboard/CinemaDashboard"));
 const Theatre = lazy(() =>
   import("./components/Theatre/TheatreDashboard/Theatre")
 );
@@ -54,6 +54,7 @@ const Users = lazy(() => import("./components/Admin/users/users"));
 const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
+const CinMovies = lazy(()=>import('./components/Cinema/Movies/movies'))
 
 function App() {
   return (
@@ -138,6 +139,7 @@ function App() {
                 element={<Navigate replace to="dash" />}
               />
               <Route path="dash" element={<CinemaDashboard />} />
+              <Route path="mov" element={<CinMovies/>}/>
             </Route>
           </Routes>
         </Suspense>

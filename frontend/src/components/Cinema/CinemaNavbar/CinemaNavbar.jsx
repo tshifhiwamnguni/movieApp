@@ -26,7 +26,7 @@ function Home() {
   const active = true;
   return (
     <>
-      <div className="drawer" data-theme='lofi'>
+      <div className="drawer" data-theme='corporate'>
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
@@ -68,7 +68,7 @@ function Home() {
                     Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/movies/")}>
+                <li onClick={() => navigate("/cinema/mov/")}>
                   <a>
                     <FiUsers style={{ fontSize: "1.5rem" }} />
                     Movies
