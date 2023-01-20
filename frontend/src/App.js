@@ -47,8 +47,8 @@ const TheatreList = lazy(()=> import('./components/clientSide/theatreList/Theare
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
 const Register = lazy(()=> import('./components/register/Register') )
 const Customer = lazy(()=> import('./components/Customer/Customer'))
-const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
-const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
+const Cinema = lazy(()=> import('./components/Cinema/cinemaDashboard/Cinema'))
+const Theatre = lazy(()=> import('./components/Theatre/TheatreDashboard/Theatre'))
 const AllMovies = lazy(()=>import('./components/Admin/CinemaMovies/Allmovies'));
 const Users = lazy(()=>import('./components/Admin/users/users'));
 
