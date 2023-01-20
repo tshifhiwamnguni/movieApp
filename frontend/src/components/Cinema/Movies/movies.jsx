@@ -1,17 +1,17 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import { API, TOKEN } from "../environment/constant";
-import "./Allmov.css";
+import { API, TOKEN } from "../../environment/constant";
+// import "./Allmov.css";
 import moment from "moment";
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
-import { RiVideoAddFill } from "react-icons/ri";
+import { BiMoviePlay } from "react-icons/bi";
 
-function AllMovies() {
+function CinMovies() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -118,7 +118,10 @@ function AllMovies() {
         console.log(error);
         ERROR(error.response.data.error.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+      });
   };
 
   const deleteMovie = async () => {
@@ -137,7 +140,10 @@ function AllMovies() {
         console.log(error);
         ERROR(error.response.data.error.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+      });
   };
 
   const uploadMoviePoster = async (e) => {
@@ -186,6 +192,78 @@ function AllMovies() {
       .finally(() => setLoading(false));
   };
 
+  const addMovies = async () => {
+    setLoading(true);
+
+    const movieData = {
+      data: {
+        title: title,
+        description: description,
+        movieImage: image,
+        duration: duration,
+        cinema: parseInt(cinemaId),
+      },
+    };
+    console.log(movieId);
+
+    axios
+      .post(`${API}/movies?populate=*`, movieData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((mov) => {
+        console.log(mov.data.data.id);
+        SUCCESS("Successfully added");
+        movieId.current = mov.data.data.id;
+
+            const formData = new FormData();
+            formData.append("files", movieFile.current);
+        formData.append("refID", movieId.current);
+        formData.append("field", "movieImage");
+        formData.append("ref", "api::movie.movie");
+         axios
+          .post(`${API}/upload`, formData, {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          })
+          .then((data) => {
+            console.log(data.data[0].url);
+            imgUrl.current = data.data[0].url;
+            SUCCESS("Successfully uploaded");
+            axios
+              .put(
+                `${API}/movies/${movieId.current}?populate=*`,
+                { data: { movieImage: imgUrl.current } },
+                {
+                  headers: {
+                    Authorization: `Bearer ${TOKEN}`,
+                  },
+                }
+              )
+              .then((data) => {
+                console.log(data);
+                SUCCESS("Successfully updated");
+              })
+              .catch((error) => {
+                ERROR(error.response.data.error.message);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            ERROR(error.response.data.error.message);
+          })
+          .finally(() => setLoading(false));
+      })
+      .catch((error) => {
+        console.log(error);
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {setLoading(false)
+    getMovies();});
+  };
+
   useEffect(() => {
     getMovies();
     getCinema();
@@ -194,6 +272,10 @@ function AllMovies() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
+      <label htmlFor="my-modal-7" className="btn btn-primary gap-2">
+        <BiMoviePlay style={{ fontSize: "1.5rem" }} />
+        Add movies
+      </label>
       <h1 className="text-center font-bold text-3xl mb-4">Movies</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
@@ -419,8 +501,125 @@ function AllMovies() {
           </div>
         </label>
       </label>
+
+      {/* add movies */}
+
+      <input type="checkbox" id="my-modal-7" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box relative">
+          <label
+            htmlFor="my-modal-7"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold">Add movie</h3>
+          <div className="py-4">
+            <div className="flex justify-center">
+              <div className="avatar">
+                <div className="w-24 rounded-full">
+                  <img src={image} alt="" />
+                </div>
+                <MdAddPhotoAlternate
+                  onClick={handleClick}
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
+            {/* <div className="flex justify-center mt-2">
+              <button
+                className="btn btn-success btn-xs"
+                onClick={uploadMoviePoster}
+              >
+                Upload
+              </button>
+            </div> */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Movie title</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <BiRename />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Avatar"
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Movie Description</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <TbFileDescription />
+                </span>
+                <input
+                  type="text"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe the movie"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Movie Duration in minutes</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Cinema</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <TbFileDescription />
+                </span>
+                <select
+                  defaultValue={cinemaId}
+                  onChange={(e) => setCinemaId(e.target.value)}
+                  className="select select-bordered max-w-lg"
+                >
+                  <option disabled>Pick a cinema</option>
+                  {cinemas.map((cin) => (
+                    <option key={cin.id} value={cin.id}>
+                      {cin.attributes.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="flex justify-end mt-3">
+              <button className="btn btn-success" onClick={addMovies}>
+                ADD
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default AllMovies;
+export default CinMovies;

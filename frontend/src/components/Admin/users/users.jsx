@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
-import { API, TOKEN } from "../environment/constant";
+import { API, TOKEN } from "../../environment/constant";
 import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import './users.css'
 
 function Users() {
@@ -148,7 +148,7 @@ function Users() {
       })
       .finally(() => {
         setLoading(false);
-        window.location.reload();
+        getUsers();
       });
   };
 
@@ -378,9 +378,13 @@ function Users() {
             Are you sure you want to delete?
           </h3>
           <div className="py-4">
-            <button className="btn btn-error" onClick={deleteUser}>
+            <label
+              className="btn btn-error"
+              htmlFor="my-modal-4"
+              onClick={deleteUser}
+            >
               Delete
-            </button>
+            </label>
             <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
             </h1>

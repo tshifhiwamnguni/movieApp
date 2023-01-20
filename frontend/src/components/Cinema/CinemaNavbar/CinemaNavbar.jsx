@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { IoMdLogOut } from "react-icons/io";
-import { removeToken } from "../environment/helpers";
+import { removeToken } from "../../environment/helpers";
 import { useNavigate } from "react-router-dom";
 import { BsHouse } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import "./navbar.css";
+// import "./navbar.css";
 import {Outlet} from "react-router-dom" ;
 
 function Home() {
@@ -14,19 +14,19 @@ function Home() {
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
-      navigate("/admin/login/", { replace: true });
+      navigate("/login/", { replace: true });
     }
   });
 
   function logout() {
     removeToken();
-    navigate("/admin/login/", { replace: true });
+    navigate("/login/", { replace: true });
   }
 
   const active = true;
   return (
     <>
-      <div className="drawer" data-theme='lofi'>
+      <div className="drawer" data-theme='corporate'>
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
@@ -56,22 +56,22 @@ function Home() {
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/admin/dashboard/")}>
+                <li  onClick={() => navigate("/cinema/dash/")}>
                   <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/profile/")}>
+                <li onClick={() => navigate("/cinema/snacks/")}>
                   <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
-                    Profile
+                    Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/users/")}>
+                <li onClick={() => navigate("/cinema/mov/")}>
                   <a>
                     <FiUsers style={{ fontSize: "1.5rem" }} />
-                    All users
+                    Movies
                   </a>
                 </li>
                 <li onClick={logout}>
