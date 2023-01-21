@@ -53,7 +53,6 @@ function Snacks() {
     setSnackQuantity(snc.attributes.quantity);
     setImage(snc.attributes.snackImage)
     snackID.current = snc.id;
-    console.log(snc.id);
   }
 
   // delete a snacks
@@ -280,7 +279,7 @@ function Snacks() {
         }
       )
       .then((snac) => {
-        console.log(snac.data.data);
+        // console.log(snac.data.data);
         setSnacks(snac.data.data);
         // getMovies();
       })
@@ -344,7 +343,7 @@ function Snacks() {
                               <label
                                 className="cursor-pointer"
                                 htmlFor="my-modal-6"
-                                // onClick={() => selectedEdit(mov)}
+                                onClick={() => selectedEdit(snack)}
                               >
                                 <img
                                   src={snack.attributes.snackImage}
@@ -664,6 +663,22 @@ function Snacks() {
           </div>
         </label>
       </label>
+
+      
+{/* view image */}
+<input type="checkbox" id="my-modal-6" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <div className="flex justify-center">
+            <img src={image} alt="nice" />
+          </div>
+          <div className="modal-action">
+            <label htmlFor="my-modal-6" className="btn">
+              Done
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
