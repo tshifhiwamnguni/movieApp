@@ -26,7 +26,7 @@ function Home() {
   const active = true;
   return (
     <>
-      <div className="drawer" data-theme='corporate'>
+      <div className="drawer" data-theme='dark'>
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">

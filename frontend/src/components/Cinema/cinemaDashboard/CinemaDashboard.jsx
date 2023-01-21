@@ -67,7 +67,7 @@ function CinemaDashboard() {
       </h1>
 
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-5 justify-center">
-        <div className="stats shadow-xl bg-base-100">
+        <div className="stats shadow-xl bg-base-300">
           <div className="stat">
             {loading ? (
               <progress className="progress progress-primary mb-3 w-full"></progress>
