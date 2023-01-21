@@ -45,7 +45,7 @@ function CinemaDashboard() {
         },
       })
       .then((cinema) => {
-        console.log(cinema.data.data.attributes);
+        // console.log(cinema.data.data.attributes);
         setMovies(cinema.data.data.attributes.movies.data.length);
         setCinemaName(cinema.data.data.attributes.name);
         setBooking(cinema.data.data.attributes.booking_cinemas.data.length);
@@ -57,27 +57,8 @@ function CinemaDashboard() {
       .finally(() => setLoading(false));
   };
 
-  const getSnacks = async () => {
-    setLoading(true);
-    await axios
-      .get(`${API}/cinema-snacks?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then((movie) => {
-        // console.log(movie.data.data.length);
-        setSnacks(movie.data.data.length);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => setLoading(false));
-  };
-
   useEffect(() => {
     getUser();
-    getSnacks();
   }, []);
   return (
     <div className="min-h-screen">
@@ -98,7 +79,13 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{movies}</div>
-              <IoChevronForwardCircleOutline className="cursor-pointer" style={{ fontSize: "2.5rem" }} />
+              <button className="btn btn-ghost glass">
+                <IoChevronForwardCircleOutline
+                  className="cursor-pointer"
+                  style={{ fontSize: "2.5rem" }}
+                />
+                More info.
+              </button>
             </div>
           </div>
         </div>
@@ -115,7 +102,13 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{snacks}</div>
-              <IoChevronForwardCircleOutline className="cursor-pointer" style={{ fontSize: "2.5rem" }} />
+              <button className="btn btn-ghost glass">
+                <IoChevronForwardCircleOutline
+                  className="cursor-pointer"
+                  style={{ fontSize: "2.5rem" }}
+                />
+                More info.
+              </button>
             </div>
           </div>
         </div>
@@ -132,7 +125,13 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{bookings}</div>
-              <IoChevronForwardCircleOutline className="cursor-pointer" style={{ fontSize: "2.5rem" }} />
+              <button className="btn btn-ghost glass">
+                <IoChevronForwardCircleOutline
+                  className="cursor-pointer"
+                  style={{ fontSize: "2.5rem" }}
+                />
+                More info.
+              </button>
             </div>
           </div>
         </div>
