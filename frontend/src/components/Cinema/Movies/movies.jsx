@@ -18,9 +18,7 @@ function CinMovies() {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState("");
-  const [cinemaId, setCinemaId] = useState();
   const [image, setImage] = useState("");
-  const [cinemas, setCinemas] = useState([]);
   const movieId = useRef();
   const movieFile = useRef();
   const imgUrl = useRef();
