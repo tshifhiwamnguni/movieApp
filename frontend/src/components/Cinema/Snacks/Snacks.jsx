@@ -51,10 +51,31 @@ function Snacks() {
     setSnackName(snc.attributes.name);
     setSnackPrice(snc.attributes.price);
     setSnackQuantity(snc.attributes.quantity);
-    snackImageUrl.current = snc.attributes.snackImage;
+    setImage(snc.attributes.snackImage)
     snackID.current = snc.id;
     console.log(snc.id);
   }
+
+  // delete a snacks
+  const deleteSnack = async () => {
+    setLoading(true);
+    await axios
+      .delete(`${API}/cinema-snacks/${snackID.current}`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        SUCCESS("Successfully deleted");
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+        getSnacks();
+      });
+  };
 
   // get image when you click
   const handleClick = () => {
@@ -95,7 +116,7 @@ function Snacks() {
       })
       .then((data) => {
         snackImageUrl.current = data.data[0].url;
-        console.log(snackImageUrl)
+        // console.log(snackImageUrl)
         SUCCESS("Successfully uploaded");
         axios
           .put(
@@ -112,7 +133,7 @@ function Snacks() {
           })
           .catch((error) => {
             ERROR(error.response.data.error.message);
-            console.log(error)
+            // console.log(error)
           })
           .finally(() => {
             setLoading(false);
@@ -131,6 +152,84 @@ function Snacks() {
       });
   };
 
+  // add snacks
+  const addSnack = async () => {
+    setLoading(true);
+
+    const snackData = {
+      data: {
+        name: snackName,
+        price: snackPrice,
+        quantity: snackQuantity,
+        snackSize: snacksSize,
+        cinema: parseInt(cinemaID.current),
+      },
+    };
+
+    await axios
+      .post(`${API}/cinema-snacks?populate=*`, snackData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((snac) => {
+        snackID.current = snac.data.data.id;
+      })
+      .catch((error) => {
+        console.log(error);
+        ERROR(error.response.data.error.message);
+      });
+
+    const formData = new FormData();
+    formData.append("files", snackImageUrl.current);
+    formData.append("refID", snackID.current);
+    formData.append("field", "movieImage");
+    formData.append("ref", "api::cinema-snack.cinema-snack");
+    await axios
+      .post(`${API}/upload`, formData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        snackImageUrl.current = data.data[0].url;
+        // console.log(data.data[0].url)
+        SUCCESS("Successfully added");
+      })
+      .catch((error) => {
+        // console.log(error);
+        ERROR(error.response.data.error.message);
+      });
+
+    axios
+      .put(
+        `${API}/cinema-snacks/${snackID.current}?populate=*`,
+        { data: { snackImage: snackImageUrl.current } },
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((data) => {
+        // console.log(data);
+        // SUCCESS("Successfully added");
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+        getSnacks();
+
+        setSnackName("");
+        setSnackPrice(0);
+        setSnackQuantity(0);
+        setSnackPrice("");
+        setSnackSize("");
+      });
+  };
   // updating snacks data
   const updateSnack = () => {
     setLoading(true);
@@ -237,14 +336,14 @@ function Snacks() {
               return (
                 <tr key={snack.id}>
                   <td>
-                    {!loading ? (
+                    {!loading || snack.id !== snackID.current ? (
                       <div className="flex items-center space-x-3">
                         <div className="flex items-center space-x-3">
                           <div className="avatar">
                             <div className="mask mask-squircle w-12 h-12">
                               <label
                                 className="cursor-pointer"
-                                htmlFor="my-modal-8"
+                                htmlFor="my-modal-6"
                                 // onClick={() => selectedEdit(mov)}
                               >
                                 <img
@@ -315,7 +414,7 @@ function Snacks() {
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold">Edit movie</h3>
+          <h3 className="text-lg font-bold">Edit snack</h3>
           <div className="py-4">
             <div className="flex justify-center">
               <div className="avatar">
@@ -435,27 +534,20 @@ function Snacks() {
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold">Edit movie</h3>
+          <h3 className="text-lg font-bold">Add snacks</h3>
           <div className="py-4">
             <div className="flex justify-center">
               <div className="avatar">
                 <div className="w-24 rounded-full">
-                  {/* <img src={image} alt="" /> */}
+                  <img src={image} alt="" />
                 </div>
                 <MdAddPhotoAlternate
-                  // onClick={handleClick}
+                  onClick={handleClick}
                   className="cursor-pointer"
                 />
               </div>
             </div>
-            <div className="flex justify-center mt-2">
-              <button
-                className="btn btn-success btn-xs"
-                // onClick={uploadMoviePoster}
-              >
-                Upload
-              </button>
-            </div>
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Snack name</span>
@@ -535,8 +627,8 @@ function Snacks() {
             <div className="flex justify-end mt-3">
               <label
                 className="btn btn-success"
-                htmlFor="my-modal-3"
-                onClick={updateSnack}
+                htmlFor="my-modal-8"
+                onClick={addSnack}
               >
                 ADD
               </label>
@@ -544,6 +636,34 @@ function Snacks() {
           </div>
         </div>
       </div>
+
+      {/* delete modal */}
+      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+      <label htmlFor="my-modal-4" className="modal cursor-pointer">
+        <label className="modal-box relative" htmlFor="">
+          <label
+            htmlFor="my-modal-4"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold">
+            Are you sure you want to delete {snackName}?
+          </h3>
+          <div className="py-4">
+            <label
+              className="btn btn-error"
+              htmlFor="my-modal-4"
+              onClick={deleteSnack}
+            >
+              Delete
+            </label>
+            {/* <h1 className="mt-4 text-green-500">
+              Click outside the card to cancel
+            </h1> */}
+          </div>
+        </label>
+      </label>
     </div>
   );
 }

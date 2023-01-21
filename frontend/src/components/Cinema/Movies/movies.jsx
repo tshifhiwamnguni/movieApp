@@ -258,29 +258,29 @@ function CinMovies() {
       })
       .then((mov) => {
         movieId.current = mov.data.data.id;
-
-        const formData = new FormData();
-        formData.append("files", movieFile.current);
-        formData.append("refID", movieId.current);
-        formData.append("field", "movieImage");
-        formData.append("ref", "api::movie.movie");
-        axios
-          .post(`${API}/upload`, formData, {
-            headers: {
-              Authorization: `Bearer ${TOKEN}`,
-            },
-          })
-          .then(async (data) => {
-            imgUrl.current = data.data[0].url;
-            // SUCCESS("Successfully uploaded");
-          })
-          .catch((error) => {
-            // console.log(error);
-            ERROR(error.response.data.error.message);
-          });
       })
       .catch((error) => {
         console.log(error);
+        ERROR(error.response.data.error.message);
+      });
+
+    const formData = new FormData();
+    formData.append("files", movieFile.current);
+    formData.append("refID", movieId.current);
+    formData.append("field", "movieImage");
+    formData.append("ref", "api::movie.movie");
+    await axios
+      .post(`${API}/upload`, formData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then(async (data) => {
+        imgUrl.current = data.data[0].url;
+        // SUCCESS("Successfully uploaded");
+      })
+      .catch((error) => {
+        // console.log(error);
         ERROR(error.response.data.error.message);
       });
 
@@ -295,7 +295,7 @@ function CinMovies() {
         }
       )
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         SUCCESS("Successfully added");
       })
       .catch((error) => {
@@ -357,7 +357,7 @@ function CinMovies() {
                           <div className="avatar">
                             <div className="mask mask-squircle w-12 h-12">
                               <label
-                              className="cursor-pointer"
+                                className="cursor-pointer"
                                 htmlFor="my-modal-8"
                                 onClick={() => selectedEdit(mov)}
                               >
@@ -707,6 +707,7 @@ function CinMovies() {
         </div>
       </div>
 
+{/* view image */}
       <input type="checkbox" id="my-modal-8" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
