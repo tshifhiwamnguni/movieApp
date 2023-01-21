@@ -86,7 +86,7 @@ function Dashboard() {
   return (
     <div className="hero min-h-screen xs:mt-28">
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-5 justify-center">
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-96 bg-base-300 shadow-xl">
           {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
@@ -112,7 +112,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-96 bg-base-300 shadow-xl">
           {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
@@ -138,7 +138,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-96 bg-base-300 shadow-xl">
           {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
@@ -161,7 +161,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-96 bg-base-300 shadow-xl">
           {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (
@@ -184,7 +184,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-96 bg-base-300 shadow-xl">
           {loading ? (
             <progress className="progress h-1 progress-primary w-96 loading"></progress>
           ) : (

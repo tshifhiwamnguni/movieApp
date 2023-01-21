@@ -90,7 +90,7 @@ function CinemaDashboard() {
           </div>
         </div>
 
-        <div className="stats shadow-xl bg-base-100">
+        <div className="stats shadow-xl bg-base-300">
           <div className="stat">
             {loading ? (
               <progress className="progress progress-primary mb-3 w-full"></progress>
@@ -113,7 +113,7 @@ function CinemaDashboard() {
           </div>
         </div>
 
-        <div className="stats shadow-xl bg-base-100">
+        <div className="stats shadow-xl bg-base-300">
           <div className="stat">
             {loading ? (
               <progress className="progress progress-primary mb-3 w-full"></progress>
