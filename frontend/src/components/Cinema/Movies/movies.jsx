@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { API, TOKEN } from "../../environment/constant";
-// import "./Allmov.css";
+import "./movies.css";
 import moment from "moment";
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
@@ -10,6 +10,7 @@ import { MdAddPhotoAlternate } from "react-icons/md";
 import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
+import jwt_decode from "jwt-decode";
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -21,55 +22,91 @@ function CinMovies() {
   const [image, setImage] = useState("");
   const [cinemas, setCinemas] = useState([]);
   const movieId = useRef();
-  const [movID, setMovId] = useState();
   const movieFile = useRef();
   const imgUrl = useRef();
+  const cinemaID = useRef();
+  const [cinemaName, setCinemaName] = useState("");
+  const [genre, setGenres] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
+  // checkbox for genres
+  const handleCheckboxChange = async (event) => {
+    const selectedValue = event.target.value;
+
+    if (event.target.checked) {
+      setSelectedOptions([...selectedOptions, parseInt(selectedValue)]);
+    } else {
+      setSelectedOptions(
+        selectedOptions.filter((value) => value !== parseInt(selectedValue))
+      );
+    }
+  };
+
+  // use effect for the selected options of a checkbox
+  useEffect(() => {}, [selectedOptions]);
+
+  const token = localStorage.getItem("jwt");
+  let decoded = jwt_decode(token);
+  let ID = decoded.id;
+
+  // get user for the cinema
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        cinemaID.current = data.data?.cinema.id;
+        getMovies();
+      })
+      .catch((err) => {});
+  };
+
+  // get genres
+  const getGenres = async () => {
+    await axios
+      .get(`${API}/genres`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        setGenres(data.data.data);
+      })
+      .catch((error) => {});
+  };
+
+  // get movies per cinema
   const getMovies = async () => {
     setLoading(true);
     await axios
-      .get(`${API}/movies?populate=*`, {
+      .get(`${API}/movies?filters[cinema]=${cinemaID.current}&populate=*`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((movie) => {
-        console.log(movie.data.data[1]);
         setMovies(movie.data.data);
+        setCinemaName(
+          movie.data.data[0].attributes.cinema.data.attributes.name
+        );
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => {})
       .finally(() => setLoading(false));
   };
 
-  function getCinema() {
-    axios
-      .get(`${API}/cinemas`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then((cinema) => {
-        console.log(cinema.data.data);
-        setCinemas(cinema.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
+  // get and set selected data to the variables
   function selectedEdit(mov) {
-    console.log(mov.id);
     setTitle(mov.attributes.title);
     setDuration(mov.attributes.duration);
     setDescription(mov.attributes.description);
-    setCinemaId(mov.attributes.cinema.data.id);
     setImage(mov.attributes.movieImage);
     movieId.current = mov.id;
-    setMovId(mov.id);
   }
 
+  // get image when you click
   const handleClick = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -77,7 +114,6 @@ function CinMovies() {
     input.onchange = (e) => {
       const file = e.target.files[0];
       movieFile.current = file;
-      console.log(movieFile.current);
       const reader = new FileReader();
 
       reader.onloadend = () => {
@@ -90,6 +126,7 @@ function CinMovies() {
     input.click();
   };
 
+  // updating movie data
   const updateMovie = () => {
     setLoading(true);
 
@@ -97,12 +134,11 @@ function CinMovies() {
       data: {
         title: title,
         description: description,
-        movieImage: image,
         duration: duration,
-        cinema: parseInt(cinemaId),
+        cinema: parseInt(cinemaID.current),
+        genres: selectedOptions,
       },
     };
-    console.log(movieId);
 
     axios
       .put(`${API}/movies/${movieId.current}?populate=*`, movieData, {
@@ -111,19 +147,24 @@ function CinMovies() {
         },
       })
       .then((data) => {
-        console.log(data);
         SUCCESS("Successfully updated");
       })
       .catch((error) => {
-        console.log(error);
         ERROR(error.response.data.error.message);
       })
       .finally(() => {
         setLoading(false);
         getMovies();
+
+        setTitle("");
+        setDescription("");
+        setImage("");
+        setDuration(0);
+        movieId.current = null;
       });
   };
 
+  // delete a movie
   const deleteMovie = async () => {
     setLoading(true);
     await axios
@@ -133,11 +174,9 @@ function CinMovies() {
         },
       })
       .then((data) => {
-        console.log(data);
         SUCCESS("Successfully deleted");
       })
       .catch((error) => {
-        console.log(error);
         ERROR(error.response.data.error.message);
       })
       .finally(() => {
@@ -146,12 +185,12 @@ function CinMovies() {
       });
   };
 
+  // update a movie image
   const uploadMoviePoster = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const formData = new FormData();
-    console.log(movID);
     formData.append("files", movieFile.current);
     formData.append("refID", movieId.current);
     formData.append("field", "movieImage");
@@ -164,7 +203,6 @@ function CinMovies() {
         },
       })
       .then((data) => {
-        console.log(data.data[0].url);
         imgUrl.current = data.data[0].url;
         SUCCESS("Successfully uploaded");
         axios
@@ -178,20 +216,29 @@ function CinMovies() {
             }
           )
           .then((data) => {
-            console.log(data);
             SUCCESS("Successfully updated");
           })
           .catch((error) => {
             ERROR(error.response.data.error.message);
+          })
+          .finally(() => {
+            setLoading(false);
+            getMovies();
+
+            setTitle("");
+            setDescription("");
+            setImage("");
+            setDuration(0);
+            setGenres([]);
+            movieId.current = null;
           });
       })
       .catch((error) => {
-        console.log(error);
         ERROR(error.response.data.error.message);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
+  // add a movie with image
   const addMovies = async () => {
     setLoading(true);
 
@@ -199,74 +246,79 @@ function CinMovies() {
       data: {
         title: title,
         description: description,
-        movieImage: image,
         duration: duration,
-        cinema: parseInt(cinemaId),
+        cinema: parseInt(cinemaID.current),
+        genres: selectedOptions,
       },
     };
-    console.log(movieId);
 
-    axios
+    await axios
       .post(`${API}/movies?populate=*`, movieData, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((mov) => {
-        console.log(mov.data.data.id);
-        SUCCESS("Successfully added");
         movieId.current = mov.data.data.id;
 
-            const formData = new FormData();
-            formData.append("files", movieFile.current);
+        const formData = new FormData();
+        formData.append("files", movieFile.current);
         formData.append("refID", movieId.current);
         formData.append("field", "movieImage");
         formData.append("ref", "api::movie.movie");
-         axios
+        axios
           .post(`${API}/upload`, formData, {
             headers: {
               Authorization: `Bearer ${TOKEN}`,
             },
           })
-          .then((data) => {
-            console.log(data.data[0].url);
+          .then(async (data) => {
             imgUrl.current = data.data[0].url;
-            SUCCESS("Successfully uploaded");
-            axios
-              .put(
-                `${API}/movies/${movieId.current}?populate=*`,
-                { data: { movieImage: imgUrl.current } },
-                {
-                  headers: {
-                    Authorization: `Bearer ${TOKEN}`,
-                  },
-                }
-              )
-              .then((data) => {
-                console.log(data);
-                SUCCESS("Successfully updated");
-              })
-              .catch((error) => {
-                ERROR(error.response.data.error.message);
-              });
+            // SUCCESS("Successfully uploaded");
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
             ERROR(error.response.data.error.message);
-          })
-          .finally(() => setLoading(false));
+          });
       })
       .catch((error) => {
         console.log(error);
         ERROR(error.response.data.error.message);
+      });
+
+    axios
+      .put(
+        `${API}/movies/${movieId.current}?populate=*`,
+        { data: { movieImage: imgUrl.current } },
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        SUCCESS("Successfully added");
       })
-      .finally(() => {setLoading(false)
-    getMovies();});
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+
+        setTitle("");
+        setDescription("");
+        setImage("");
+        setDuration(0);
+        setGenres([]);
+      });
   };
 
   useEffect(() => {
-    getMovies();
-    getCinema();
+    getUser();
+    getGenres();
   }, []);
 
   return (
@@ -301,25 +353,37 @@ function CinMovies() {
               return (
                 <tr key={mov.id}>
                   <td>
-                    <div className="flex items-center space-x-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img
-                            src={mov.attributes.movieImage}
-                            alt="Avatar Tailwind CSS Component"
-                          />
+                    {!loading || mov.id !== movieId.current ? (
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="avatar">
+                            <div className="mask mask-squircle w-12 h-12">
+                              <img
+                                src={mov.attributes.movieImage}
+                                alt="Avatar Tailwind CSS Component"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="d-flex justify-content-center">
+                        <div className="spinner">
+                          <div className="bounce1"></div>
+                          <div className="bounce2"></div>
+                          <div className="bounce3"></div>
+                        </div>
+                      </div>
+                    )}
                   </td>
                   <td>
                     {mov.attributes.title}
                     <br />
 
-                    {mov.attributes.genres.data.map((genre) => (
+                    {mov.attributes.genres?.data.map((genre) => (
                       <span
                         key={genre.id}
-                        className="badge badge-ghost badge-sm"
+                        className="badge badge-ghost badge-sm ml-1"
                       >
                         {genre.attributes.name}
                       </span>
@@ -332,7 +396,7 @@ function CinMovies() {
                         Math.round((mov.attributes.duration % 60) * 100) / 100
                       ).toFixed(0)}
                   </td>
-                  <td>{mov.attributes.cinema.data.attributes.name}</td>
+                  <td>{cinemaName}</td>
                   <td>
                     {moment(mov.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
@@ -455,30 +519,35 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Cinema</span>
+                <span className="label-text">Movie genres</span>
               </label>
               <label className="input-group">
-                <span>
-                  <TbFileDescription />
-                </span>
-                <select
-                  defaultValue={cinemaId}
-                  onChange={(e) => setCinemaId(e.target.value)}
-                  className="select select-bordered max-w-lg"
-                >
-                  <option disabled>Pick a cinema</option>
-                  {cinemas.map((cin) => (
-                    <option key={cin.id} value={cin.id}>
-                      {cin.attributes.name}
-                    </option>
-                  ))}
-                </select>
+                {genre.map((option) => (
+                  <div
+                    key={option.id}
+                    style={{ backgroundColor: "aliceblue", padding: "10px" }}
+                  >
+                    <input
+                      type="checkbox"
+                      value={option.id}
+                      onChange={(e) => handleCheckboxChange(e)}
+                      checked={selectedOptions.includes(option.id)}
+                      className="checkbox checkbox-primary"
+                    />
+                    <label>{option.attributes.name}</label>
+                  </div>
+                ))}
               </label>
             </div>
+
             <div className="flex justify-end mt-3">
-              <button className="btn btn-success" onClick={updateMovie}>
+              <label
+                className="btn btn-success"
+                htmlFor="my-modal-3"
+                onClick={updateMovie}
+              >
                 Update
-              </button>
+              </label>
             </div>
           </div>
         </div>
@@ -488,16 +557,26 @@ function CinMovies() {
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
       <label htmlFor="my-modal-4" className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
+          <label
+            htmlFor="my-modal-4"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
           <h3 className="text-lg font-bold">
             Are you sure you want to delete {title}?
           </h3>
           <div className="py-4">
-            <button className="btn btn-error" onClick={deleteMovie}>
+            <label
+              className="btn btn-error"
+              htmlFor="my-modal-4"
+              onClick={deleteMovie}
+            >
               Delete
-            </button>
-            <h1 className="mt-4 text-green-500">
+            </label>
+            {/* <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
-            </h1>
+            </h1> */}
           </div>
         </label>
       </label>
@@ -590,30 +669,35 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Cinema</span>
+                <span className="label-text">Movie genres</span>
               </label>
               <label className="input-group">
-                <span>
-                  <TbFileDescription />
-                </span>
-                <select
-                  defaultValue={cinemaId}
-                  onChange={(e) => setCinemaId(e.target.value)}
-                  className="select select-bordered max-w-lg"
-                >
-                  <option disabled>Pick a cinema</option>
-                  {cinemas.map((cin) => (
-                    <option key={cin.id} value={cin.id}>
-                      {cin.attributes.name}
-                    </option>
-                  ))}
-                </select>
+                {genre.map((option) => (
+                  <div
+                    key={option.id}
+                    style={{ backgroundColor: "aliceblue", padding: "10px" }}
+                  >
+                    <input
+                      type="checkbox"
+                      value={option.id}
+                      onChange={(e) => handleCheckboxChange(e)}
+                      checked={selectedOptions.includes(option.id)}
+                      className="checkbox checkbox-primary"
+                    />
+                    <label>{option.attributes.name}</label>
+                  </div>
+                ))}
               </label>
             </div>
+
             <div className="flex justify-end mt-3">
-              <button className="btn btn-success" onClick={addMovies}>
+              <label
+                htmlFor="my-modal-7"
+                className="btn btn-success"
+                onClick={addMovies}
+              >
                 ADD
-              </button>
+              </label>
             </div>
           </div>
         </div>

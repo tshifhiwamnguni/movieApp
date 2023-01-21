@@ -2,13 +2,15 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { API, TOKEN } from "../../environment/constant";
 import jwt_decode from "jwt-decode";
+import { IoChevronForwardCircleOutline } from "react-icons/io5";
 
 function CinemaDashboard() {
-  const [movies, setMovies] = useState([]);
-  const [snacks, setSnacks] = useState([]);
+  const [movies, setMovies] = useState(0);
+  const [snacks, setSnacks] = useState(0);
   const [loading, setLoading] = useState(false);
   const cinemaID = useRef();
-  const [cinemaName, setCinemaName] = useState('');
+  const [cinemaName, setCinemaName] = useState("");
+  const [bookings, setBooking] = useState(0);
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -16,23 +18,26 @@ function CinemaDashboard() {
 
   // console.log(ID)
 
-  const getUser = async()=>{
-    await axios.get(`${API}/users/${ID}?populate=*`,{
-      headers:{
-        Authorization: `Bearer ${TOKEN}`
-      }
-    }).then((data)=>{
-      // console.log(data.data?.cinema.id);
-      cinemaID.current = data.data?.cinema.id;
-      getCinemaMovies();
-    }).catch((err)=>{
-      console.log(err);
-    })
-  }
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        // console.log(data.data?.cinema.id);
+        cinemaID.current = data.data?.cinema.id;
+        getCinemaMovies();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getCinemaMovies = async () => {
     setLoading(true);
-    console.log(cinemaID.current)
+    // console.log(cinemaID.current);
     await axios
       .get(`${API}/cinemas/${cinemaID.current}?populate=*`, {
         headers: {
@@ -40,9 +45,11 @@ function CinemaDashboard() {
         },
       })
       .then((cinema) => {
-        console.log(cinema.data.data.attributes.name)
+        console.log(cinema.data.data.attributes);
         setMovies(cinema.data.data.attributes.movies.data.length);
-        setCinemaName(cinema.data.data.attributes.name)
+        setCinemaName(cinema.data.data.attributes.name);
+        setBooking(cinema.data.data.attributes.booking_cinemas.data.length);
+        setSnacks(cinema.data.data.attributes.cinema_snacks.data.length);
       })
       .catch((error) => {
         console.log(error);
@@ -74,38 +81,63 @@ function CinemaDashboard() {
   }, []);
   return (
     <div className="min-h-screen">
-      <h1 className="mt-24 mb-16 text-center font-bold text-4xl">{cinemaName.toUpperCase()}</h1>
-  
+      <h1 className="mt-24 mb-16 text-center font-bold text-4xl">
+        {cinemaName.toUpperCase()}
+      </h1>
+
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-5 justify-center">
-        <div className="stats shadow-xl bg-base-200">
+        <div className="stats shadow-xl bg-base-100">
           <div className="stat">
+            {loading ? (
+              <progress className="progress progress-primary mb-3 w-full"></progress>
+            ) : (
+              ""
+            )}
             <div className="stat-title text-3xl mb-3 font-bold">
               Number of movies
             </div>
-            <div className="stat-value text-blue-400">{movies}</div>
+            <div className="flex">
+              <div className="stat-value flex-1 text-blue-400">{movies}</div>
+              <IoChevronForwardCircleOutline className="cursor-pointer" style={{ fontSize: "2.5rem" }} />
+            </div>
           </div>
         </div>
 
-        <div className="stats shadow-xl bg-base-200">
+        <div className="stats shadow-xl bg-base-100">
           <div className="stat">
+            {loading ? (
+              <progress className="progress progress-primary mb-3 w-full"></progress>
+            ) : (
+              ""
+            )}
             <div className="stat-title text-3xl mb-3 font-bold">
               Number of snacks
             </div>
-            <div className="stat-value text-blue-400">{snacks}</div>
+            <div className="flex">
+              <div className="stat-value flex-1 text-blue-400">{snacks}</div>
+              <IoChevronForwardCircleOutline className="cursor-pointer" style={{ fontSize: "2.5rem" }} />
+            </div>
           </div>
         </div>
 
-        <div className="stats shadow-xl bg-base-200">
+        <div className="stats shadow-xl bg-base-100">
           <div className="stat">
+            {loading ? (
+              <progress className="progress progress-primary mb-3 w-full"></progress>
+            ) : (
+              ""
+            )}
             <div className="stat-title text-3xl mb-3 font-bold">
               Number of booking
             </div>
-            <div className="stat-value text-blue-400">89,400</div>
+            <div className="flex">
+              <div className="stat-value flex-1 text-blue-400">{bookings}</div>
+              <IoChevronForwardCircleOutline className="cursor-pointer" style={{ fontSize: "2.5rem" }} />
+            </div>
           </div>
         </div>
       </div>
-      </div>
-
+    </div>
   );
 }
 
