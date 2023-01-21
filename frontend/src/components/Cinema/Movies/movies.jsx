@@ -358,10 +358,16 @@ function CinMovies() {
                         <div className="flex items-center space-x-3">
                           <div className="avatar">
                             <div className="mask mask-squircle w-12 h-12">
-                              <img
-                                src={mov.attributes.movieImage}
-                                alt="Avatar Tailwind CSS Component"
-                              />
+                              <label
+                              className="cursor-pointer"
+                                htmlFor="my-modal-8"
+                                onClick={() => selectedEdit(mov)}
+                              >
+                                <img
+                                  src={mov.attributes.movieImage}
+                                  alt="Avatar Tailwind CSS Component"
+                                />
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -525,7 +531,7 @@ function CinMovies() {
                 {genre.map((option) => (
                   <div
                     key={option.id}
-                    style={{ backgroundColor: "aliceblue", padding: "10px" }}
+                    style={{ backgroundColor: "", padding: "10px" }}
                   >
                     <input
                       type="checkbox"
@@ -675,7 +681,7 @@ function CinMovies() {
                 {genre.map((option) => (
                   <div
                     key={option.id}
-                    style={{ backgroundColor: "aliceblue", padding: "10px" }}
+                    style={{ backgroundColor: "", padding: "10px" }}
                   >
                     <input
                       type="checkbox"
@@ -699,6 +705,20 @@ function CinMovies() {
                 ADD
               </label>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <input type="checkbox" id="my-modal-8" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <div className="flex justify-center">
+            <img src={image} alt="nice" />
+          </div>
+          <div className="modal-action">
+            <label htmlFor="my-modal-8" className="btn">
+              Done
+            </label>
           </div>
         </div>
       </div>

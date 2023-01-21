@@ -2,7 +2,7 @@ import React from 'react'
 
 function Snacks() {
   return (
-    <div>Snacks</div>
+    <div className='hero min-h-screen'>Snacks</div>
   )
 }
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { API, TOKEN } from "../../environment/constant";
 import jwt_decode from "jwt-decode";
 import { IoChevronForwardCircleOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 function CinemaDashboard() {
   const [movies, setMovies] = useState(0);
@@ -11,6 +12,7 @@ function CinemaDashboard() {
   const cinemaID = useRef();
   const [cinemaName, setCinemaName] = useState("");
   const [bookings, setBooking] = useState(0);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -79,7 +81,7 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{movies}</div>
-              <button className="btn btn-ghost glass">
+              <button className="btn btn-ghost glass" onClick={()=>navigate('/cinema/mov', {replace: true})}>
                 <IoChevronForwardCircleOutline
                   className="cursor-pointer"
                   style={{ fontSize: "2.5rem" }}

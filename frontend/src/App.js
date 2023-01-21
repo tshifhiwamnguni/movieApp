@@ -7,12 +7,17 @@ import {
 import "./App.css";
 import { lazy, Suspense } from "react";
 import "./App.css";
-import Dashboard from "./components/Admin/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
-import CinemaBooking from "./components/Admin/cinemaBooking/CinemaBooking";
-import TheatreBooking from "./components/Admin/theatreBooking/TheatreBooking";
 
+const Snacks = lazy(() => import("./components/Cinema/Snacks/Snacks"));
+const TheatreBooking = lazy(() =>
+  import("./components/Admin/theatreBooking/TheatreBooking")
+);
+const CinemaBooking = lazy(() =>
+  import("./components/Admin/cinemaBooking/CinemaBooking")
+);
+const Dashboard = lazy(() => import("./components/Admin/dash/dash"));
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(() => import("./components/Admin/Navbar/navbar"));
 const ForgotPassword = lazy(() =>
@@ -43,7 +48,9 @@ const TheatreList = lazy(() =>
 const Splash = lazy(() => import("./components/splashpage/Splash"));
 const Register = lazy(() => import("./components/register/Register"));
 const Customer = lazy(() => import("./components/Customer/Customer"));
-const CinemaDashboard = lazy(() => import("./components/Cinema/cinemaDashboard/CinemaDashboard"));
+const CinemaDashboard = lazy(() =>
+  import("./components/Cinema/cinemaDashboard/CinemaDashboard")
+);
 const Theatre = lazy(() =>
   import("./components/Theatre/TheatreDashboard/Theatre")
 );
@@ -54,7 +61,7 @@ const Users = lazy(() => import("./components/Admin/users/users"));
 const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
-const CinMovies = lazy(()=>import('./components/Cinema/Movies/movies'))
+const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
 
 function App() {
   return (
@@ -101,8 +108,6 @@ function App() {
             <Route path="customer" element={<Customer />}></Route>
 
             <Route path="/register" element={<Register />}></Route>
-       
- 
 
             <Route path="forgot" element={<ForgotPassword />}></Route>
             <Route path="/" element={<Splash />}></Route>
@@ -132,14 +137,14 @@ function App() {
             {/* Admin for cinema path/routes */}
             <Route
               path="/cinema"
-              element={!getToken() ? <CinemaNavbar /> : <Navigate to={"/login"} />}
+              element={
+                !getToken() ? <CinemaNavbar /> : <Navigate to={"/login"} />
+              }
             >
-              <Route
-                path="cinema/"
-                element={<Navigate replace to="dash" />}
-              />
+              <Route path="cinema/" element={<Navigate replace to="dash" />} />
               <Route path="dash" element={<CinemaDashboard />} />
-              <Route path="mov" element={<CinMovies/>}/>
+              <Route path="mov" element={<CinMovies />} />
+              <Route path="snacks" element={<Snacks />} />
             </Route>
           </Routes>
         </Suspense>
