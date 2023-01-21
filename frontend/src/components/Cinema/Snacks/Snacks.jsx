@@ -6,10 +6,23 @@ import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
 
+import { BiRename } from "react-icons/bi";
+import { TbFileDescription } from "react-icons/tb";
+import { IoMdTime } from "react-icons/io";
+import { MdAddPhotoAlternate } from "react-icons/md";
+import { ERROR, SUCCESS } from "../../environment/toast";
+
 function Snacks() {
   const [loading, setLoading] = useState(false);
   const cinemaID = useRef();
+  const snackID = useRef();
   const [snacks, setSnacks] = useState([]);
+  const [snackName, setSnackName] = useState("");
+  const [snackPrice, setSnackPrice] = useState(0);
+  const [snackQuantity, setSnackQuantity] = useState(0);
+  const [snacksSize, setSnackSize] = useState("");
+  const [image, setImage] = useState();
+  const snackImageUrl = useRef("");
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -33,6 +46,129 @@ function Snacks() {
       });
   };
 
+  // get and set selected data to the variables
+  function selectedEdit(snc) {
+    setSnackName(snc.attributes.name);
+    setSnackPrice(snc.attributes.price);
+    setSnackQuantity(snc.attributes.quantity);
+    snackImageUrl.current = snc.attributes.snackImage;
+    snackID.current = snc.id;
+    console.log(snc.id);
+  }
+
+  // get image when you click
+  const handleClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      snackImageUrl.current = file;
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    };
+
+    input.click();
+  };
+
+  // update a movie image
+  const uploadSnackImage = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("files", snackImageUrl.current);
+    formData.append("refID", snackID.current);
+    formData.append("field", "movieImage");
+    formData.append("ref", "api::cinema-snack.cinema-snack");
+
+    await axios
+      .post(`${API}/upload`, formData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        snackImageUrl.current = data.data[0].url;
+        console.log(snackImageUrl)
+        SUCCESS("Successfully uploaded");
+        axios
+          .put(
+            `${API}/cinema-snacks/${snackID.current}?populate=*`,
+            { data: { snackImage: snackImageUrl.current } },
+            {
+              headers: {
+                Authorization: `Bearer ${TOKEN}`,
+              },
+            }
+          )
+          .then((data) => {
+            SUCCESS("Successfully updated");
+          })
+          .catch((error) => {
+            ERROR(error.response.data.error.message);
+            console.log(error)
+          })
+          .finally(() => {
+            setLoading(false);
+            getSnacks();
+
+            setSnackName("");
+            setSnackPrice(0);
+            setSnackQuantity(0);
+            setSnackPrice("");
+            setSnackSize("");
+            // snackID.current = null;
+          });
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      });
+  };
+
+  // updating snacks data
+  const updateSnack = () => {
+    setLoading(true);
+
+    const snackData = {
+      data: {
+        name: snackName,
+        price: snackPrice,
+        quantity: snackQuantity,
+        snackSize: snacksSize,
+      },
+    };
+
+    axios
+      .put(`${API}/cinema-snacks/${snackID.current}?populate=*`, snackData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        SUCCESS("Successfully updated");
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+        getSnacks();
+
+        setSnackName("");
+        setSnackPrice(0);
+        setSnackQuantity(0);
+        setSnackPrice("");
+        setSnackSize("");
+        snackID.current = null;
+      });
+  };
+  // get snacks by a cinemaid
   const getSnacks = async () => {
     setLoading(true);
     await axios
@@ -60,10 +196,18 @@ function Snacks() {
     getUser();
   }, []);
 
+  const snackSize = [
+    { value: "small", name: "Small" },
+    { value: "Medium", name: "Medium" },
+    { value: "large", name: "Large" },
+    { value: "extra-large", name: "Extra-large" },
+    { value: "extra-extra-large", name: "XX-large" },
+  ];
+
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <label htmlFor="my-modal-7" className="btn btn-primary gap-2">
+      <label htmlFor="my-modal-8" className="btn btn-primary gap-2">
         <BiMoviePlay style={{ fontSize: "1.5rem" }} />
         Add snacks
       </label>
@@ -81,6 +225,7 @@ function Snacks() {
               <th>Name</th>
               <th>Price</th>
               <th>Quantity</th>
+              <th>Size</th>
               <th>Created at</th>
               <th>Updated at</th>
               <th> Action</th>
@@ -103,7 +248,7 @@ function Snacks() {
                                 // onClick={() => selectedEdit(mov)}
                               >
                                 <img
-                                  src={snack.attributes.movieImage}
+                                  src={snack.attributes.snackImage}
                                   alt="Avatar Tailwind CSS Component"
                                 />
                               </label>
@@ -121,13 +266,10 @@ function Snacks() {
                       </div>
                     )}
                   </td>
-                  <td>
-                    {snack.attributes.name}
-                  </td>
-                  <td>
-                    {'R' + snack.attributes.price}
-                  </td>
+                  <td>{snack.attributes.name}</td>
+                  <td>{"R" + snack.attributes.price}</td>
                   <td>{snack.attributes.quantity}</td>
+                  <th>{snack.attributes.snackSize}</th>
                   <td>
                     {moment(snack.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
@@ -143,14 +285,14 @@ function Snacks() {
                       <label
                         htmlFor="my-modal-3"
                         className="btn btn-success btn-xs"
-                        // onClick={() => selectedEdit(mov)}
+                        onClick={() => selectedEdit(snack)}
                       >
                         Edit
                       </label>
                       <label
                         htmlFor="my-modal-4"
                         className="btn btn-error btn-xs"
-                        // onClick={() => selectedEdit(mov)}
+                        onClick={() => selectedEdit(snack)}
                       >
                         Delete
                       </label>
@@ -161,6 +303,246 @@ function Snacks() {
             })}
           </tbody>
         </table>
+      </div>
+
+      {/* edit modal */}
+      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box relative">
+          <label
+            htmlFor="my-modal-3"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold">Edit movie</h3>
+          <div className="py-4">
+            <div className="flex justify-center">
+              <div className="avatar">
+                <div className="w-24 rounded-full">
+                  <img src={image} alt="" />
+                </div>
+                <MdAddPhotoAlternate
+                  onClick={handleClick}
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
+            <div className="flex justify-center mt-2">
+              <button
+                className="btn btn-success btn-xs"
+                onClick={uploadSnackImage}
+              >
+                Upload
+              </button>
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack name</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <BiRename />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Hola-hola"
+                  onChange={(e) => setSnackName(e.target.value)}
+                  value={snackName}
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack price</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <TbFileDescription />
+                </span>
+                <input
+                  type="number"
+                  value={snackPrice}
+                  onChange={(e) => setSnackPrice(e.target.value)}
+                  placeholder="e.g. 20"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack quantity</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={snackQuantity}
+                  onChange={(e) => setSnackQuantity(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack size</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <select
+                  onClick={(e) => setSnackSize(e.target.value)}
+                  className="select select-info w-full max-w-xs"
+                >
+                  <option disabled selected>
+                    Select snack size
+                  </option>
+                  {snackSize.map((snack) => {
+                    return <option key={snack.value}>{snack.name}</option>;
+                  })}
+                </select>
+              </label>
+            </div>
+
+            <div className="flex justify-end mt-3">
+              <label
+                className="btn btn-success"
+                htmlFor="my-modal-3"
+                onClick={updateSnack}
+              >
+                Update
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add modal */}
+      <input type="checkbox" id="my-modal-8" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box relative">
+          <label
+            htmlFor="my-modal-8"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="text-lg font-bold">Edit movie</h3>
+          <div className="py-4">
+            <div className="flex justify-center">
+              <div className="avatar">
+                <div className="w-24 rounded-full">
+                  {/* <img src={image} alt="" /> */}
+                </div>
+                <MdAddPhotoAlternate
+                  // onClick={handleClick}
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
+            <div className="flex justify-center mt-2">
+              <button
+                className="btn btn-success btn-xs"
+                // onClick={uploadMoviePoster}
+              >
+                Upload
+              </button>
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack name</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <BiRename />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Hola-hola"
+                  onChange={(e) => setSnackName(e.target.value)}
+                  value={snackName}
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack price</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <TbFileDescription />
+                </span>
+                <input
+                  type="number"
+                  value={snackPrice}
+                  onChange={(e) => setSnackPrice(e.target.value)}
+                  placeholder="e.g. 20"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack quantity</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={snackQuantity}
+                  onChange={(e) => setSnackQuantity(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Snack size</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <select
+                  onChange={(e) => setSnackSize(e.target.value)}
+                  className="select select-info w-full max-w-xs"
+                >
+                  <option disabled selected>
+                    Select snack size
+                  </option>
+                  {snackSize.map((snack) => {
+                    return <option key={snack.value}>{snack.name}</option>;
+                  })}
+                </select>
+              </label>
+            </div>
+
+            <div className="flex justify-end mt-3">
+              <label
+                className="btn btn-success"
+                htmlFor="my-modal-3"
+                onClick={updateSnack}
+              >
+                ADD
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
