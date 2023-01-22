@@ -37,7 +37,6 @@ function Snacks() {
         },
       })
       .then((data) => {
-        console.log(data.data);
         cinemaID.current = data.data?.cinema.id;
         getSnacks();
       })
@@ -115,7 +114,6 @@ function Snacks() {
       })
       .then((data) => {
         snackImageUrl.current = data.data[0].url;
-        // console.log(snackImageUrl)
         SUCCESS("Successfully uploaded");
         axios
           .put(
