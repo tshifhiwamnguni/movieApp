@@ -62,6 +62,7 @@ const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
+const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'))
 
 function App() {
   return (
@@ -145,6 +146,7 @@ function App() {
               <Route path="dash" element={<CinemaDashboard />} />
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
+              <Route path="stats" element={<BookingStat/>}/>
             </Route>
           </Routes>
         </Suspense>

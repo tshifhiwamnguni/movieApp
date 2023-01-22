@@ -127,7 +127,7 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{bookings}</div>
-              <button className="btn btn-ghost glass">
+              <button className="btn btn-ghost glass" onClick={()=>navigate('/cinema/stats', {replace: true})}>
                 <IoChevronForwardCircleOutline
                   className="cursor-pointer"
                   style={{ fontSize: "2.5rem" }}
