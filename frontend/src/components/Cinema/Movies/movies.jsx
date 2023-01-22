@@ -531,7 +531,7 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Movie Duration in minutes</span>
+                <span className="label-text">Movie Price</span>
               </label>
               <label className="input-group">
                 <span>
@@ -699,7 +699,7 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Movie Duration in minutes</span>
+                <span className="label-text">Movie Price</span>
               </label>
               <label className="input-group">
                 <span>
