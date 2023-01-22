@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
+import './snacks.css'
 
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
