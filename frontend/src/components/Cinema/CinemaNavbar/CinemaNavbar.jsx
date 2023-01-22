@@ -3,14 +3,14 @@ import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../../environment/helpers";
 import { useNavigate } from "react-router-dom";
 import { BsHouse } from "react-icons/bs";
-import { CgProfile } from "react-icons/cg";
-import { FiUsers } from "react-icons/fi";
+import { IoFastFoodOutline } from "react-icons/io5";
+import { TbMovie } from "react-icons/tb";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import "./navbar.css";
+// import "./navbar.css";
 import {Outlet} from "react-router-dom" ;
 
 function Home() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
@@ -56,22 +56,22 @@ function Home() {
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/admin/dashboard/")}>
+                <li  onClick={() => navigate("/cinema/dash/")}>
                   <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/profile/")}>
+                <li onClick={() => navigate("/cinema/snacks/")}>
                   <a>
-                    <CgProfile style={{ fontSize: "1.5rem" }} />
-                    Profile
+                    <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
+                    Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/users/")}>
+                <li onClick={() => navigate("/cinema/mov/")}>
                   <a>
-                    <FiUsers style={{ fontSize: "1.5rem" }} />
-                    All users
+                    <TbMovie style={{ fontSize: "1.5rem" }} />
+                    Movies
                   </a>
                 </li>
                 <li onClick={logout}>
@@ -98,22 +98,22 @@ function Home() {
             >
               <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
-            <li onClick={() => navigate("/admin/dashboard/")}>
+            <li onClick={() => navigate("/cinema/dash/")}>
               <a className={active ? "active" : ""}>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
-            <li onClick={() => navigate("/admin/profile/")}>
+            <li onClick={() => navigate("/cinema/snacks/")}>
               <a>
-                <CgProfile style={{ fontSize: "1.5rem" }} />
-                Profile
+                <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
+                Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/admin/users/")}>
+            <li onClick={() => navigate("/cimema/mov/")}>
               <a>
-                <FiUsers style={{ fontSize: "1.5rem" }} />
-                All users
+                <TbMovie style={{ fontSize: "1.5rem" }} />
+                Movies
               </a>
             </li>
             <li onClick={logout}>
