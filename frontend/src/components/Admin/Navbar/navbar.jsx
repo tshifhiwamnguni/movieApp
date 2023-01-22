@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { IoMdLogOut } from "react-icons/io";
-import { removeToken } from "../environment/helpers";
+import { removeToken } from "../../environment/helpers";
 import { useNavigate } from "react-router-dom";
 import { BsHouse } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";

@@ -1,12 +1,18 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
-import { API, TOKEN } from "../environment/constant";
+import { API, TOKEN } from "../../environment/constant";
 import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
+<<<<<<< HEAD:frontend/src/components/users/users.jsx
 import { ERROR, SUCCESS } from "../environment/toast";
 import './users.css'
+=======
+import { ERROR, SUCCESS } from "../../environment/toast";
+import './users.css'
+import Spin from "../../Spinner/Spin";
+>>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -18,6 +24,11 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
+<<<<<<< HEAD:frontend/src/components/users/users.jsx
+=======
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [deleteLoader, setDeleteLoader]=useState(false);
+>>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
 
   const getUsers = async () => {
     setLoading(true);
@@ -66,6 +77,10 @@ function Users() {
     setEmail(user.email);
     setUserRole(user.role.id);
     userID.current = user.id;
+<<<<<<< HEAD:frontend/src/components/users/users.jsx
+=======
+    setIsBlocked(user.blocked);
+>>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
   }
 
   const deleteUser = async () => {
@@ -148,7 +163,7 @@ function Users() {
       })
       .finally(() => {
         setLoading(false);
-        window.location.reload();
+        getUsers();
       });
   };
 
@@ -378,9 +393,19 @@ function Users() {
             Are you sure you want to delete?
           </h3>
           <div className="py-4">
+<<<<<<< HEAD:frontend/src/components/users/users.jsx
             <button className="btn btn-error" onClick={deleteUser}>
               Delete
             </button>
+=======
+            <label
+              className="btn btn-error"
+              htmlFor="my-modal-4"
+              onClick={deleteUser}
+            >
+              Delete
+            </label>
+>>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
             <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
             </h1>

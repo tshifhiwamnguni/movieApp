@@ -4,8 +4,8 @@ import { HiUsers } from "react-icons/hi";
 import { MdMovie } from "react-icons/md";
 import { ImBlocked } from "react-icons/im";
 import axios from "axios";
-import { API, TOKEN } from "../environment/constant";
-import { ERROR } from "../environment/toast";
+import { API, TOKEN } from "../../environment/constant";
+import { ERROR } from "../../environment/toast";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
