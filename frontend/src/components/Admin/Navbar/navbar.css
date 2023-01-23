@@ -1,0 +1,23 @@
+.mn li a{
+    margin: 2px;
+}
+
+.active{
+    background-color: #65C3C8;
+    border-radius: 30px;
+}
+
+.close{
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* justify-content: end; */
+}
+
+.close:hover{
+    transform: scale(1);
+    cursor: pointer;
+    color: #65C3C8;
+}
+
