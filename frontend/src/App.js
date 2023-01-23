@@ -12,8 +12,6 @@ import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
 
 
-
-
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(() => import("./components/Navbar/navbar"));
 const ForgotPassword = lazy(() =>
@@ -37,9 +35,7 @@ const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
 // client side lazyLoads
 const CinemaList = lazy(()=> import('./components/clientSide/cinemaList/CinemaList'))
 const TheatreList = lazy(()=> import('./components/clientSide/theatreList/TheareList'))
-
-
-
+const Payment = lazy(()=> import('./components/clientSide/payment/Payment'))
 
 
 const Splash = lazy(()=> import('./components/splashpage/Splash'))
@@ -63,19 +59,18 @@ function App() {
         >
           <Routes>
 
-
+<Route path="login" element={<Login />}></Route>
             {/* client related routes */}
             
-            <Route path="login" element={<Login />}></Route>
-          
-
+            
+  
             <Route path="/client" element={<ClientSide />}>
-              {/* <Route path="/client" element={<Navigate replace to='clientHome' />} /> */}
               <Route path="clientHome" element={<ClientHome/>}/>
               <Route path="movieList" element={<Movies/>}/>
               <Route path="cinemaList" element={<CinemaList/>}/>
               <Route path="theatreList" element={<TheatreList/>}/>
               <Route path="book" element={<Booking />}></Route>
+              <Route path="payment" element={<Payment/>}/>
             </Route>
 
 
