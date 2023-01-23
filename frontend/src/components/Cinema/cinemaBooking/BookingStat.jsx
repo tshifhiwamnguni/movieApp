@@ -1,13 +1,65 @@
-import React,{useState, useEffect, useRef} from 'react'
-import { ToastContainer } from 'react-toastify';
+import React, { useState, useEffect, useRef } from "react";
+import { ToastContainer } from "react-toastify";
+import jwt_decode from "jwt-decode";
+import { API, TOKEN } from "../../environment/constant";
+import axios from "axios";
+import moment from "moment";
 
 function BookingStat() {
-  const [loading, setLoading]= useState(false);
+  const [loading, setLoading] = useState(false);
+  const [bookings, setBookings] = useState([]);
+  const cinemaID = useRef();
+
+  const token = localStorage.getItem("jwt");
+  let decoded = jwt_decode(token);
+  let ID = decoded.id;
+
+  // console.log(ID)
+
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=cinema`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        // console.log(data.data);
+        cinemaID.current = data.data?.cinema.id;
+        getBooking();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getBooking = async () => {
+    await axios
+      .get(
+        `${API}/booking-cinemas?populate=*&filters[cinema]=${cinemaID.current}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((b) => {
+        console.log(b.data.data);
+        setBookings(b.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      
+
       <h1 className="text-center font-bold text-3xl mb-4">Booking</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
@@ -19,10 +71,10 @@ function BookingStat() {
           <thead>
             <tr>
               <th></th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Size</th>
+              <th>Customer Name</th>
+              <th>Movie</th>
+              <th>Seat</th>
+              <th>Date</th>
               <th>Created at</th>
               <th>Updated at</th>
               <th> Action</th>
@@ -30,26 +82,19 @@ function BookingStat() {
             </tr>
           </thead>
           <tbody>
-            {/* {snacks.map((snack) => {
-              return ( */}
-                <tr >
+            {bookings.map((book) => {
+              return (
+                <tr>
                   <td>
                     {!loading ? (
                       <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="avatar">
-                            <div className="mask mask-squircle w-12 h-12">
-                              <label
-                                className="cursor-pointer"
-                                htmlFor="my-modal-6"
-                                // onClick={() => selectedEdit(snack)}
-                              >
-                                <img
-                                  // src={snack.attributes.snackImage}
-                                  alt="Avatar Tailwind CSS Component"
-                                />
-                              </label>
-                            </div>
+                        <div className="avatar placeholder">
+                          <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
+                            <span className="text-3xl">
+                              {book.attributes.users_permissions_user.data.attributes.firstname
+                                ?.slice(0, 1)
+                                ?.toUpperCase()}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -63,19 +108,26 @@ function BookingStat() {
                       </div>
                     )}
                   </td>
-                  {/* <td>{snack.attributes.name}</td> */}
-                  {/* <td>{"R" + snack.attributes.price}</td> */}
-                  {/* <td>{snack.attributes.quantity}</td> */}
-                  {/* <th>{snack.attributes.snackSize}</th> */}
                   <td>
-                    {/* {moment(snack.attributes.createdAt).format(
+                    {book.attributes.users_permissions_user.data.attributes
+                      .firstname +
+                      " " +
+                      book.attributes.users_permissions_user.data.attributes
+                        .lastname}
+                  </td>
+                  <td>{book.attributes.movie.data.attributes.title}</td>
+                  <td>{book.attributes.cinema_seat.data.attributes.seat}</td>
+                  <td>{moment(book.attributes.bookingDate).format('YYYY-MM-DD HH:mm:ss')}</td>
+                  <td>
+                    {moment(book.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
-                    )} */}createdAt
+                    )}
+                    
                   </td>
                   <td>
-                    {/* {moment(snack.attributes.updatedAt).format(
+                    {moment(book.attributes.updatedAt).format(
                       "YYYY-MM-DD HH:mm:ss"
-                    )} */}upat
+                    )}
                   </td>
                   <th>
                     <div className="space-x-3">
@@ -86,23 +138,17 @@ function BookingStat() {
                       >
                         Edit
                       </label>
-                      <label
-                        htmlFor="my-modal-4"
-                        className="btn btn-error btn-xs"
-                        // onClick={() => selectedEdit(snack)}
-                      >
-                        Delete
-                      </label>
+                      
                     </div>
                   </th>
                 </tr>
-              {/* );
-            })} */}
+              );
+            })}
           </tbody>
         </table>
       </div>
-      </div>
-  )
+    </div>
+  );
 }
 
-export default BookingStat
+export default BookingStat;

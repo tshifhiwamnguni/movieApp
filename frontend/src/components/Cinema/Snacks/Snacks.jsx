@@ -366,7 +366,7 @@ function Snacks() {
                   <td>{snack.attributes.name}</td>
                   <td>{"R" + snack.attributes.price}</td>
                   <td>{snack.attributes.quantity}</td>
-                  <th>{snack.attributes.snackSize}</th>
+                  <td>{snack.attributes.snackSize}</td>
                   <td>
                     {moment(snack.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
