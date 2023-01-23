@@ -27,6 +27,8 @@ function CinMovies() {
   const [genre, setGenres] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [price, setPrice] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [gn, setGn] = useState([]);
 
   // checkbox for genres
   const handleCheckboxChange = async (event) => {
@@ -59,6 +61,7 @@ function CinMovies() {
       .then((data) => {
         cinemaID.current = data.data?.cinema.id;
         getMovies();
+        // getReviews();
       })
       .catch((err) => {});
   };
@@ -77,6 +80,22 @@ function CinMovies() {
       .catch((error) => {});
   };
 
+  // get reviews for cinema
+  const getReviews = async (data) => {
+    await axios
+      .get(`${API}/review-cinemas?populate=*&filters[movie]=${data.id}`)
+      .then((rev) => {
+        console.log(rev.data.data);
+        console.log(data);
+        setTitle(data.attributes.title);
+        setGn(data.attributes.genres.data);
+        setReviews(rev.data.data);
+        setImage(data.attributes.movieImage);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   // get movies per cinema
   const getMovies = async () => {
     setLoading(true);
@@ -87,6 +106,7 @@ function CinMovies() {
         },
       })
       .then((movie) => {
+        // console.log(movie.data.data);
         setMovies(movie.data.data);
         setCinemaName(
           movie.data.data[0].attributes.cinema.data.attributes.name
@@ -137,7 +157,7 @@ function CinMovies() {
         duration: duration,
         cinema: parseInt(cinemaID.current),
         genres: selectedOptions,
-        price: price
+        price: price,
       },
     };
 
@@ -231,7 +251,7 @@ function CinMovies() {
             setImage("");
             setDuration(0);
             setGenres([]);
-            setPrice(0)
+            setPrice(0);
             movieId.current = null;
           });
       })
@@ -251,7 +271,7 @@ function CinMovies() {
         duration: duration,
         cinema: parseInt(cinemaID.current),
         genres: selectedOptions,
-        price: price
+        price: price,
       },
     };
 
@@ -316,7 +336,7 @@ function CinMovies() {
         setImage("");
         setDuration(0);
         setGenres([]);
-        setPrice(0)
+        setPrice(0);
       });
   };
 
@@ -349,7 +369,7 @@ function CinMovies() {
               <th>Price</th>
               <th>Created at</th>
               <th>Updated at</th>
-              <th> Action</th>
+              <th> Actions</th>
               <th></th>
             </tr>
           </thead>
@@ -408,7 +428,7 @@ function CinMovies() {
                       ).toFixed(0)}
                   </td>
                   <td>{cinemaName}</td>
-                  <td>{'R' + mov.attributes.price}</td>
+                  <td>{"R" + mov.attributes.price}</td>
                   <td>
                     {moment(mov.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
@@ -434,6 +454,14 @@ function CinMovies() {
                         onClick={() => selectedEdit(mov)}
                       >
                         Delete
+                      </label>
+
+                      <label
+                        htmlFor="my-modal-11"
+                        className="btn btn-success btn-xs"
+                        onClick={() => getReviews(mov)}
+                      >
+                        View reviews
                       </label>
                     </div>
                   </th>
@@ -751,7 +779,7 @@ function CinMovies() {
         </div>
       </div>
 
-{/* view image */}
+      {/* view image */}
       <input type="checkbox" id="my-modal-8" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
@@ -761,6 +789,55 @@ function CinMovies() {
           <div className="modal-action">
             <label htmlFor="my-modal-8" className="btn">
               Done
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Review */}
+      <input type="checkbox" id="my-modal-11" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <label
+            htmlFor="my-modal-11"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="font-bold text-4xl">Reviews</h3>
+          <div className="flex justify-center">
+            <div className="mt-5">
+              <div className="avatar">
+                <div className="w-40 full">
+                  <img src={image} />
+                </div>
+              </div>
+              <h2 className="font-bold mt-1 text-2xl text-center">{title}</h2>
+            </div>
+          </div>
+          <div className="flex justify-center gap-1 mt-2">
+            {gn.map((g) => (
+              <span className="badge badge-primary">{g.attributes.name}</span>
+            ))}
+          </div>
+          <div className="py-4">
+            {reviews.map((revv) => {
+              return (
+                <div key={revv.id} className="card card-compact glass">
+                  <div className="card-body">
+                    <h2 className="card-title">Life hack</h2>
+                    <p>How to park your car at your garage?</p>
+                    <div className="card-actions justify-end">
+                      <button className="btn btn-primary">Learn now!</button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="modal-action">
+            <label htmlFor="my-modal-11" className="btn">
+              Yay!
             </label>
           </div>
         </div>

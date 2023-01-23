@@ -30,7 +30,7 @@ function BookingStat() {
   }
 
   const updateBooking = () =>{
-   
+   setLoading(true);
 
     const bookingData = {
       data:{
@@ -65,6 +65,9 @@ function BookingStat() {
           getBooking();
         }).catch((err)=>{
           console.log(err)
+        }).finally(()=>{
+          setLoading(false);
+          getBooking();
         })
       }
     });
@@ -74,6 +77,7 @@ function BookingStat() {
 
   // get cinema seats
   const getCinemaSeats = async() =>{
+    setLoading(true);
     await axios
       .get(
         `${API}/cinema-seats?populate=*&filters[cinema]=${cinemaID.current}`,
@@ -89,7 +93,9 @@ function BookingStat() {
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(()=>{
+        setLoading(false)
+      })
   }
 
 // get a user

@@ -69,7 +69,9 @@ function CinemaDashboard() {
           {cinemaName.toUpperCase()}
         </h1>
         <div className="flex justify-end">
-          <label htmlFor="my-modal-10" className="btn btn-primary glass ">Add seats</label>
+          <label htmlFor="my-modal-10" className="btn btn-primary glass ">
+            Add seats
+          </label>
         </div>
       </div>
 
@@ -153,14 +155,17 @@ function CinemaDashboard() {
         </div>
       </div>
 
-{/* Add seats */}
+      {/* Add seats */}
       <input type="checkbox" id="my-modal-10" className="modal-toggle" />
       <div className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-        <label htmlFor="my-modal-10" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-          <h3 className="font-bold text-lg">
-            Add seat
-          </h3>
+          <label
+            htmlFor="my-modal-10"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="font-bold text-lg">Add seat</h3>
           <p className="py-4">
             You've been selected for a chance to get one year of subscription to
             use Wikipedia for free!
