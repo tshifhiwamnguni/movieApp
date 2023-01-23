@@ -5,19 +5,10 @@ import { API, TOKEN } from "../../environment/constant";
 import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
-<<<<<<< HEAD
-<<<<<<< HEAD:frontend/src/components/users/users.jsx
-import { ERROR, SUCCESS } from "../environment/toast";
-import './users.css'
-=======
+
 import { ERROR, SUCCESS } from "../../environment/toast";
 import './users.css'
 import Spin from "../../Spinner/Spin";
->>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
-=======
-import { ERROR, SUCCESS } from "../../environment/toast";
-import './users.css'
->>>>>>> all
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -29,14 +20,10 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
-<<<<<<< HEAD
-<<<<<<< HEAD:frontend/src/components/users/users.jsx
-=======
+
   const [isBlocked, setIsBlocked] = useState(false);
   const [deleteLoader, setDeleteLoader]=useState(false);
->>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
-=======
->>>>>>> all
+
 
   const getUsers = async () => {
     setLoading(true);
@@ -85,13 +72,12 @@ function Users() {
     setEmail(user.email);
     setUserRole(user.role.id);
     userID.current = user.id;
-<<<<<<< HEAD
-<<<<<<< HEAD:frontend/src/components/users/users.jsx
-=======
+
+
     setIsBlocked(user.blocked);
->>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
-=======
->>>>>>> all
+
+
+
   }
 
   const deleteUser = async () => {
@@ -405,14 +391,11 @@ function Users() {
             Are you sure you want to delete?
           </h3>
           <div className="py-4">
-<<<<<<< HEAD
-<<<<<<< HEAD:frontend/src/components/users/users.jsx
+
             <button className="btn btn-error" onClick={deleteUser}>
               Delete
             </button>
-=======
-=======
->>>>>>> all
+
             <label
               className="btn btn-error"
               htmlFor="my-modal-4"
@@ -420,10 +403,7 @@ function Users() {
             >
               Delete
             </label>
-<<<<<<< HEAD
->>>>>>> d1fc4871ff931d2b9599706ef71711ab8bb6a311:frontend/src/components/Admin/users/users.jsx
-=======
->>>>>>> all
+
             <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
             </h1>

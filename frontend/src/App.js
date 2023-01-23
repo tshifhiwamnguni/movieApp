@@ -62,6 +62,14 @@ const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
+const Landing = lazy(() => import("./components/Admin/dash/dash"));
+const History = lazy(() => import("./components/customers/bookingHistory/history"));
+const Review = lazy(() => import("./components/customers/review/review"));
+const Test = lazy(() => import("./components/test/test"));
+const Reviews = lazy(() => import("./components/customers/reviews/reviews"));
+const StarRatings = lazy(() => import("./components/customers/star_ratings/star_ratings"));
+const Filter = lazy(() => import("./components/customers/filterObjects/filter"));
+const Example = lazy(() => import("./components/customers/addExtras/snacks"));
 
 function App() {
   return (
@@ -75,7 +83,7 @@ function App() {
           }
         >
           <Routes>
-            {/* client related routes */}
+         
 
             <Route path="login" element={<Login />}></Route>
 
@@ -88,7 +96,7 @@ function App() {
               <Route path="book" element={<Booking />}></Route>
             </Route>
 
-            {/* ========================================================================================================= */}
+         
 
             <Route path="customer" element={<Customer />}></Route>
 
@@ -154,6 +162,7 @@ function App() {
             <Route path="/reviews" element={<Reviews/>}></Route>
             <Route path="/stars" element={<StarRatings/>}></Route>
             <Route path="/filter" element={<Filter/>}></Route>
+            <Route path="/snacks" element={<Example/>}></Route>
 
           </Routes>
         </Suspense>

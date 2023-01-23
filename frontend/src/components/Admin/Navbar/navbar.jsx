@@ -68,11 +68,7 @@ function Home() {
                     Profile
                   </a>
                 </li>
-<<<<<<< HEAD:frontend/src/components/home/home.jsx
-                <li onClick={() => navigate("/admin/stats/")}>
-=======
                 <li onClick={() => navigate("/admin/users/")}>
->>>>>>> 107ef89043b36ec58238f94d126b7c13e4a4a118:frontend/src/components/Admin/Navbar/navbar.jsx
                   <a>
                     <FiUsers style={{ fontSize: "1.5rem" }} />
                     All users
