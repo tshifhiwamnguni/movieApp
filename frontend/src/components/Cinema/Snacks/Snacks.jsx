@@ -51,7 +51,7 @@ function Snacks() {
     setSnackName(snc.attributes.name);
     setSnackPrice(snc.attributes.price);
     setSnackQuantity(snc.attributes.quantity);
-    setImage(snc.attributes.snackImage)
+    setImage(snc.attributes.snackImage);
     snackID.current = snc.id;
   }
 
@@ -228,6 +228,7 @@ function Snacks() {
         setSnackSize("");
       });
   };
+
   // updating snacks data
   const updateSnack = () => {
     setLoading(true);
@@ -241,6 +242,7 @@ function Snacks() {
       },
     };
 
+    console.log(snackData);
     axios
       .put(`${API}/cinema-snacks/${snackID.current}?populate=*`, snackData, {
         headers: {
@@ -496,14 +498,11 @@ function Snacks() {
                   <IoMdTime />
                 </span>
                 <select
-                  onClick={(e) => setSnackSize(e.target.value)}
+                  onChange={(e) => setSnackSize(e.target.value)}
                   className="select select-info w-full max-w-xs"
                 >
-                  <option disabled selected>
-                    Select snack size
-                  </option>
                   {snackSize.map((snack) => {
-                    return <option key={snack.value}>{snack.name}</option>;
+                    return <option key={snack.value} value={snack.value}>{snack.name}</option>;
                   })}
                 </select>
               </label>
@@ -616,7 +615,7 @@ function Snacks() {
                     Select snack size
                   </option>
                   {snackSize.map((snack) => {
-                    return <option key={snack.value}>{snack.name}</option>;
+                    return <option key={snack.value} value={snack.value}>{snack.name}</option>;
                   })}
                 </select>
               </label>
