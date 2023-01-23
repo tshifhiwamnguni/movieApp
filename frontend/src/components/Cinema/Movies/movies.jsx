@@ -82,11 +82,12 @@ function CinMovies() {
 
   // get reviews for cinema
   const getReviews = async (data) => {
+    setLoading(true);
     await axios
       .get(`${API}/review-cinemas?populate=*&filters[movie]=${data.id}`)
       .then((rev) => {
-        console.log(rev.data.data);
-        console.log(data);
+        console.log(rev.data);
+        // console.log(data);
         setTitle(data.attributes.title);
         setGn(data.attributes.genres.data);
         setReviews(rev.data.data);
@@ -94,6 +95,9 @@ function CinMovies() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   // get movies per cinema
@@ -807,38 +811,76 @@ function CinMovies() {
           <h3 className="font-bold text-4xl">Reviews</h3>
           <div className="flex justify-center">
             <div className="mt-5">
-              <div className="avatar">
-                <div className="w-40 full">
-                  <img src={image} />
+              {!loading ? (
+                <div className="flex justify-center">
+                  <div className="avatar">
+                    <div className="w-36 ">
+                      <img src={image} alt="Avatar Tailwind CSS Component" />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex justify-center">
+                  <div className="spinner">
+                    <div className="bounce1"></div>
+                    <div className="bounce2"></div>
+                    <div className="bounce3"></div>
+                  </div>
+                </div>
+              )}
               <h2 className="font-bold mt-1 text-2xl text-center">{title}</h2>
             </div>
           </div>
           <div className="flex justify-center gap-1 mt-2">
             {gn.map((g) => (
-              <span className="badge badge-primary">{g.attributes.name}</span>
+              <span key={g.id} className="badge badge-primary">
+                {g.attributes.name}
+              </span>
             ))}
           </div>
-          <div className="py-4">
+          <div className="grid grid-col-1 gap-3 py-4">
             {reviews.map((revv) => {
               return (
-                <div key={revv.id} className="card card-compact glass">
+                <div
+                  lazy="true"
+                  key={revv.id}
+                  className="card card-compact glass z-10"
+                >
                   <div className="card-body">
-                    <h2 className="card-title">Life hack</h2>
-                    <p>How to park your car at your garage?</p>
-                    <div className="card-actions justify-end">
-                      <button className="btn btn-primary">Learn now!</button>
+                    <div className="flex gap-3">
+                      <div className="items-center space-x-3">
+                        <div className="avatar placeholder">
+                          <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
+                            <span className="text-3xl">
+                              {revv.attributes.users_permissions_user?.data.attributes.firstname
+                                ?.slice(0, 1)
+                                ?.toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-row">
+                        <h2 className="card-title">
+                          {
+                            revv.attributes.users_permissions_user?.data
+                              .attributes.firstname
+                          }
+                        </h2>
+                        <div className="flex-row rating gap-1">
+                          <span className="font-bold">Rating: </span>
+                          <span className="badge badge-primary font-bold">
+                            {revv.attributes.rating}
+                          </span>
+                        </div>
+                      </div>
                     </div>
+                    <p className="font-bold text-2xl">
+                      {revv.attributes.comment}
+                    </p>
                   </div>
                 </div>
               );
             })}
-          </div>
-          <div className="modal-action">
-            <label htmlFor="my-modal-11" className="btn">
-              Yay!
-            </label>
           </div>
         </div>
       </div>
