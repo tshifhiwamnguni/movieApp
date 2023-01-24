@@ -5,6 +5,9 @@
     position: relative;
     text-align: center;
   }
+  .star{
+    display: flex;
+  }
   
   .spinner > div {
     width: 100%;
