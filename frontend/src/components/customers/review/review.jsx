@@ -15,22 +15,23 @@ function Review() {
         console.log(error);
     });
 
-
-    console.log(rating);
-    console.log(review);
-    console.log(firstname);
-
     const addReview = () => {
-        console.log("Hello, World!")
+        console.log(review)
+        console.log(rating)
+
         axios.post(`${API}/review-cinemas`, {
-            data: {comment: review,
-            rating: rating}
+                    comment: review,
+                    rating: rating
           }).then((response) => {
             console.log(response);
         }).catch((error) => {
             console.log(error);
         });
     }
+
+    console.log(rating);
+    console.log(review);
+    console.log(firstname);
 
     return (
         <>
@@ -43,7 +44,7 @@ function Review() {
                         <h2 className="h-12 w-auto text-center text-xl font-bold text-gray-900">Pirates of the carribean</h2>
 
                     </div>
-                    <form className="mt-2 border-4 px-8 rounded-md py-8 space-y-6" onSubmit={addReview}>
+                    <form className="mt-2 border-4 px-8 rounded-md py-8 space-y-6" >
 
 
                         <div className="flex gap-2 flex-col rounded-md shadow-sm">
@@ -69,7 +70,7 @@ function Review() {
 
                         <div className="bg-gray-50 flex justify-end gap-2">
                             <button className="btn text-white bg-rose-500 rounded ">Cancel Review</button>
-                            <button type="submit" className="btn text-white bg-sky-500 rounded">Add Review</button>
+                            <button type="submit" className="btn text-white bg-sky-500 rounded" onSubmit={addReview}>Add Review</button>
                         </div>
                     </form>
                 </div>

@@ -1,9 +1,44 @@
 import womenKing from "../../../assets/womanKing.jpeg";
 import { BsFillPlusSquareFill } from "react-icons/bs"
+import axios from "axios"
+import { useState } from "react";
+import { useEffect } from "react";
 
-export default function Example() {
+export default function Example() { 
+    const [snack , setSnack] = useState('')
+    const [price , setPrice] = useState(0)
+    const [quantity , setQuantity] = useState(0)
 
+    const [mediumcombo , setMediumcombo] = useState('')
+    const [mediumblockbuster , setMediumblockbuster] = useState('')
+    // const [mediumcombo , setMediumcombo] = useState('')
 
+    console.log(price)
+
+    const getOrders = () => {
+        axios.get('https://strapi-movie-app.onrender.com/api/cinema-orders?populate=*').then((response) => {
+            console.log(response)
+            getSnack(response.data.data[0].attributes.cinema_snacks.data[0].attributes.name)
+            getPrice(response.data.data[0].attributes.cinema_snacks.data[0].attributes.price)
+            getQuantity(response.data.data[0].attributes.quantity)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+
+    const getSnack = (information) => {
+        setSnack(information)
+    }
+    const getPrice = (info) => {
+        setPrice(info)
+    }
+    const getQuantity = (info) => {
+        setQuantity(info)
+    }
+
+    useEffect(() => {
+        getOrders();
+    })
   return (
     <>
       <div className="mx-auto bg-blue-400 p-4">
@@ -12,7 +47,7 @@ export default function Example() {
       <div className="mx-auto w-4/5">
         <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="mt-5 md:col-span-2 md:mt-0">
-            <form action="#" method="POST">
+            <form action="#">
               <div className="shadow sm:overflow-hidden sm:rounded-md">
                 <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                   <div className="grid grid-cols-3 gap-6">
@@ -52,9 +87,9 @@ export default function Example() {
                     </div>
                     <div className="mt-1 flex justify-between">
                       <p className="mt-2 text-2xl text-gray-500">
-                        1 x Medium Popcorn
+                        {quantity} x {snack}
                       </p>
-                      <p className="mt-2 text-2xl text-gray-500">R95,00</p>
+                      <p className="mt-2 text-2xl text-gray-500">R{price},00</p>
                     </div>
 
                     <div className="mt-1 flex justify-between">
@@ -65,7 +100,7 @@ export default function Example() {
                 </div>
 
                 <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                  <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8">
+                  <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8">
                     Checkout
                   </button>
                 </div>
@@ -91,7 +126,7 @@ export default function Example() {
                     <div className="card h-fit w-96 bg-primary text-primary-content">
                       <div className="card-body text-center">
                         <h2 className="card-title flex justify-center">
-                          Feature Combo Medium
+                          {mediumcombo}
                         </h2>
                         <img
                           className="h-1/2 w-full"
@@ -100,7 +135,7 @@ export default function Example() {
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
                         <button type="button"
-                          class="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
+                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
                             <BsFillPlusSquareFill className="text-2xl"/> 
                           <h1 className="text-2xl">Add To Basket</h1>
                         </button>
@@ -110,7 +145,7 @@ export default function Example() {
                     <div className="card h-fit w-96 bg-primary text-primary-content">
                       <div className="card-body text-center">
                         <h2 className="card-title flex justify-center">
-                          Blockbuster Combo Medium
+                          Feature Combo Medium 
                         </h2>
                         <img
                           className="h-1/2 w-full"
@@ -119,7 +154,7 @@ export default function Example() {
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
                         <button type="button"
-                          class="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
+                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
                             <BsFillPlusSquareFill className="text-2xl"/> 
                           <h1 className="text-2xl">Add To Basket</h1>
                         </button>
@@ -138,7 +173,7 @@ export default function Example() {
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
                         <button type="button"
-                          class="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
+                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
                             <BsFillPlusSquareFill className="text-2xl"/> 
                           <h1 className="text-2xl">Add To Basket</h1>
                         </button>
