@@ -90,7 +90,7 @@ function Review() {
     <div className="hero min-h-screen mt-24">
       <div className="card card-compact bg-base-200 w-full shadow-xl">
         <div className="card-body">
-          <h3 className=" card-title font-bold text-4xl">Reviews</h3>
+          <h3 className=" card-title text-center font-bold text-4xl">Reviews</h3>
           <div className="flex justify-center">
             <div className="mt-5">
               {!loading ? (
