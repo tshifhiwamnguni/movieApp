@@ -2,10 +2,10 @@ import { MdEmail } from "react-icons/md";
 import { IoCall } from "react-icons/io5";
 import { BiRename } from "react-icons/bi";
 import axios from "axios";
-import { API } from "../environment/constant";
+import { API } from "../../environment/constant";
 import jwt_decode from "jwt-decode";
 import { useState, useEffect } from "react";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import "./adminProfile.css";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -102,7 +102,7 @@ function AdminProfile() {
     <div>
       <ToastContainer />
       <div className="hero min-h-screen flex justify-center align-middle">
-        <div className="card w-96 card-compact bg-base-100 shadow-xl">
+        <div className="card w-96 card-compact bg-base-300 shadow-xl">
           {loading ? (
             <progress className="progress progress-primary w-96 loading"></progress>
           ) : (

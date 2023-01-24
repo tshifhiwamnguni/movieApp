@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import { API, TOKEN } from "../environment/constant";
+import { API, TOKEN } from "../../environment/constant";
 import "./Allmov.css";
 import moment from "moment";
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { RiVideoAddFill } from "react-icons/ri";
 
@@ -118,7 +118,10 @@ function AllMovies() {
         console.log(error);
         ERROR(error.response.data.error.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+      });
   };
 
   const deleteMovie = async () => {
@@ -183,7 +186,10 @@ function AllMovies() {
         console.log(error);
         ERROR(error.response.data.error.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+      });
   };
 
   useEffect(() => {
@@ -194,6 +200,7 @@ function AllMovies() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
+      <h1 className="text-center font-bold text-3xl mb-4">Movies</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
@@ -209,7 +216,7 @@ function AllMovies() {
               <th>Cinema</th>
               <th>Created at</th>
               <th>Updated at</th>
-              <th> Action</th>
+              {/* <th> Action</th> */}
               <th></th>
             </tr>
           </thead>
@@ -260,7 +267,7 @@ function AllMovies() {
                       "YYYY-MM-DD HH:mm:ss"
                     )}
                   </td>
-                  <th>
+                  {/* <th>
                     <div className="space-x-3">
                       <label
                         htmlFor="my-modal-3"
@@ -277,7 +284,7 @@ function AllMovies() {
                         Delete
                       </label>
                     </div>
-                  </th>
+                  </th> */}
                 </tr>
               );
             })}

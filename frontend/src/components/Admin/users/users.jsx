@@ -1,11 +1,15 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
-import { API, TOKEN } from "../environment/constant";
+import { API, TOKEN } from "../../environment/constant";
 import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
+import './users.css'
+import Spin from "../../Spinner/Spin";
+
+
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -18,6 +22,8 @@ function Users() {
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
   const [isBlocked, setIsBlocked] = useState(false);
+  const [deleteLoader, setDeleteLoader]=useState(false);
+
 
   const getUsers = async () => {
     setLoading(true);
@@ -69,6 +75,26 @@ function Users() {
     setIsBlocked(user.blocked);
   }
 
+  const deleteUser = async () => {
+    setLoading(true);
+    axios
+      .delete(`${API}/users/${userID.current}`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        SUCCESS("Successfully deleted");
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+        getUsers();
+      });
+  };
+
   const blockingUser = (data) => {
     setLoading(true);
     userID.current = data.id;
@@ -98,7 +124,7 @@ function Users() {
       })
       .finally(() => {
         setLoading(false);
-        window.location.reload();
+        getUsers();
       });
   };
 
@@ -129,7 +155,7 @@ function Users() {
       })
       .finally(() => {
         setLoading(false);
-        window.location.reload();
+        getUsers();
       });
   };
 
@@ -141,6 +167,7 @@ function Users() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
+      <h1 className="text-center font-bold text-4xl mb-4">Users</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
@@ -165,7 +192,7 @@ function Users() {
               return (
                 <tr key={user.id}>
                   <td>
-                    <div className="flex items-center space-x-3">
+                    {!loading || user.id !== userID.current ? <div className="flex items-center space-x-3">
                       <div className="avatar placeholder">
                         <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
                           <span className="text-3xl">
@@ -173,7 +200,15 @@ function Users() {
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </div>:
+
+                    <div className="d-flex justify-content-center">
+                      <div className="spinner">
+                        <div className="bounce1"></div>
+                        <div className="bounce2"></div>
+                        <div className="bounce3"></div>
+                      </div>
+                    </div>}
                   </td>
                   <td>
                     {user.firstname} {user.lastname}
@@ -215,6 +250,7 @@ function Users() {
                       <label
                         htmlFor="my-modal-4"
                         className="btn btn-error btn-xs"
+                        onClick={() => getSelected(user)}
                       >
                         Delete
                       </label>
@@ -237,7 +273,7 @@ function Users() {
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold">Edit movie</h3>
+          <h3 className="text-lg font-bold">Edit user profile</h3>
           <div className="py-4">
             <div className="form-control">
               <label className="label">
@@ -350,7 +386,13 @@ function Users() {
             Are you sure you want to delete?
           </h3>
           <div className="py-4">
-            <button className="btn btn-error">Delete</button>
+            <label
+              className="btn btn-error"
+              htmlFor="my-modal-4"
+              onClick={deleteUser}
+            >
+              Delete
+            </label>
             <h1 className="mt-4 text-green-500">
               Click outside the card to cancel
             </h1>
