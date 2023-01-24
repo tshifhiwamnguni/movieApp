@@ -2,6 +2,8 @@ import womenKing from "../../../assets/womanKing.jpeg";
 import { BsFillPlusSquareFill } from "react-icons/bs"
 
 export default function Example() {
+
+
   return (
     <>
       <div className="mx-auto bg-blue-400 p-4">
@@ -93,7 +95,7 @@ export default function Example() {
                         </h2>
                         <img
                           className="h-1/2 w-full"
-                          src={womenKing}
+                          src='https://numetro.co.za/wp-content/uploads/concession_images/A000006871.png'
                           alt="movie poster"
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
@@ -112,7 +114,7 @@ export default function Example() {
                         </h2>
                         <img
                           className="h-1/2 w-full"
-                          src={womenKing}
+                          src='https://numetro.co.za/wp-content/uploads/concession_images/A000006868.png'
                           alt="movie poster"
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
@@ -131,7 +133,7 @@ export default function Example() {
                         </h2>
                         <img
                           className="h-1/2 w-full"
-                          src={womenKing}
+                          src='https://numetro.co.za/wp-content/uploads/concession_images/A000006872.png'
                           alt="movie poster"
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
