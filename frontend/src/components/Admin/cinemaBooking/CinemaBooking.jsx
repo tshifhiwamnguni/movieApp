@@ -170,8 +170,7 @@ function CinemaBooking() {
               <th>Fullname</th>
               <th>Created at</th>
               <th>Updated at</th>
-              <th> Action</th>
-              <th></th>
+              {/* <th> Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -204,7 +203,7 @@ function CinemaBooking() {
                     )}
                   </td>
 
-                  <th>
+                  {/* <th>
                     <div className="space-x-3">
                       <label
                         htmlFor="my-modal-3"
@@ -221,7 +220,7 @@ function CinemaBooking() {
                         Delete
                       </label>
                     </div>
-                  </th>
+                  </th> */}
                 </tr>
               );
             })}

@@ -118,7 +118,10 @@ function AllMovies() {
         console.log(error);
         ERROR(error.response.data.error.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+      });
   };
 
   const deleteMovie = async () => {
@@ -183,7 +186,10 @@ function AllMovies() {
         console.log(error);
         ERROR(error.response.data.error.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        getMovies();
+      });
   };
 
   useEffect(() => {
@@ -210,7 +216,7 @@ function AllMovies() {
               <th>Cinema</th>
               <th>Created at</th>
               <th>Updated at</th>
-              <th> Action</th>
+              {/* <th> Action</th> */}
               <th></th>
             </tr>
           </thead>
@@ -261,7 +267,7 @@ function AllMovies() {
                       "YYYY-MM-DD HH:mm:ss"
                     )}
                   </td>
-                  <th>
+                  {/* <th>
                     <div className="space-x-3">
                       <label
                         htmlFor="my-modal-3"
@@ -278,7 +284,7 @@ function AllMovies() {
                         Delete
                       </label>
                     </div>
-                  </th>
+                  </th> */}
                 </tr>
               );
             })}

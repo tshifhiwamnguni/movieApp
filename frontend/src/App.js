@@ -62,6 +62,8 @@ const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
+const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'));
+const Review = lazy(()=>import('./components/Cinema/Reviews/Review'))
 
 function App() {
   return (
@@ -90,19 +92,7 @@ function App() {
 
             {/* ========================================================================================================= */}
 
-            <Route path="customer" element={<Customer />}></Route>
-
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="/" element={<Splash />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="*" element={<Splash />}></Route>
-            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="reset" element={<ResetPassword />}></Route>
-
+    
             {/* Public routes */}
             <Route path="login" element={<Login />}></Route>
             <Route path="customer" element={<Customer />}></Route>
@@ -145,6 +135,8 @@ function App() {
               <Route path="dash" element={<CinemaDashboard />} />
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
+              <Route path="stats" element={<BookingStat/>}/>
+              <Route path="review/:movieId" element={<Review/>}/>
             </Route>
           </Routes>
         </Suspense>

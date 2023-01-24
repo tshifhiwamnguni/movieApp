@@ -11,6 +11,7 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -26,6 +27,9 @@ function CinMovies() {
   const [cinemaName, setCinemaName] = useState("");
   const [genre, setGenres] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [price, setPrice] = useState(0);
+  const [gn, setGn] = useState([]);
+  const navigate = useNavigate();
 
   // checkbox for genres
   const handleCheckboxChange = async (event) => {
@@ -58,6 +62,7 @@ function CinMovies() {
       .then((data) => {
         cinemaID.current = data.data?.cinema.id;
         getMovies();
+        // getReviews();
       })
       .catch((err) => {});
   };
@@ -86,6 +91,7 @@ function CinMovies() {
         },
       })
       .then((movie) => {
+        // console.log(movie.data.data);
         setMovies(movie.data.data);
         setCinemaName(
           movie.data.data[0].attributes.cinema.data.attributes.name
@@ -101,6 +107,7 @@ function CinMovies() {
     setDuration(mov.attributes.duration);
     setDescription(mov.attributes.description);
     setImage(mov.attributes.movieImage);
+    setPrice(mov.attributes.price);
     movieId.current = mov.id;
   }
 
@@ -135,6 +142,7 @@ function CinMovies() {
         duration: duration,
         cinema: parseInt(cinemaID.current),
         genres: selectedOptions,
+        price: price,
       },
     };
 
@@ -228,6 +236,7 @@ function CinMovies() {
             setImage("");
             setDuration(0);
             setGenres([]);
+            setPrice(0);
             movieId.current = null;
           });
       })
@@ -247,6 +256,7 @@ function CinMovies() {
         duration: duration,
         cinema: parseInt(cinemaID.current),
         genres: selectedOptions,
+        price: price,
       },
     };
 
@@ -311,6 +321,7 @@ function CinMovies() {
         setImage("");
         setDuration(0);
         setGenres([]);
+        setPrice(0);
       });
   };
 
@@ -340,9 +351,10 @@ function CinMovies() {
               <th>Title & Genre</th>
               <th>Duration</th>
               <th>Cinema</th>
+              <th>Price</th>
               <th>Created at</th>
               <th>Updated at</th>
-              <th> Action</th>
+              <th> Actions</th>
               <th></th>
             </tr>
           </thead>
@@ -401,6 +413,7 @@ function CinMovies() {
                       ).toFixed(0)}
                   </td>
                   <td>{cinemaName}</td>
+                  <td>{"R" + mov.attributes.price}</td>
                   <td>
                     {moment(mov.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
@@ -426,6 +439,14 @@ function CinMovies() {
                         onClick={() => selectedEdit(mov)}
                       >
                         Delete
+                      </label>
+
+                      <label
+                        htmlFor="my-modal-11"
+                        className="btn btn-success btn-xs"
+                        onClick={() => navigate('/cinema/review/' + mov.id,{replace: true})}
+                      >
+                        View reviews
                       </label>
                     </div>
                   </th>
@@ -515,6 +536,24 @@ function CinMovies() {
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Movie Price</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                   placeholder="e.g 120"
                   className="input input-bordered w-full"
                 />
@@ -673,6 +712,24 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
+                <span className="label-text">Movie Price</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
                 <span className="label-text">Movie genres</span>
               </label>
               <label className="input-group">
@@ -707,7 +764,7 @@ function CinMovies() {
         </div>
       </div>
 
-{/* view image */}
+      {/* view image */}
       <input type="checkbox" id="my-modal-8" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
