@@ -11,7 +11,6 @@ import Dashboard from "./components/dash/dash";
 import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
 
-
 const Login = lazy(() => import("./components/login/login"));
 const Home = lazy(() => import("./components/Navbar/navbar"));
 const ForgotPassword = lazy(() =>
@@ -26,25 +25,27 @@ const AdminProfile = lazy(() =>
 );
 const ClientSide = lazy(() => import("./components/clientSide/ClientSide"));
 
-
 const ClientHome = lazy(() =>
   import("./components/clientSide/ClientHome/clientHome")
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
 
 // client side lazyLoads
-const CinemaList = lazy(()=> import('./components/clientSide/cinemaList/CinemaList'))
-const TheatreList = lazy(()=> import('./components/clientSide/theatreList/TheareList'))
-const Payment = lazy(()=> import('./components/clientSide/payment/Payment'))
+const CinemaList = lazy(() =>
+  import("./components/clientSide/cinemaList/CinemaList")
+);
+const TheatreList = lazy(() =>
+  import("./components/clientSide/theatreList/TheareList")
+);
+const Payment = lazy(() => import("./components/clientSide/payment/Payment"));
 
-
-const Splash = lazy(()=> import('./components/splashpage/Splash'))
-const Register = lazy(()=> import('./components/register/Register') )
-const Customer = lazy(()=> import('./components/Customer/Customer'))
-const Cinema = lazy(()=> import('./components/Cinema/Cinema'))
-const Theatre = lazy(()=> import('./components/Theatre/Theatre'))
-const AllMovies = lazy(()=>import('./components/CinemaMovies/Allmovies'));
-const Users = lazy(()=>import('./components/users/users'));
+// const Splash = lazy(() => import("./components/splashpage/Splash"));
+const Register = lazy(() => import("./components/register/Register"));
+const Customer = lazy(() => import("./components/Customer/Customer"));
+const Cinema = lazy(() => import("./components/Cinema/Cinema"));
+const Theatre = lazy(() => import("./components/Theatre/Theatre"));
+const AllMovies = lazy(() => import("./components/CinemaMovies/Allmovies"));
+const Users = lazy(() => import("./components/users/users"));
 
 function App() {
   return (
@@ -58,64 +59,45 @@ function App() {
           }
         >
           <Routes>
-
-<Route path="login" element={<Login />}></Route>
             {/* client related routes */}
-            
-            
-  
+
             <Route path="/client" element={<ClientSide />}>
-              <Route path="clientHome" element={<ClientHome/>}/>
-              <Route path="movieList" element={<Movies/>}/>
-              <Route path="cinemaList" element={<CinemaList/>}/>
-              <Route path="theatreList" element={<TheatreList/>}/>
+              <Route path="clientHome" element={<ClientHome />} />
+              <Route path="movieList" element={<Movies />} />
+              <Route path="cinemaList" element={<CinemaList />} />
+              <Route path="theatreList" element={<TheatreList />} />
               <Route path="book" element={<Booking />}></Route>
-              <Route path="payment" element={<Payment/>}/>
+              <Route path="payment" element={<Payment />} />
             </Route>
 
+            {/* ========================================================================================================= */}
 
-{/* ========================================================================================================= */}
+            <Route path="/register" element={<Register />}></Route>
 
+            {/* Public routes */}
+            <Route path="login" element={<Login />}></Route>
+            <Route path="customer" element={<Customer />}></Route>
 
-              <Route path="customer" element={<Customer />}></Route>
             <Route path="/cinema" element={<Cinema />}></Route>
             <Route path="/theatre" element={<Theatre />}></Route>
 
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="/" element={<Splash />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="*" element={<Splash />}></Route>
-            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
+            {/* <Route path="*" element={<Splash/>}></Route>
+             */}
             <Route path="forgot" element={<ForgotPassword />}></Route>
             <Route path="reset" element={<ResetPassword />}></Route>
-          
-            {/* Public routes */}
-            <Route path="login" element={<Login/>}></Route>
-            <Route path="customer" element={<Customer/>}></Route>
-
-            <Route path="/register" element={<Register/>}></Route>
-            <Route path="/cinema" element={<Cinema/>}></Route>
-            <Route path="/theatre" element={<Theatre/>}></Route>
-
-
-            <Route path='forgot' element={<ForgotPassword/>}></Route>
-            <Route path="/" element={<Splash/>}></Route>
-            <Route path="/register" element={<Register/>}></Route>
-
-            <Route path="*" element={<Splash/>}></Route>
-            
-            <Route path="forgot" element={<ForgotPassword/>}></Route>
-            <Route path="reset" element={<ResetPassword/>}></Route>
             {/* Admin routes */}
-            <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="/login"/>} >
-              <Route path="/admin" element={<Navigate replace to="dashboard" />} />
+            <Route
+              path="/admin"
+              element={!getToken() ? <Home /> : <Navigate to="/login" />}
+            >
+              <Route
+                path="/admin"
+                element={<Navigate replace to="dashboard" />}
+              />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="profile" element={<AdminProfile />} />
-              <Route path="movies" element={<AllMovies/>} />
-              <Route path="users" element={<Users/>}/>
+              <Route path="movies" element={<AllMovies />} />
+              <Route path="users" element={<Users />} />
             </Route>
           </Routes>
         </Suspense>
