@@ -91,19 +91,7 @@ function App() {
 
             {/* ========================================================================================================= */}
 
-            <Route path="customer" element={<Customer />}></Route>
-
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="/" element={<Splash />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="*" element={<Splash />}></Route>
-            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="reset" element={<ResetPassword />}></Route>
-
+    
             {/* Public routes */}
             <Route path="login" element={<Login />}></Route>
             <Route path="customer" element={<Customer />}></Route>
