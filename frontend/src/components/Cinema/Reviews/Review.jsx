@@ -128,7 +128,7 @@ function Review() {
                 <div
                   lazy="true"
                   key={revv.id}
-                  className="card card-compact glass z-10"
+                  className="card card-compact glass"
                 >
                   {!loading ? (
                     <div className="card-body">
