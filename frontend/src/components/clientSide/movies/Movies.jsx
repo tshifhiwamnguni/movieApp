@@ -86,7 +86,7 @@ function Movies() {
                {element.attributes.cinema.data.id == cinemaID ?
                 <div 
                   key={element.id}
-                  className="card red w-96 bg-base-100 shadow-xl"
+                  className="card cardMod red w-96 bg-base-100 shadow-xl"
                 >
                   
                  
@@ -99,18 +99,18 @@ function Movies() {
                   </figure>
                   <div className="card-body items-center text-center">
                     <h2 className="card-title">{element.attributes.title}</h2>
-                    <p>{element.attributes.description}</p>
+                
 
                     <div className="card-actions">
-                      <button className="btn btn-primary" onClick={()=>{selectMovie(element.id)}}>book now</button>
+                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element.id)}}>book now</button>
                       <label
                         onClick={() => {
                           select(element.id);
                         }}
                         htmlFor="my-modal-5"
-                        className="btn"
+                        className="btn radius"
                       >
-                        open modal
+                        view details
                       </label>
 
                       {/* Put this part before </body> tag */}
@@ -135,12 +135,12 @@ function Movies() {
 
                           //   allow="autoplay"
                           ></iframe>
-
+                <p>{modelData.attributes.description}</p>
 
 
 
                           <div className="modal-action">
-                            <label onClick={stop} htmlFor="my-modal-5" className="btn">
+                            <label onClick={stop} htmlFor="my-modal-5" className="btn radius">
                               close
                             </label>
                           </div>
