@@ -7,9 +7,6 @@ import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
 import { ERROR, SUCCESS } from "../../environment/toast";
 import './users.css'
-import Spin from "../../Spinner/Spin";
-
-
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -21,9 +18,6 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [deleteLoader, setDeleteLoader]=useState(false);
-
 
   const getUsers = async () => {
     setLoading(true);
@@ -34,7 +28,7 @@ function Users() {
         },
       })
       .then((data) => {
-        console.log(data.data);
+        // console.log(data.data);
         setUsers(data.data);
       })
       .catch((error) => {
@@ -54,7 +48,7 @@ function Users() {
         },
       })
       .then((data) => {
-        console.log(data.data.roles);
+        // console.log(data.data.roles);
         setRoles(data.data.roles);
       })
       .catch((error) => {
@@ -72,7 +66,6 @@ function Users() {
     setEmail(user.email);
     setUserRole(user.role.id);
     userID.current = user.id;
-    setIsBlocked(user.blocked);
   }
 
   const deleteUser = async () => {
