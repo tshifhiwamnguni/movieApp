@@ -62,7 +62,8 @@ const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
-const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'))
+const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'));
+const Review = lazy(()=>import('./components/Cinema/Reviews/Review'))
 
 function App() {
   return (
@@ -135,6 +136,7 @@ function App() {
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
               <Route path="stats" element={<BookingStat/>}/>
+              <Route path="review/:movieId" element={<Review/>}/>
             </Route>
           </Routes>
         </Suspense>

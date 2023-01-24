@@ -11,6 +11,7 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -27,8 +28,8 @@ function CinMovies() {
   const [genre, setGenres] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [price, setPrice] = useState(0);
-  const [reviews, setReviews] = useState([]);
   const [gn, setGn] = useState([]);
+  const navigate = useNavigate();
 
   // checkbox for genres
   const handleCheckboxChange = async (event) => {
@@ -80,26 +81,6 @@ function CinMovies() {
       .catch((error) => {});
   };
 
-  // get reviews for cinema
-  const getReviews = async (data) => {
-    setLoading(true);
-    await axios
-      .get(`${API}/review-cinemas?populate=*&filters[movie]=${data.id}`)
-      .then((rev) => {
-        console.log(rev.data);
-        // console.log(data);
-        setTitle(data.attributes.title);
-        setGn(data.attributes.genres.data);
-        setReviews(rev.data.data);
-        setImage(data.attributes.movieImage);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
   // get movies per cinema
   const getMovies = async () => {
     setLoading(true);
@@ -463,7 +444,7 @@ function CinMovies() {
                       <label
                         htmlFor="my-modal-11"
                         className="btn btn-success btn-xs"
-                        onClick={() => getReviews(mov)}
+                        onClick={() => navigate('/cinema/review/' + mov.id,{replace: true})}
                       >
                         View reviews
                       </label>
@@ -794,93 +775,6 @@ function CinMovies() {
             <label htmlFor="my-modal-8" className="btn">
               Done
             </label>
-          </div>
-        </div>
-      </div>
-
-      {/* Review */}
-      <input type="checkbox" id="my-modal-11" className="modal-toggle" />
-      <div className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <label
-            htmlFor="my-modal-11"
-            className="btn btn-sm btn-circle absolute right-2 top-2"
-          >
-            ✕
-          </label>
-          <h3 className="font-bold text-4xl">Reviews</h3>
-          <div className="flex justify-center">
-            <div className="mt-5">
-              {!loading ? (
-                <div className="flex justify-center">
-                  <div className="avatar">
-                    <div className="w-36 ">
-                      <img src={image} alt="Avatar Tailwind CSS Component" />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex justify-center">
-                  <div className="spinner">
-                    <div className="bounce1"></div>
-                    <div className="bounce2"></div>
-                    <div className="bounce3"></div>
-                  </div>
-                </div>
-              )}
-              <h2 className="font-bold mt-1 text-2xl text-center">{title}</h2>
-            </div>
-          </div>
-          <div className="flex justify-center gap-1 mt-2">
-            {gn.map((g) => (
-              <span key={g.id} className="badge badge-primary">
-                {g.attributes.name}
-              </span>
-            ))}
-          </div>
-          <div className="grid grid-col-1 gap-3 py-4">
-            {reviews.map((revv) => {
-              return (
-                <div
-                  lazy="true"
-                  key={revv.id}
-                  className="card card-compact glass z-10"
-                >
-                  <div className="card-body">
-                    <div className="flex gap-3">
-                      <div className="items-center space-x-3">
-                        <div className="avatar placeholder">
-                          <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
-                            <span className="text-3xl">
-                              {revv.attributes.users_permissions_user?.data.attributes.firstname
-                                ?.slice(0, 1)
-                                ?.toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-row">
-                        <h2 className="card-title">
-                          {
-                            revv.attributes.users_permissions_user?.data
-                              .attributes.firstname
-                          }
-                        </h2>
-                        <div className="flex-row rating gap-1">
-                          <span className="font-bold">Rating: </span>
-                          <span className="badge badge-primary font-bold">
-                            {revv.attributes.rating}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="font-bold text-2xl">
-                      {revv.attributes.comment}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </div>
