@@ -31,9 +31,8 @@ function Payment() {
     // setStripePromise(prom)
   }, []);
 
-  useEffect(() => {
-    
-  }, []);
+
+  
 
  
   return (

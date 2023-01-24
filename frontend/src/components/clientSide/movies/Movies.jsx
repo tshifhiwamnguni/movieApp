@@ -5,6 +5,9 @@ import CinemaContext from '../../../context/CinemaContext'
 import ReactPlayer from "react-player";
 import Iframe from "react-iframe";
 import { useNavigate } from "react-router-dom";
+import  './Movies.css';
+
+
 function Movies() {
 
   const cinemaCtx = useContext(CinemaContext)
@@ -40,8 +43,8 @@ function Movies() {
         // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
         console.log(response.data.data)
   
-        console.log(cinemaCtx.cinemaId);
-        setCinemaID(cinemaCtx.cinemaId.cinemaId)
+        console.log(localStorage.getItem("cinemaId"));
+        setCinemaID(localStorage.getItem("cinemaId"))
        
         setMovies(response.data.data);
       })
@@ -99,7 +102,14 @@ function Movies() {
                   </figure>
                   <div className="card-body items-center text-center">
                     <h2 className="card-title">{element.attributes.title}</h2>
-                
+                    <div className="layer ">
+                    {element.attributes.genres.data.map(
+            el=>{
+             
+               return<div className="genre btn"> {el.attributes.name} </div>;
+            }
+          )}
+          </div>
 
                     <div className="card-actions">
                       <button className="btn btn-primary radius" onClick={()=>{selectMovie(element.id)}}>book now</button>

@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 const cors = require("cors"); //import cors module
-const { resolve } = require("path");
+
 
 const bodyParser = require('body-parser')
-const routes = require("./routes")
+
 app.use(express.json()); 
 
 app.use(bodyParser.json())
@@ -14,7 +14,7 @@ app.use(
     })
 );
 app.use("/", routes) // User endpoint API
-
+const routes = require("./routes")
 app.use(cors());
 // Replace if using a different env file or config
 const env = require("dotenv").config({ path: "./.env" });

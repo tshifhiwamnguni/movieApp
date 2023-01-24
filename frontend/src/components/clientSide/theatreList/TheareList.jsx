@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './TheareList.css'
 
 
 function TheareList() {
     const [movies, setMovies] = useState([]);
-
+  const navigate = useNavigate()
     const initData = {
       id: 1,
       attributes: {
@@ -44,7 +45,14 @@ function TheareList() {
       setModelData(movies[index - 1]);
       console.log(index);
     }
+
+    function setTheatreID(id) {
+      localStorage.setItem("theatreId", id)
+      navigate("../plays");
+      }
+    function toPlays() {
   
+    }
     return (
       <div className=' '>
   
@@ -69,7 +77,7 @@ function TheareList() {
                  
   
                       <div className="card-actions">
-                        <button className="btn btn-primary radius">Select</button>
+                        <button className="btn btn-primary radius" onClick={()=>{setTheatreID(element.id)}}>Select</button>
                         <label
                           onClick={() => {
                             select(element.id);
