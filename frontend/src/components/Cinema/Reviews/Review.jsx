@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { AiTwotoneStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { API, TOKEN } from "../../environment/constant";
 import "./rev.css";
@@ -23,7 +24,7 @@ function Review() {
         },
       })
       .then((mov) => {
-        // console.log(mov.data.data);
+        console.log('mov ' , mov.data.data);
         setMovie(mov.data.data);
       })
       .catch((err) => {
@@ -70,7 +71,7 @@ function Review() {
         `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[page]=${page}&pagination[pageSize]=6`
       )
       .then((rev) => {
-        // console.log(rev.data);
+        console.log('rev ' ,rev.data);
         setReviews(rev.data.data);
       })
       .catch((err) => {
@@ -97,7 +98,7 @@ function Review() {
                 <div className="flex justify-center">
                   <div className="avatar">
                     <div className="w-36 ">
-                      <img src={movie.attributes?.movieImage} alt="Avatar" />
+                      <img src={movie?.attributes?.movieImage} alt="Avatar" />
                     </div>
                   </div>
                 </div>
@@ -111,12 +112,12 @@ function Review() {
                 </div>
               )}
               <h2 className="font-bold mt-1 text-2xl text-center">
-                {movie.attributes?.title}
+                {movie?.attributes?.title}
               </h2>
             </div>
           </div>
           <div className="flex justify-center gap-1 mt-2">
-            {movie.attributes?.genres.data.map((g) => (
+            {movie?.attributes?.genres.data.map((g) => (
               <span key={g.id} className="badge badge-primary">
                 {g.attributes.name}
               </span>
@@ -137,9 +138,9 @@ function Review() {
                           <div className="avatar placeholder">
                             <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
                               <span className="text-3xl">
-                                {revv.attributes.users_permissions_user?.data.attributes.firstname
+                                {/* {revv.attribute.users_permissions_user.data.attributes.firstname
                                   ?.slice(0, 1)
-                                  ?.toUpperCase()}
+                                  ?.toUpperCase()} */}
                               </span>
                             </div>
                           </div>
@@ -147,20 +148,25 @@ function Review() {
                         <div className="flex-row">
                           <h2 className="card-title">
                             {
-                              revv.attributes.users_permissions_user?.data
+                              revv.attributes.users_permissions_user.data
                                 .attributes.firstname
                             }
                           </h2>
                           <div className="flex-row rating gap-1">
                             <span className="font-bold">Rating: </span>
                             <span className="badge badge-primary font-bold">
-                              {revv.attributes.rating}
+                           
+                              { revv?.attributes?.rating ===1 ?(<div className="star"><AiTwotoneStar/> </div>): ''}
+                              { revv?.attributes?.rating ===2 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/></div>): ''}
+                              { revv?.attributes?.rating ===3 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/><AiTwotoneStar/></div>): ''}
+                              { revv?.attributes?.rating ===4 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/><AiTwotoneStar/><AiTwotoneStar/></div>): ''}
+                               { revv?.attributes?.rating ===5 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/><AiTwotoneStar/><AiTwotoneStar/><AiTwotoneStar/></div>): ''}
                             </span>
                           </div>
                         </div>
                       </div>
                       <p className="font-bold text-2xl">
-                        {revv.attributes.comment}
+                        {revv?.attributes.comment}
                       </p>
                     </div>
                   ) : (

@@ -33,6 +33,7 @@ const AdminProfile = lazy(() =>
 const ClientSide = lazy(() => import("./components/clientSide/ClientSide"));
 
 const ClientHome = lazy(() =>
+
   import("./components/clientSide/ClientHome/clientHome")
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
@@ -64,7 +65,7 @@ const CinemaNavbar = lazy(() =>
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
 const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'));
 const Review = lazy(()=>import('./components/Cinema/Reviews/Review'))
-
+const Payment = lazy(()=>import('./components/clientSide/payment/Payment'))
 function App() {
   return (
     <div className="App">
@@ -88,6 +89,7 @@ function App() {
               <Route path="cinemaList" element={<CinemaList />} />
               <Route path="theatreList" element={<TheatreList />} />
               <Route path="book" element={<Booking />}></Route>
+              <Route path="payment" element={<Payment />} />
             </Route>
 
             {/* ========================================================================================================= */}
