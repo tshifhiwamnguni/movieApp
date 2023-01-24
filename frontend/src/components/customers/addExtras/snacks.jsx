@@ -126,7 +126,7 @@ export default function Example() {
                     <div className="card h-fit w-96 bg-primary text-primary-content">
                       <div className="card-body text-center">
                         <h2 className="card-title flex justify-center">
-                          {mediumcombo}
+                          Feature Medium Combo
                         </h2>
                         <img
                           className="h-1/2 w-full"
