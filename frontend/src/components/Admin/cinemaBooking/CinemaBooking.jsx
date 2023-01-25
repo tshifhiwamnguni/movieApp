@@ -3,10 +3,6 @@ import moment from "moment";
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import { API, TOKEN } from "../../environment/constant";
-import { RiMovie2Fill } from "react-icons/ri";
-import { MdAirlineSeatReclineNormal } from "react-icons/md";
-import { BiMoviePlay } from "react-icons/bi";
-import { SUCCESS } from "../../environment/toast";
 
 function CinemaBooking() {
   const [bookings, setBookings] = useState([]);
@@ -30,7 +26,7 @@ function CinemaBooking() {
         },
       })
       .then((booking) => {
-        console.log(booking.data);
+        // console.log(booking.data);
         setBookings(booking.data.data);
         setPageCount(booking.data.meta.pagination.pageCount);
       })

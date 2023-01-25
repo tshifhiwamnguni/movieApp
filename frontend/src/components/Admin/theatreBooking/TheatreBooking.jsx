@@ -18,6 +18,8 @@ function TheatreBooking() {
   const [seatId, setSeatId] = useState();
   const [showId, setShowId] = useState();
   const bookId = useRef();
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
 
   const getBookings = async () => {
     setLoading(true);
@@ -28,8 +30,9 @@ function TheatreBooking() {
         },
       })
       .then((booking) => {
-        console.log(booking.data.data);
+        // console.log(booking.data.data);
         setBookings(booking.data.data);
+        setPageCount(booking.data.meta.pagination.pageCount);
       })
       .catch((error) => {
         console.log(error);
@@ -93,10 +96,22 @@ function TheatreBooking() {
     setSeatId(data.attributes.theatre_seat.data.id);
     setShowId(data.attributes.show.data.id);
     bookId.current = data.id;
-
   };
 
-  
+  //   change page number
+  async function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  async function handlePreviousPage() {
+    setPage(page - 1);
+  }
+
+  //   request for page change
+  useEffect(() => {
+    getBookings();
+  }, [page]);
+
   useEffect(() => {
     getBookings();
     getTheatres();
@@ -181,24 +196,22 @@ function TheatreBooking() {
       </div>
 
       <hr />
-        <div className="flex gap-3 justify-center mt-3">
-          <button
-            className="btn btn-primary glass"
-            onClick={handlePreviousPage}
-            disabled={page === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-primary glass"
-            onClick={handleNextPage}
-            disabled={page === pageCount}
-          >
-            Next
-          </button>
-        </div>
-
-      
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-primary glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-primary glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

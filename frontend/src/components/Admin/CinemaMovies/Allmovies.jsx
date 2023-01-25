@@ -37,7 +37,7 @@ function AllMovies() {
         },
       })
       .then((movie) => {
-        console.log(movie.data);
+        // console.log(movie.data);
         setMovies(movie.data.data);
         setPageCount(movie.data.meta.pagination.pageCount);
       })
@@ -55,7 +55,7 @@ function AllMovies() {
         },
       })
       .then((cinema) => {
-        console.log(cinema.data.data);
+        // console.log(cinema.data.data);
         setCinemas(cinema.data.data);
       })
       .catch((error) => {
@@ -64,7 +64,7 @@ function AllMovies() {
   }
 
   function selectedEdit(mov) {
-    console.log(mov.id);
+    // console.log(mov.id);
     setTitle(mov.attributes.title);
     setDuration(mov.attributes.duration);
     setDescription(mov.attributes.description);
@@ -81,7 +81,7 @@ function AllMovies() {
     input.onchange = (e) => {
       const file = e.target.files[0];
       movieFile.current = file;
-      console.log(movieFile.current);
+      // console.log(movieFile.current);
       const reader = new FileReader();
 
       reader.onloadend = () => {
@@ -106,7 +106,7 @@ function AllMovies() {
         cinema: parseInt(cinemaId),
       },
     };
-    console.log(movieId);
+    // console.log(movieId);
 
     axios
       .put(`${API}/movies/${movieId.current}?populate=*`, movieData, {
@@ -115,7 +115,7 @@ function AllMovies() {
         },
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         SUCCESS("Successfully updated");
       })
       .catch((error) => {
@@ -137,7 +137,7 @@ function AllMovies() {
         },
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         SUCCESS("Successfully deleted");
       })
       .catch((error) => {
@@ -152,7 +152,7 @@ function AllMovies() {
     setLoading(true);
 
     const formData = new FormData();
-    console.log(movID);
+    // console.log(movID);
     formData.append("files", movieFile.current);
     formData.append("refID", movieId.current);
     formData.append("field", "movieImage");
@@ -165,7 +165,7 @@ function AllMovies() {
         },
       })
       .then((data) => {
-        console.log(data.data[0].url);
+        // console.log(data.data[0].url);
         imgUrl.current = data.data[0].url;
         SUCCESS("Successfully uploaded");
         axios
@@ -179,7 +179,7 @@ function AllMovies() {
             }
           )
           .then((data) => {
-            console.log(data);
+            // console.log(data);
             SUCCESS("Successfully updated");
           })
           .catch((error) => {
