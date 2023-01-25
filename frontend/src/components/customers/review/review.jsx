@@ -1,37 +1,47 @@
-import { useState } from "react";
+import {useState, useRef} from "react";
 import womenKing from "../../../assets/womanKing.jpeg"
 import axios from "axios";
 const API = "https://strapi-movie-app.onrender.com/api";
 
 function Review() {
 
-    const [review, setReview] = useState('');
-    const [firstname, setFirstname] = useState('');
-    const [rating, setRating] = useState(1);
+    const reviews = useRef(null);
+    const ratings = useRef(1);
+    const firstname = useRef(null);
 
-    axios.get(`${API}/review-cinemas`).then((response) => {
+    axios.get('https://strapi-movie-app.onrender.com/api/review-cinemas').then((response) => {
         console.log(response);
     }).catch((error) => {
         console.log(error);
     });
 
     const addReview = () => {
-        console.log(review)
-        console.log(rating)
+       
 
-        axios.post(`${API}/review-cinemas`, {
-                    comment: review,
-                    rating: rating
-          }).then((response) => {
+        axios.post('https://strapi-movie-app.onrender.com/api/review-cinemas', 
+        {rating: ratings, comment: reviews}).then((response) => {
             console.log(response);
         }).catch((error) => {
             console.log(error);
         });
     }
 
-    console.log(rating);
-    console.log(review);
-    console.log(firstname);
+    const handleReviewChange = event => {
+        console.log(firstname.current.value)
+        console.log(reviews.current.value)
+        console.log(ratings.current.value)
+        event.preventDefault()
+
+        const data = {data:{rating: ratings.current.value, comment: reviews.current.value}}
+
+        axios.post('https://strapi-movie-app.onrender.com/api/review-cinemas', data).then((response) => {
+            console.log(response);
+            console.log("response received")
+        }).catch((error) => {
+            console.log(error);
+            console.log("error in posting")
+        });
+      };
 
     return (
         <>
@@ -51,12 +61,12 @@ function Review() {
 
                             <div>
                                 <label className="text-xl">Firstname</label>
-                                <input id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" onChange={(e) => setFirstname(e.target.value)} value={firstname} />
+                                <input ref={firstname} id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name"  />
                             </div>
 
                             <div>
-                                <label className="text-lg">Review</label>
-                                <textarea id="review" rows="4" name="review" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="comments" onChange={(e) => setReview(e.target.value)} value={review} />
+                                <label className="text-lg" htmlFor="review">Review</label>
+                                <textarea ref={reviews} id="review" rows="4" name="review" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2" placeholder="comments"  />
                             </div>
 
                             <div className="form-control w-full max-w-xs">
@@ -64,13 +74,13 @@ function Review() {
                                 <span className="label-text">Rating</span>
 
 
-                                <input id="firstname" name="firstname" type="number" min="1" max="5" className="relative block appearance-none rounded-none rounded-b-md border border-gray-300 px-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="No between 1 -5" onChange={(e) => setRating(e.target.value)} value={rating} />
+                                <input ref={ratings} id="firstname" name="firstname" type="number" min="1" max="5" className="relative block appearance-none rounded-none rounded-b-md border border-gray-300 px-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="No between 1 -5" />
                             </div>
                         </div>
 
                         <div className="bg-gray-50 flex justify-end gap-2">
                             <button className="btn text-white bg-rose-500 rounded ">Cancel Review</button>
-                            <button type="submit" className="btn text-white bg-sky-500 rounded" onSubmit={addReview}>Add Review</button>
+                            <button type="submit" className="btn text-white bg-sky-500 rounded" onClick={handleReviewChange}>Add Review</button>
                         </div>
                     </form>
                 </div>
