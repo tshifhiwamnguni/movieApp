@@ -551,7 +551,8 @@ function CinMovies() {
             })}
           </tbody>
         </table>
-        <hr />
+      </div>
+      <hr />
         <div className="flex gap-3 justify-center mt-3">
           <button
             className="btn btn-primary glass"
@@ -568,7 +569,6 @@ function CinMovies() {
             Next
           </button>
         </div>
-      </div>
 
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />

@@ -24,18 +24,22 @@ function AllMovies() {
   const [movID, setMovId] = useState();
   const movieFile = useRef();
   const imgUrl = useRef();
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
+  const [query, setQuery] = useState("");
 
   const getMovies = async () => {
     setLoading(true);
     await axios
-      .get(`${API}/movies?populate=*`, {
+      .get(`${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((movie) => {
-        console.log(movie.data.data[1]);
+        console.log(movie.data);
         setMovies(movie.data.data);
+        setPageCount(movie.data.meta.pagination.pageCount);
       })
       .catch((error) => {
         console.log(error);
@@ -197,6 +201,20 @@ function AllMovies() {
     getCinema();
   }, []);
 
+    //   change page number
+    async function handleNextPage() {
+      setPage(page + 1);
+    }
+  
+    async function handlePreviousPage() {
+      setPage(page - 1);
+    }
+  
+    //   request for page change
+    useEffect(() => {
+      getMovies();
+    }, [page]);
+
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
@@ -291,7 +309,23 @@ function AllMovies() {
           </tbody>
         </table>
       </div>
-
+      <hr />
+        <div className="flex gap-3 justify-center mt-3">
+          <button
+            className="btn btn-primary glass"
+            onClick={handlePreviousPage}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <button
+            className="btn btn-primary glass"
+            onClick={handleNextPage}
+            disabled={page === pageCount}
+          >
+            Next
+          </button>
+        </div>
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">

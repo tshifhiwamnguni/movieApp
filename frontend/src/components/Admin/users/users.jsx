@@ -6,7 +6,7 @@ import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
 import { ERROR, SUCCESS } from "../../environment/toast";
-import './users.css'
+import "./users.css";
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,9 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
 
   const getUsers = async () => {
     setLoading(true);
@@ -157,34 +160,64 @@ function Users() {
     getRoles();
   }, []);
 
-  // search useeffect 
+  // search useeffect
   useEffect(() => {
     setLoading(true);
-    if(query){
-    axios
-      .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-          },
-        }
-      )
-      .then((movie) => {
-        setSnacks(movie.data.data);
-        console.log(movie.data)
-      })
-      .catch((error) => {})
-      .finally(() => setLoading(false));
-    }else{
-        getSnacks();
+    if (query) {
+      axios
+        .get(
+          `${API}/users?populate=*&filters[$or][0][firstname][$containsi]=${query}&filters[$or][1][lastname][$containsi]=${query}&filters[$or][2][email][$containsi]=${query}&filters[$or][3][username][$containsi]=${query}`,
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        )
+        .then((user) => {
+          setUsers(user.data);
+          console.log(user.data);
+        })
+        .catch((error) => {})
+        .finally(() => setLoading(false));
+    } else {
+      getUsers();
     }
   }, [query]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <h1 className="text-center font-bold text-4xl mb-4">Users</h1>
+      <div className="flex">
+        <h1 className="text-center font-bold text-4xl mb-4">Users</h1>
+        <div className="form-control flex-1">
+          <div className="input-group justify-end">
+            <input
+              type="text"
+              placeholder="Search…"
+              className="input input-bordered"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button className="btn btn-square">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
@@ -209,23 +242,25 @@ function Users() {
               return (
                 <tr key={user.id}>
                   <td>
-                    {!loading || user.id !== userID.current ? <div className="flex items-center space-x-3">
-                      <div className="avatar placeholder">
-                        <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
-                          <span className="text-3xl">
-                            {user.firstname?.slice(0, 1)?.toUpperCase()}
-                          </span>
+                    {!loading || user.id !== userID.current ? (
+                      <div className="flex items-center space-x-3">
+                        <div className="avatar placeholder">
+                          <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
+                            <span className="text-3xl">
+                              {user.firstname?.slice(0, 1)?.toUpperCase()}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>:
-
-                    <div className="d-flex justify-content-center">
-                      <div className="spinner">
-                        <div className="bounce1"></div>
-                        <div className="bounce2"></div>
-                        <div className="bounce3"></div>
+                    ) : (
+                      <div className="d-flex justify-content-center">
+                        <div className="spinner">
+                          <div className="bounce1"></div>
+                          <div className="bounce2"></div>
+                          <div className="bounce3"></div>
+                        </div>
                       </div>
-                    </div>}
+                    )}
                   </td>
                   <td>
                     {user.firstname} {user.lastname}
