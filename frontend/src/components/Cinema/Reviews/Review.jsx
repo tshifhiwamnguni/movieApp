@@ -138,9 +138,9 @@ function Review() {
                           <div className="avatar placeholder">
                             <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
                               <span className="text-3xl">
-                                {/* {revv.attribute.users_permissions_user.data.attributes.firstname
+                                {revv.attributes.users_permissions_user.data.attributes.firstname
                                   ?.slice(0, 1)
-                                  ?.toUpperCase()} */}
+                                  ?.toUpperCase()}
                               </span>
                             </div>
                           </div>
