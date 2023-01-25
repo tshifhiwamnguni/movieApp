@@ -35,7 +35,7 @@ function Review() {
         console.log(firstname.current.value)
         console.log(reviews.current.value)
         console.log(ratings.current.value)
-        event.preventDefault()
+        
 
         const data = {data:{rating: ratings.current.value, comment: reviews.current.value}}
 
@@ -46,6 +46,7 @@ function Review() {
             console.log(error);
             console.log("error in posting")
         });
+        event.preventDefault()
       };
 
     return (
@@ -66,7 +67,7 @@ function Review() {
 
                             <div>
                                 <label className="text-xl">Firstname</label>
-                                <input  id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" value={username} />
+                                <input  id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" value={username} onChange={(e) => console.log("hello")}/>
                             </div>
 
                             <div>
