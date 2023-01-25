@@ -133,7 +133,7 @@ function App() {
                 !getToken() ? <CinemaNavbar /> : <Navigate to={"/login"} />
               }
             >
-              <Route path="cinema" element={<Navigate replace to="dash" />} />
+              <Route path="cinema" element={<Navigate replace to="/dash/" />} />
               <Route path="dash" element={<CinemaDashboard />} />
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
