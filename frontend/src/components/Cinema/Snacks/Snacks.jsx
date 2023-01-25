@@ -367,13 +367,13 @@ function Snacks() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <div className="flex">
+      <div className="flex xs:flex-col md:gap-3 xs:gap-3">
       <label htmlFor="my-modal-8" className="btn btn-primary gap-2">
         <BiMoviePlay style={{ fontSize: "1.5rem" }} />
         Add snacks
       </label>
-      <div className="form-control flex-1">
-          <div className="input-group justify-end">
+      <div className="form-control lg:flex-1 md:flex-1">
+          <div className="input-group justify-end sm:justify-end">
             <input
               type="text"
               placeholder="Search…"
