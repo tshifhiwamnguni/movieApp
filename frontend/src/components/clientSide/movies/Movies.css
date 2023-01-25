@@ -17,9 +17,10 @@
 
   .layer {
   
-    display: grid;
-    justify-content: center;
-    grid-template-columns: repeat(3, 1fr);
-   
+    display: flex;   
 
+  }
+
+  .genre{
+    margin-right: 5px;
   }

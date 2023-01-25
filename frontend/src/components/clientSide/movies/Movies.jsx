@@ -92,7 +92,6 @@ function Movies() {
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
                 >
                   
-                 
                   <figure className="px-10 pt-10">
                     <img
                       src={element.attributes.movieImage}
@@ -102,11 +101,10 @@ function Movies() {
                   </figure>
                   <div className="card-body items-center text-center">
                     <h2 className="card-title">{element.attributes.title}</h2>
-                    <div className="layer ">
+                    <div className="layer">
                     {element.attributes.genres.data.map(
             el=>{
-             
-               return<div className="genre btn"> {el.attributes.name} </div>;
+               return<div className="genre">{el.attributes.name}  </div>;
             }
           )}
           </div>

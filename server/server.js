@@ -13,8 +13,9 @@ app.use(
         extended: true
     })
 );
-app.use("/", routes) // User endpoint API
 const routes = require("./routes")
+app.use("/", routes) // User endpoint API
+
 app.use(cors());
 // Replace if using a different env file or config
 const env = require("dotenv").config({ path: "./.env" });
@@ -58,7 +59,7 @@ app.post("/create-payment-intent", async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "EUR",
-  
+      amount: addCash(),
       automatic_payment_methods: { enabled: false },
     });
 

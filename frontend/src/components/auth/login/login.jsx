@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { API } from "../environment/constant";
+import { API } from "../../environment/constant";
 import "./login.css";
 import { useFormInputValidation } from "react-form-input-validation";
-import { setToken } from "../environment/helpers";
+import { setToken } from "../../environment/helpers";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { ERROR, SUCCESS } from "../environment/toast";
+import { ERROR, SUCCESS } from "../../environment/toast";
 import jwt_decode from "jwt-decode";
-import Bac from "../back/back";
+import Bac from "../../back/back";
+import { AiFillQuestionCircle } from "react-icons/ai";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,16 @@ function Login() {
   function move() {
     navigate("forgot", { replace: true });
   }
+
+
+
+
+
+
+
+
+
+
 
   const login = async (e) => {
     e.preventDefault();
@@ -95,6 +106,16 @@ function Login() {
         });
     }
   };
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div>

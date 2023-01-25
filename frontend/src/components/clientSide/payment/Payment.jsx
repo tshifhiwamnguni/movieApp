@@ -15,9 +15,9 @@ function Payment() {
   );
   // setStripePromise(prom)
   useEffect(() => {
-    axios.post("http://localhost:5252/lol", 
-     {money: 90}
-    ).then(async (result) => {
+    // axios.post("http://localhost:5252/lol", 
+    //  {money: 90}
+    // ).then(async (result) => {
       fetch("http://localhost:5252/create-payment-intent", {
       method: "POST",
     }).then(async (result) => {
@@ -27,7 +27,7 @@ function Payment() {
       setClientSecret(clientSecret);
       setStripePromises(stripePromise);
     });
-    })
+    // })
     // setStripePromise(prom)
   }, []);
 
