@@ -3,6 +3,7 @@ import { CardSubtitle, CardText, CardTitle } from "reactstrap";
 import womanKing from "../../../assets/womanKing.jpeg";
 import { MdModeEditOutline, MdDelete } from "react-icons/md";
 import axios from "axios";
+// import Moment from "moment"
 const API = "https://strapi-movie-app.onrender.com/api";
 
 const Reviews = () => {
@@ -47,55 +48,30 @@ const Reviews = () => {
   };
 
   const getReviews = () => {
-    axios.get("https://strapi-movie-app.onrender.com/api/review-cinemas")
+    axios.get("https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*")
       .then((response) => {
         console.log(response);
+        setReviews(response.data.data[1].attributes.comment)
+        setTimestamp(response.data.data[1].attributes.createdAt)
+        setStars(response.data.data[1].attributes.rating)
       }).catch((error) => {
         console.log(error);
       });
   };
+  console.log(reviews)
 
-  function UserOne() {
-    return <CardSubtitle tag="h5">⭐ </CardSubtitle>;
-  }
-  function UserTwo() {
-    return <CardSubtitle tag="h5">⭐ ⭐ </CardSubtitle>;
-  }
-  function UserThree() {
-    return <CardSubtitle tag="h5">⭐ ⭐ ⭐ </CardSubtitle>;
-  }
-  function UserFour() {
-    return <CardSubtitle tag="h5">⭐ ⭐ ⭐ ⭐ </CardSubtitle>;
-  }
-  function UserFive() {
-    return <CardSubtitle tag="h5">⭐ ⭐ ⭐ ⭐ ⭐ </CardSubtitle>;
-  }
-
-  function Greeting() {
-    let ratingNum = 5;
-    if (ratingNum === 2) {
-      return <UserOne />;
-    } else if (ratingNum === 3) {
-      return <UserThree />;
-    } else if (ratingNum === 4) {
-      return <UserFour />;
-    } else if (ratingNum === 4) {
-      return <UserFive />;
+  const Greeting = (props) => {
+    if (props.rating === 5) {
+        return <CardSubtitle tag="h5">⭐ ⭐ ⭐ ⭐ ⭐ </CardSubtitle>
+    } else if (props.rating === 4) {
+        return <CardSubtitle tag="h5">⭐ ⭐ ⭐ ⭐ </CardSubtitle>;
+    } else if (props.rating === 4) {
+        return <CardSubtitle tag="h5">⭐ ⭐ ⭐ </CardSubtitle>;
+    } else if (props.rating === 4) {
+        return <CardSubtitle tag="h5">⭐ ⭐ </CardSubtitle>;
     } else {
-      return <UserOne />;
+        return <CardSubtitle tag="h5">⭐ </CardSubtitle>;
     }
-  }
-
-  function getReviewss() {
-    axios
-      .get(`${API}/review-cinemas?populate=*`)
-      .then((response) => {
-        console.log(response.data.data);
-        arr = response.data.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   useEffect(() => {
@@ -108,7 +84,7 @@ const Reviews = () => {
         <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
           <div className="flex flex-col justify-start items-start bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
             <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800 py-8">
-              Customer’s Cart
+                Movie Reviews
             </h1>
             <div className="flex outline p-2 rounded flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
               <div className="w-full md:w-40">
@@ -122,7 +98,7 @@ const Reviews = () => {
               <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full  pb-8">
                 <div className="w-full flex flex-col justify-start items-start ">
                   <CardTitle tag="h1" className="text-center">
-                    {title} - Nu metro VIP @ Waterfront
+                    {title}
                   </CardTitle>
                   <div className="rating py-1">
                     {[...Array(stars || 1)].map((star, index) => {
@@ -139,16 +115,17 @@ const Reviews = () => {
                   <div className="reviews-body">
                     <CardText>
                       "
-                      {comment ||
+                      {reviews ||
                         "Lorem ipsum dolor sit amet consectetur adipisicing elit."}
                       "
                     </CardText>
                     <CardText>
                       <small className="text-muted text-bold">
+                        {/* <Moment from="2015-04-19">1976-04-19T12:59-0500</Moment> */}
                         {timestamp || "3 mins ago"}
                       </small>
                     </CardText>
-                    <Greeting />
+                    <Greeting rating={stars}/>
                   </div>
                 </div>
 

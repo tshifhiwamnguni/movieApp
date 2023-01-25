@@ -4,20 +4,25 @@ import axios from "axios";
 const API = "https://strapi-movie-app.onrender.com/api";
 
 function Review() {
-
     const reviews = useRef(null);
     const ratings = useRef(1);
     const firstname = useRef(null);
 
-    axios.get('https://strapi-movie-app.onrender.com/api/review-cinemas').then((response) => {
+    const [title, setTitle] = useState('')
+    const [username, setUsername] = useState('') 
+    const [poster, setPoster] = useState('') 
+
+    axios.get('https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*').then((response) => {
         console.log(response);
+        setTitle(response.data.data[0].attributes.movie.data.attributes.title)
+        setUsername(response.data.data[0].attributes.users_permissions_user.data.attributes.username)
+        setPoster(response.data.data[0].attributes.movie.data.attributes.movieImage)
     }).catch((error) => {
         console.log(error);
     });
 
     const addReview = () => {
        
-
         axios.post('https://strapi-movie-app.onrender.com/api/review-cinemas', 
         {rating: ratings, comment: reviews}).then((response) => {
             console.log(response);
@@ -50,8 +55,8 @@ function Review() {
 
                 <div className="w-full max-w-md space-y-8">
                     <div className="flex flex-row gap-4 border-4 rounded-md px-4 py-4">
-                        <img className="h-12 w-16" src={womenKing} alt="movie poster" />
-                        <h2 className="h-12 w-auto text-center text-xl font-bold text-gray-900">Pirates of the carribean</h2>
+                        <img className="h-12 w-16" src={poster} alt="movie poster" />
+                        <h2 className="h-12 w-auto text-center text-xl font-bold text-gray-900">{title}</h2>
 
                     </div>
                     <form className="mt-2 border-4 px-8 rounded-md py-8 space-y-6" >
@@ -61,7 +66,7 @@ function Review() {
 
                             <div>
                                 <label className="text-xl">Firstname</label>
-                                <input ref={firstname} id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name"  />
+                                <input  id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" value={username} />
                             </div>
 
                             <div>
