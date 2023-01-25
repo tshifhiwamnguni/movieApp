@@ -221,6 +221,7 @@ function CinMovies() {
       .finally(() => {
         setLoading(false);
         getMovies();
+        getPages();
       });
   };
 
@@ -348,6 +349,7 @@ function CinMovies() {
       .finally(() => {
         setLoading(false);
         getMovies();
+        getPages();
 
         setTitle("");
         setDescription("");
@@ -363,9 +365,7 @@ function CinMovies() {
     getGenres();
   }, []);
 
-  //   const filteredItems = movies.filter(mov=>{
-  //      return mov.attributes.title.toLowerCase().includes(query.toLowerCase())
-  //   })
+// search use effect
 
   useEffect(() => {
     setLoading(true);

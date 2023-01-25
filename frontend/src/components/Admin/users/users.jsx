@@ -157,6 +157,30 @@ function Users() {
     getRoles();
   }, []);
 
+  // search useeffect 
+  useEffect(() => {
+    setLoading(true);
+    if(query){
+    axios
+      .get(
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((movie) => {
+        setSnacks(movie.data.data);
+        console.log(movie.data)
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+    }else{
+        getSnacks();
+    }
+  }, [query]);
+
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
