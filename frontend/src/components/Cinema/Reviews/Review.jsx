@@ -51,7 +51,7 @@ function Review() {
       )
       .then((rev) => {
         // console.log(rev.data.meta.pagination.pageSize);
-        setPageCount(rev.data.meta.pagination.pageSize);
+        setPageCount(rev.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
