@@ -64,7 +64,6 @@ function CinMovies() {
       .then(async (data) => {
         cinemaID.current = data.data?.cinema.id;
         getMovies();
-        getPages();
       })
       .catch((err) => {});
   };
@@ -97,20 +96,6 @@ function CinMovies() {
     getMovies();
   }, [page]);
 
-  //   get pages
-  const getPages = async () => {
-    await axios
-      .get(
-        `${API}/movies?populate=*&filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
-      )
-      .then((rev) => {
-        console.log(rev.data.meta.pagination);
-        setPageCount(rev.data.meta.pagination.pageCount);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   // get movies per cinema
   const getMovies = async () => {
     setLoading(true);
@@ -125,6 +110,7 @@ function CinMovies() {
       )
       .then((movie) => {
         // console.log(movie.data);
+        setPageCount(movie.data.meta.pagination.pageCount);
         setMovies(movie.data.data);
         setCinemaName(
           movie.data.data[0].attributes.cinema.data.attributes.name
@@ -221,7 +207,6 @@ function CinMovies() {
       .finally(() => {
         setLoading(false);
         getMovies();
-        getPages();
       });
   };
 
@@ -349,7 +334,6 @@ function CinMovies() {
       .finally(() => {
         setLoading(false);
         getMovies();
-        getPages();
 
         setTitle("");
         setDescription("");
@@ -365,31 +349,31 @@ function CinMovies() {
     getGenres();
   }, []);
 
-// search use effect
+  // search use effect
 
   useEffect(() => {
     setLoading(true);
-    if(query){
-    axios
-      .get(
-        `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-          },
-        }
-      )
-      .then((movie) => {
-        // console.log(movie.data);
-        setMovies(movie.data.data);
-        setCinemaName(
-          movie.data.data[0].attributes.cinema.data.attributes.name
-        );
-      })
-      .catch((error) => {})
-      .finally(() => setLoading(false));
-    }else{
-        getMovies();
+    if (query) {
+      axios
+        .get(
+          `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        )
+        .then((movie) => {
+          // console.log(movie.data);
+          setMovies(movie.data.data);
+          setCinemaName(
+            movie.data.data[0].attributes.cinema.data.attributes.name
+          );
+        })
+        .catch((error) => {})
+        .finally(() => setLoading(false));
+    } else {
+      getMovies();
     }
   }, [query]);
 
@@ -553,22 +537,22 @@ function CinMovies() {
         </table>
       </div>
       <hr />
-        <div className="flex gap-3 justify-center mt-3">
-          <button
-            className="btn btn-primary glass"
-            onClick={handlePreviousPage}
-            disabled={page === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-primary glass"
-            onClick={handleNextPage}
-            disabled={page === pageCount}
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-primary glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-primary glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
+      </div>
 
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
