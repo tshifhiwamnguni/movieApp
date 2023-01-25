@@ -8,10 +8,13 @@ const API = "https://strapi-movie-app.onrender.com/api";
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [stars, setStars] = useState();
-  let timestamp = "2023-01-17";
-  let comment = "Great movie";
-  let username = "Fhatuwani";
-  let movieTitle = "Avatar the lost city";
+  const [timestamp, setTimestamp] = useState("2023-01-17");
+  const [comment, setComment] = useState("Great movie");
+  const [username, setUsername] = useState("Fhatuwani");
+  const [title, setTitle] = useState("Avatar the lost city");
+  const [poster, setPoster] = useState("../../../assets/womanKing.jpeg");
+
+
   let index = 2;
   let arr = [];
 
@@ -119,7 +122,7 @@ const Reviews = () => {
               <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full  pb-8">
                 <div className="w-full flex flex-col justify-start items-start ">
                   <CardTitle tag="h1" className="text-center">
-                    {movieTitle} - Nu metro VIP @ Waterfront
+                    {title} - Nu metro VIP @ Waterfront
                   </CardTitle>
                   <div className="rating py-1">
                     {[...Array(stars || 1)].map((star, index) => {
