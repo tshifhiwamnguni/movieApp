@@ -96,56 +96,7 @@ function TheatreBooking() {
 
   };
 
-  const updateBooking = async () => {
-      setLoading(true);
-    const data = {
-      data: {
-        theatre: parseInt(theatreId),
-        cinema_seat: parseInt(seatId),
-        movie: parseInt(showId),
-      },
-    };
-
-    console.log(data);
-
-    await axios
-      .put(`${API}/booking-theatres/${bookId.current}?populate=*`, data, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then((data) => {
-        console.log(data.data);
-        SUCCESS("Successfully updated");
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-        window.location.reload();
-      });
-  };
-
-  const deleteBooking = async () => {
-      setLoading(true);
-    await axios
-      .delete(`${API}/booking-theatres/${bookId.current}`,{
-          headers: {
-              Authorization: `Bearer ${TOKEN}`
-          }
-      })
-      .then((data) => {
-        console.log(data);
-        SUCCESS('Successfully deleted')
-      })
-      .catch((error) => {
-        console.log(error);
-      }).finally(()=>{
-          setLoading(false);
-          window.location.reload();
-      });
-  };
+  
   useEffect(() => {
     getBookings();
     getTheatres();
@@ -229,111 +180,25 @@ function TheatreBooking() {
         </table>
       </div>
 
-      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
-      <div className="modal">
-        <div className="modal-box relative">
-          <label
-            htmlFor="my-modal-3"
-            className="btn btn-sm btn-circle absolute right-2 top-2"
+      <hr />
+        <div className="flex gap-3 justify-center mt-3">
+          <button
+            className="btn btn-primary glass"
+            onClick={handlePreviousPage}
+            disabled={page === 1}
           >
-            ✕
-          </label>
-          <h3 className="text-lg font-bold">Edit movie {}</h3>
-          <div className="py-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Cinema</span>
-              </label>
-              <label className="input-group">
-                <span>
-                  <RiMovie2Fill />
-                </span>
-                <select
-                  defaultValue={theatreId}
-                  onChange={(e) => setTheatreId(e.target.value)}
-                  className="select select-bordered max-w-lg"
-                >
-                  <option disabled>Pick a cinema</option>
-                  {theatres.map((cin) => (
-                    <option key={cin.id} value={cin.id}>
-                      {cin.attributes.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Cinema seat</span>
-              </label>
-              <label className="input-group">
-                <span>
-                  <MdAirlineSeatReclineNormal />
-                </span>
-                <select
-                  defaultValue={seatId}
-                  onChange={(e) => setSeatId(e.target.value)}
-                  className="select select-bordered max-w-lg"
-                >
-                  <option disabled>Pick a cinema</option>
-                  {theatreSeat.map((cin) => (
-                    <option key={cin.id} value={cin.id}>
-                      {cin.attributes.seat}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Movie</span>
-              </label>
-              <label className="input-group">
-                <span>
-                  <BiMoviePlay />
-                </span>
-                <select
-                  defaultValue={showId}
-                  onChange={(e) => setShowId(e.target.value)}
-                  className="select select-bordered max-w-lg"
-                >
-                  <option disabled>Pick a cinema</option>
-                  {shows.map((cin) => (
-                    <option key={cin.id} value={cin.id}>
-                      {cin.attributes.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div className="flex justify-end mt-3">
-              <button className="btn btn-success" onClick={updateBooking}>
-                Update
-              </button>
-            </div>
-          </div>
+            Previous
+          </button>
+          <button
+            className="btn btn-primary glass"
+            onClick={handleNextPage}
+            disabled={page === pageCount}
+          >
+            Next
+          </button>
         </div>
-      </div>
 
-      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-      <label htmlFor="my-modal-4" className="modal cursor-pointer">
-        <label className="modal-box relative" htmlFor="">
-          <h3 className="text-lg font-bold">
-            Are you sure you want to delete ?
-          </h3>
-          <div className="py-4">
-            <button className="btn btn-error" onClick={deleteBooking}>
-              Delete
-            </button>
-            <h1 className="mt-4 text-green-500">
-              Click outside the card to cancel
-            </h1>
-          </div>
-        </label>
-      </label>
+      
     </div>
   );
 }
