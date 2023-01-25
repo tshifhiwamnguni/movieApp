@@ -15,6 +15,8 @@ function BookingStat() {
   const [seat, setSeat] = useState('');
   const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -130,6 +132,7 @@ function BookingStat() {
       .then((b) => {
         console.log(b.data.data);
         setBookings(b.data.data);
+        setPageCount(b.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
@@ -139,6 +142,20 @@ function BookingStat() {
   useEffect(() => {
     getUser();
   }, []);
+
+     //   change page number
+     async function handleNextPage() {
+      setPage(page + 1);
+    }
+  
+    async function handlePreviousPage() {
+      setPage(page - 1);
+    }
+  
+    //   request for page change
+    useEffect(() => {
+      getBooking();
+    }, [page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -231,7 +248,23 @@ function BookingStat() {
           </tbody>
         </table>
       </div>
-
+      <hr />
+        <div className="flex gap-3 justify-center mt-3">
+          <button
+            className="btn btn-primary glass"
+            onClick={handlePreviousPage}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <button
+            className="btn btn-primary glass"
+            onClick={handleNextPage}
+            disabled={page === pageCount}
+          >
+            Next
+          </button>
+        </div>
 
        {/* edit modal */}
        <input type="checkbox" id="my-modal-3" className="modal-toggle" />

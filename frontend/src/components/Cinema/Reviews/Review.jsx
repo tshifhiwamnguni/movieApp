@@ -24,7 +24,7 @@ function Review() {
         },
       })
       .then((mov) => {
-        console.log('mov ' , mov.data.data);
+        console.log(mov.data);
         setMovie(mov.data.data);
       })
       .catch((err) => {
@@ -43,36 +43,22 @@ function Review() {
     setPage(page - 1);
   }
 
-  //   get pages
-  const getPages = async () => {
-    await axios
-      .get(
-        `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[pageSize]=6`
-      )
-      .then((rev) => {
-        // console.log(rev.data.meta.pagination.pageSize);
-        setPageCount(rev.data.meta.pagination.pageCount);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   useEffect(() => {
     getReviews();
   }, [page]);
   // get reviews for cinema
-  const getReviews = async (pages = 1) => {
+  const getReviews = async () => {
     setLoading(true);
-    console.log(page);
 
     await axios
       .get(
         `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[page]=${page}&pagination[pageSize]=6`
       )
       .then((rev) => {
-        console.log('rev ' ,rev.data);
+        // console.log('rev ' ,rev.data);
         setReviews(rev.data.data);
+        setPageCount(rev.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
@@ -84,7 +70,6 @@ function Review() {
 
   useEffect(() => {
     getMovie();
-    getPages();
   }, []);
 
   return (
