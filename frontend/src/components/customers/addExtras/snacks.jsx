@@ -1,44 +1,89 @@
 import womenKing from "../../../assets/womanKing.jpeg";
-import { BsFillPlusSquareFill } from "react-icons/bs"
-import axios from "axios"
+import { BsFillPlusSquareFill } from "react-icons/bs";
+import { MdDeleteForever } from "react-icons/md";
+import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 
-export default function Example() { 
-    const [snack , setSnack] = useState('')
-    const [price , setPrice] = useState(0)
-    const [quantity , setQuantity] = useState(0)
+export default function Example() {
+  const [snack, setSnack] = useState("");
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
-    const [mediumcombo , setMediumcombo] = useState('')
-    const [mediumblockbuster , setMediumblockbuster] = useState('')
-    // const [mediumcombo , setMediumcombo] = useState('')
+  const [mediumcombo, setMediumcombo] = useState("");
+  const [mediumblockbuster, setMediumblockbuster] = useState("");
+  // const [mediumcombo , setMediumcombo] = useState('')
 
-    console.log(price)
+  console.log(price);
 
-    const getOrders = () => {
-        axios.get('https://strapi-movie-app.onrender.com/api/cinema-orders?populate=*').then((response) => {
-            console.log(response)
-            getSnack(response.data.data[0].attributes.cinema_snacks.data[0].attributes.name)
-            getPrice(response.data.data[0].attributes.cinema_snacks.data[0].attributes.price)
-            getQuantity(response.data.data[0].attributes.quantity)
-        }).catch((error) => {
-            console.log(error)
-        })
-    }
+  const getOrders = () => {
+    axios
+      .get(
+        "https://strapi-movie-app.onrender.com/api/cinema-orders?populate=*"
+      )
+      .then((response) => {
+        console.log(response);
+        getSnack(
+          response.data.data[0].attributes.cinema_snacks.data[0].attributes.name
+        );
+        getPrice(
+          response.data.data[0].attributes.cinema_snacks.data[0].attributes
+            .price
+        );
+        getQuantity(response.data.data[0].attributes.quantity);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    const getSnack = (information) => {
-        setSnack(information)
-    }
-    const getPrice = (info) => {
-        setPrice(info)
-    }
-    const getQuantity = (info) => {
-        setQuantity(info)
-    }
+  const addExtra = () => {
+    axios.post();
+  };
 
-    useEffect(() => {
-        getOrders();
-    })
+  const deleteExtra = () => {
+    axios
+      .delete(`https://strapi-movie-app.onrender.com/api/cinema-orders/4`)
+      .then((res) => {
+        console.log(res);
+        console.log("User deleted successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const Extras = (props) => {
+    return (
+      <>
+        <p className="mt-2 text-2xl text-gray-500">
+          <MdDeleteForever
+            onClick={props.delete}
+            className="inline-flex items-center rounded-md border border-transparent outline text-red-700"
+          />
+          x {props.snacks}
+        </p>
+
+        <p className="mt-2 text-2xl text-gray-500">R{props.prices},00</p>
+      </>
+    );
+  };
+
+  const getSnack = (information) => {
+    setSnack(information);
+  };
+  const getPrice = (info) => {
+    setPrice(info);
+  };
+
+  const getQuantity = (info) => {
+    setQuantity(info);
+  };
+
+  useEffect(() => {
+    getOrders();
+  });
+  
   return (
     <>
       <div className="mx-auto bg-blue-400 p-4">
@@ -63,33 +108,35 @@ export default function Example() {
                         />
                       </label>
                       <div className="mt-1 flex rounded shadow-sm">
-                          <h2 className="h-12 w-auto text-center text-2xl font-bold text-gray-900">
-                            Pirates of the carribean
-                          </h2>
+                        <h2 className="h-12 w-auto text-center text-2xl font-bold text-gray-900">
+                          Pirates of the carribean
+                        </h2>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-2xl font-medium text-gray-700">Cinema:</label>
+                    <label className="block text-2xl font-medium text-gray-700">
+                      Cinema:
+                    </label>
                     <div className="mt-1">
                       <p className="mt-2 text-2xl text-gray-500">Menlyn park</p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-2xl font-medium text-gray-700">Items:</label>
+                    <label className="block text-2xl font-medium text-gray-700">
+                      Items:
+                    </label>
                     <div className="mt-1 flex justify-between">
                       <p className="mt-2 text-2xl text-gray-500">
                         1 x Regular 2D
                       </p>
                       <p className="mt-2 text-2xl text-gray-500">R100,00</p>
                     </div>
+
                     <div className="mt-1 flex justify-between">
-                      <p className="mt-2 text-2xl text-gray-500">
-                        {quantity} x {snack}
-                      </p>
-                      <p className="mt-2 text-2xl text-gray-500">R{price},00</p>
+                      <Extras delete={deleteExtra} snacks={snack} prices={price}/>
                     </div>
 
                     <div className="mt-1 flex justify-between">
@@ -100,7 +147,10 @@ export default function Example() {
                 </div>
 
                 <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                  <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8">
+                  <button
+                    type="button"
+                    className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8"
+                  >
                     Checkout
                   </button>
                 </div>
@@ -130,13 +180,15 @@ export default function Example() {
                         </h2>
                         <img
                           className="h-1/2 w-full"
-                          src='https://numetro.co.za/wp-content/uploads/concession_images/A000006871.png'
+                          src="https://numetro.co.za/wp-content/uploads/concession_images/A000006871.png"
                           alt="movie poster"
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
-                        <button type="button"
-                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
-                            <BsFillPlusSquareFill className="text-2xl"/> 
+                        <button
+                          type="button"
+                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800"
+                        >
+                          <BsFillPlusSquareFill className="text-2xl" />
                           <h1 className="text-2xl">Add To Basket</h1>
                         </button>
                       </div>
@@ -145,17 +197,19 @@ export default function Example() {
                     <div className="card h-fit w-96 bg-primary text-primary-content">
                       <div className="card-body text-center">
                         <h2 className="card-title flex justify-center">
-                          Feature Combo Medium 
+                          Feature Combo Medium
                         </h2>
                         <img
                           className="h-1/2 w-full"
-                          src='https://numetro.co.za/wp-content/uploads/concession_images/A000006868.png'
+                          src="https://numetro.co.za/wp-content/uploads/concession_images/A000006868.png"
                           alt="movie poster"
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
-                        <button type="button"
-                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
-                            <BsFillPlusSquareFill className="text-2xl"/> 
+                        <button
+                          type="button"
+                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800"
+                        >
+                          <BsFillPlusSquareFill className="text-2xl" />
                           <h1 className="text-2xl">Add To Basket</h1>
                         </button>
                       </div>
@@ -168,13 +222,15 @@ export default function Example() {
                         </h2>
                         <img
                           className="h-1/2 w-full"
-                          src='https://numetro.co.za/wp-content/uploads/concession_images/A000006872.png'
+                          src="https://numetro.co.za/wp-content/uploads/concession_images/A000006872.png"
                           alt="movie poster"
                         />
                         <p className=" text-4xl text-gray-500">R95,00</p>
-                        <button type="button"
-                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800">
-                            <BsFillPlusSquareFill className="text-2xl"/> 
+                        <button
+                          type="button"
+                          className="flex items-center justify-evenly p-4 rounded-md border border-transparent bg-green-800"
+                        >
+                          <BsFillPlusSquareFill className="text-2xl" />
                           <h1 className="text-2xl">Add To Basket</h1>
                         </button>
                       </div>
