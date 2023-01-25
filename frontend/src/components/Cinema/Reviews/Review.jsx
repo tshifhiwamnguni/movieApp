@@ -24,7 +24,7 @@ function Review() {
         },
       })
       .then((mov) => {
-        console.log('mov ' , mov.data.data);
+        // console.log('mov ' , mov.data.data);
         setMovie(mov.data.data);
       })
       .catch((err) => {
