@@ -33,7 +33,7 @@ function TheatreBooking() {
         },
       })
       .then((data) => {
-        if (data.data.role.id !== 6) {
+        if (data.data.role.id !== 3) {
           navigate("/home", { replace: true });
         }
       })
