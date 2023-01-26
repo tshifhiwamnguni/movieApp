@@ -345,7 +345,7 @@ function Snacks() {
   const getPages = async () => {
     await axios
       .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
       )
       .then((rev) => {
         // console.log(rev.data.meta.pagination);

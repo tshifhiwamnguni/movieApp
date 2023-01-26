@@ -33,7 +33,6 @@ const AdminProfile = lazy(() =>
 const ClientSide = lazy(() => import("./components/clientSide/ClientSide"));
 
 const ClientHome = lazy(() =>
-
   import("./components/clientSide/ClientHome/clientHome")
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
@@ -63,9 +62,13 @@ const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
-const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'));
-const Review = lazy(()=>import('./components/Cinema/Reviews/Review'))
-const Payment = lazy(()=>import('./components/clientSide/payment/Payment'))
+const BookingStat = lazy(() =>
+  import("./components/Cinema/cinemaBooking/BookingStat")
+);
+const Review = lazy(() => import("./components/Cinema/Reviews/Review"));
+const Payment = lazy(() => import("./components/clientSide/payment/Payment"));
+const TheatreNavbar = lazy(()=>import('./components/Theatre/TheatreNavbar/TheatreNavbar'));
+
 function App() {
   return (
     <div className="App">
@@ -94,7 +97,6 @@ function App() {
 
             {/* ========================================================================================================= */}
 
-    
             {/* Public routes */}
             <Route path="login" element={<Login />}></Route>
             <Route path="customer" element={<Customer />}></Route>
@@ -137,8 +139,23 @@ function App() {
               <Route path="dash" element={<CinemaDashboard />} />
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
-              <Route path="stats" element={<BookingStat/>}/>
-              <Route path="review/:movieId" element={<Review/>}/>
+              <Route path="stats" element={<BookingStat />} />
+              <Route path="review/:movieId" element={<Review />} />
+            </Route>
+
+            {/* Admin for theatre path/routes */}
+            <Route
+              path="theatre"
+              element={
+                !getToken() ? <TheatreNavbar /> : <Navigate to={"/login"} />
+              }
+            >
+              <Route path="theatre" element={<Navigate replace to="dash" />} />
+              <Route path="dash" element={<Theatre />} />
+              <Route path="shows" element={<CinMovies />} />
+              <Route path="snacks" element={<Snacks />} />
+              <Route path="stats" element={<BookingStat />} />
+              <Route path="review/:showId" element={<Review />} />
             </Route>
           </Routes>
         </Suspense>
