@@ -91,11 +91,6 @@ function CinMovies() {
     setPage(page - 1);
   }
 
-  //   request for page change
-  useEffect(() => {
-    getMovies();
-  }, [page]);
-
   // get movies per cinema
   const getMovies = async () => {
     setLoading(true);
@@ -128,6 +123,11 @@ function CinMovies() {
     setImage(mov.attributes.movieImage);
     setPrice(mov.attributes.price);
     movieId.current = mov.id;
+    mov.attributes.genres.data?.map((g) => {
+      hold.push(g.id);
+      // console.log(hold);
+    });
+    setSelectedOptions([...selectedOptions, ...hold]);
   }
 
   // get image when you click
@@ -148,6 +148,20 @@ function CinMovies() {
     };
 
     input.click();
+  };
+
+  //   clear data
+  let hold = [];
+  const clearData = () => {
+    // console.log("fdhsgjk");
+    setTitle("");
+    setDuration("");
+    setDescription("");
+    setImage("");
+    setPrice(0);
+
+    hold = [];
+    setSelectedOptions([]);
   };
 
   // updating movie data
@@ -352,8 +366,8 @@ function CinMovies() {
   // search use effect
 
   useEffect(() => {
-    setLoading(true);
     if (query) {
+      setLoading(true);
       axios
         .get(
           `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
@@ -375,7 +389,7 @@ function CinMovies() {
     } else {
       getMovies();
     }
-  }, [query]);
+  }, [query, page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -561,6 +575,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-3"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -700,6 +715,8 @@ function CinMovies() {
           <label
             htmlFor="my-modal-4"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
+            onClick={clearData}
           >
             ✕
           </label>
@@ -729,6 +746,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-7"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -869,7 +887,7 @@ function CinMovies() {
             <img src={image} alt="nice" />
           </div>
           <div className="modal-action">
-            <label htmlFor="my-modal-8" className="btn">
+            <label htmlFor="my-modal-8" className="btn" onClick={clearData}>
               Done
             </label>
           </div>

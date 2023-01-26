@@ -40,8 +40,8 @@ function Snacks() {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
-      .then((data) => {
-        theatreID.current = data.data?.theatre.id;
+      .then(async(data) => {
+        theatreID.current = await data.data.theatre.id;
         getSnacks();
       })
       .catch((err) => {
@@ -273,6 +273,7 @@ function Snacks() {
   // get snacks by a theatreID
   const getSnacks = async () => {
     setLoading(true);
+    // console.log(theatreID.current);
     await axios
       .get(
         `${API}/theatre-snacks?filters[theatre]=${theatreID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
@@ -283,9 +284,9 @@ function Snacks() {
         }
       )
       .then((snac) => {
-        // console.log(snac.data.data);
+        // console.log(snac.data);
         setSnacks(snac.data.data);
-        setPageCount(rev.data.meta.pagination.pageCount);
+        setPageCount(snac.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
@@ -294,33 +295,41 @@ function Snacks() {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getUser();
-  }, []);
+
+  // get search data
+  async function fetchData() {
+    setLoading(true)
+    await axios
+      .get(
+        `${API}/theatre-snacks?filters[theatre]=${theatreID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((movie) => {
+        setSnacks(movie.data.data);
+        // console.log(movie.data);
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+    
+  }
 
   //   search useeffect
   useEffect(() => {
-    setLoading(true);
     if (query) {
-      axios
-        .get(
-          `${API}/theatre-snacks?filters[theatre]=${theatreID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
-          {
-            headers: {
-              Authorization: `Bearer ${TOKEN}`,
-            },
-          }
-        )
-        .then((movie) => {
-          setSnacks(movie.data.data);
-          console.log(movie.data);
-        })
-        .catch((error) => {})
-        .finally(() => setLoading(false));
+      fetchData();
     } else {
       getSnacks();
     }
-  }, [query]);
+  }, [query,page]);
+
+  
+  useEffect(()=>{
+    getUser();
+  },[])
 
   //   change page number
   async function handleNextPage() {
@@ -330,11 +339,6 @@ function Snacks() {
   async function handlePreviousPage() {
     setPage(page - 1);
   }
-
-  //   request for page change
-  useEffect(() => {
-    getSnacks();
-  }, [page]);
 
   const snackSize = [
     { value: "small", name: "Small" },

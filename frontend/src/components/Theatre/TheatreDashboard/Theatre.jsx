@@ -41,13 +41,13 @@ function Theatre() {
     setLoading(true);
     // console.log(theatreID.current);
     await axios
-      .get(`${API}/theatre/${theatreID.current}?populate=*`, {
+      .get(`${API}/theatres/${theatreID.current}?populate=*`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((theatre) => {
-        // console.log(theatre.data.data.attributes);
+        console.log(theatre.data.data);
         setShows(theatre.data.data.attributes.shows.data.length);
         setTheatreName(theatre.data.data.attributes.name);
         setBooking(theatre.data.data.attributes.booking_theatres.data.length);

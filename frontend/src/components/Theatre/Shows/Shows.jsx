@@ -61,8 +61,8 @@ function Shows() {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
-      .then(async (data) => {
-        theatreID.current = data.data?.theatre.id;
+      .then((data) => {
+        theatreID.current = data.data.theatre.id;
         getShows();
       })
       .catch((err) => {});
@@ -91,11 +91,6 @@ function Shows() {
     setPage(page - 1);
   }
 
-  //   request for page change
-  useEffect(() => {
-    getShows();
-  }, [page]);
-
   // get shows per theatre
   const getShows = async () => {
     setLoading(true);
@@ -109,18 +104,34 @@ function Shows() {
         }
       )
       .then((show) => {
-        // console.log(show.data);
+        console.log(show.data);
         setPageCount(show.data.meta.pagination.pageCount);
         setShows(show.data.data);
         setTheatreName(
           show.data.data[0].attributes.theatre.data.attributes.name
         );
-        setSelectedOptions([...selectedOptions, parseInt(show.data.data.attributes.genres.data)]);
+        setSelectedOptions([
+          ...selectedOptions,
+          parseInt(show.data.data.attributes.genres.data),
+        ]);
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
   };
 
+  // clear seleted
+  let hold = [];
+  const clearData = () => {
+    setTitle("");
+    setDuration("");
+    setDescription("");
+    setImage("");
+    setPrice(0);
+
+    hold = [];
+    setSelectedOptions([]);
+  };
+  
   // get and set selected data to the variables
   function selectedEdit(theatre) {
     setTitle(theatre.attributes.title);
@@ -128,6 +139,12 @@ function Shows() {
     setDescription(theatre.attributes.description);
     setImage(theatre.attributes.showImage);
     setPrice(theatre.attributes.price);
+
+    theatre.attributes.genres.data?.map((g) => {
+      hold.push(g.id);
+    });
+    setSelectedOptions([...selectedOptions, ...hold]);
+
     showId.current = theatre.id;
   }
 
@@ -155,6 +172,7 @@ function Shows() {
   const updateShow = () => {
     setLoading(true);
 
+    console.log(selectedOptions);
     const showData = {
       data: {
         title: title,
@@ -186,6 +204,7 @@ function Shows() {
         setDescription("");
         setImage("");
         setDuration(0);
+        setSelectedOptions([]);
         showId.current = null;
       });
   };
@@ -350,33 +369,36 @@ function Shows() {
     getGenres();
   }, []);
 
-  // search use effect
-
-  useEffect(() => {
+  // search function
+  async function fetchData() {
     setLoading(true);
+    await axios
+      .get(
+        `${API}/shows?filters[theatre]=${theatreID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((show) => {
+        // console.log(movie.data);
+        setShows(show.data.data);
+        setTheatreName(
+          show.data.data[0].attributes.theatre.data.attributes.name
+        );
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+  }
+  // search use effect
+  useEffect(() => {
     if (query) {
-      axios
-        .get(
-          `${API}/shows?filters[theatre]=${theatreID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
-          {
-            headers: {
-              Authorization: `Bearer ${TOKEN}`,
-            },
-          }
-        )
-        .then((show) => {
-          // console.log(movie.data);
-          setShows(show.data.data);
-          setTheatreName(
-            show.data.data[0].attributes.theatre.data.attributes.name
-          );
-        })
-        .catch((error) => {})
-        .finally(() => setLoading(false));
+      fetchData();
     } else {
       getShows();
     }
-  }, [query]);
+  }, [query, page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -451,7 +473,7 @@ function Shows() {
                                 onClick={() => selectedEdit(theatre)}
                               >
                                 <img
-                                  src={theatre.attributes.theatreImage}
+                                  src={theatre.attributes.showImage}
                                   alt="Avatar Tailwind CSS Component"
                                 />
                               </label>
@@ -486,7 +508,8 @@ function Shows() {
                     {Math.floor(theatre.attributes.duration / 60) +
                       "h:" +
                       (
-                        Math.round((theatre.attributes.duration % 60) * 100) / 100
+                        Math.round((theatre.attributes.duration % 60) * 100) /
+                        100
                       ).toFixed(0)}
                   </td>
                   <td>{theatreName}</td>
@@ -562,6 +585,7 @@ function Shows() {
           <label
             htmlFor="my-modal-3"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -624,7 +648,9 @@ function Shows() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Show estimated Duration in minutes</span>
+                <span className="label-text">
+                  Show estimated Duration in minutes
+                </span>
               </label>
               <label className="input-group">
                 <span>
@@ -701,6 +727,7 @@ function Shows() {
           <label
             htmlFor="my-modal-4"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -730,6 +757,7 @@ function Shows() {
           <label
             htmlFor="my-modal-7"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -746,7 +774,7 @@ function Shows() {
                 />
               </div>
             </div>
-            
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Show title</span>
@@ -785,7 +813,9 @@ function Shows() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Show estimated Duration in minutes</span>
+                <span className="label-text">
+                  Show estimated Duration in minutes
+                </span>
               </label>
               <label className="input-group">
                 <span>
@@ -863,7 +893,7 @@ function Shows() {
             <img src={image} alt="nice" />
           </div>
           <div className="modal-action">
-            <label htmlFor="my-modal-8" className="btn">
+            <label htmlFor="my-modal-8" className="btn" onClick={clearData}>
               Done
             </label>
           </div>

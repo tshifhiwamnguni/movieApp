@@ -49,7 +49,7 @@ function TheatreNavbar() {
               </label>
             </div>
             <div className="flex-1 px-2 mx-2">
-              <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
+              <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Show</a>
               <a className="" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
                 Theatre
               </a>
@@ -68,10 +68,10 @@ function TheatreNavbar() {
                     Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/theatre/mov/")}>
+                <li onClick={() => navigate("/theatre/shows/")}>
                   <a>
                     <TbMovie style={{ fontSize: "1.5rem" }} />
-                    Movies
+                    Shows
                   </a>
                 </li>
                 <li onClick={logout}>
@@ -110,10 +110,10 @@ function TheatreNavbar() {
                 Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/cimema/mov/")}>
+            <li onClick={() => navigate("/theatre/shows/")}>
               <a>
                 <TbMovie style={{ fontSize: "1.5rem" }} />
-                Movies
+               Shows
               </a>
             </li>
             <li onClick={logout}>
