@@ -716,7 +716,6 @@ function CinMovies() {
             htmlFor="my-modal-4"
             className="btn btn-sm btn-circle absolute right-2 top-2"
             onClick={clearData}
-            onClick={clearData}
           >
             ✕
           </label>
