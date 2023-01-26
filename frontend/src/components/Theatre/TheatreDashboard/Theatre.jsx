@@ -18,7 +18,7 @@ function Theatre() {
   let decoded = jwt_decode(token);
   let ID = decoded.id;
 
-  // console.log(ID)
+  console.log(ID)
 
   const getUser = async () => {
     await axios
@@ -28,7 +28,11 @@ function Theatre() {
         },
       })
       .then((data) => {
-        // console.log(data.data?.theatre.id);
+        // console.log(data.data.role);
+        // console.log(data.data.id)
+        if(data.data.role.id !== 6){
+          navigate('/home', {replace: true})
+        }
         theatreID.current = data.data?.theatre.id;
         getTheatreShows();
       })
@@ -47,7 +51,7 @@ function Theatre() {
         },
       })
       .then((theatre) => {
-        console.log(theatre.data.data);
+        // console.log(theatre.data.data);
         setShows(theatre.data.data.attributes.shows.data.length);
         setTheatreName(theatre.data.data.attributes.name);
         setBooking(theatre.data.data.attributes.booking_theatres.data.length);

@@ -62,6 +62,9 @@ function CinMovies() {
         },
       })
       .then(async (data) => {
+        if(data.data.role.id !== 6){
+            navigate('/home', {replace: true})
+          }
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })

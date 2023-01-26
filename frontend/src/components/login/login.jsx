@@ -25,10 +25,6 @@ function Login() {
     }
   );
 
-  function move() {
-    navigate("forgot", { replace: true });
-  }
-
   const login = async (e) => {
     e.preventDefault();
 

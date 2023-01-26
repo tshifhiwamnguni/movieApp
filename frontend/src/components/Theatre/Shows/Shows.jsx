@@ -62,6 +62,9 @@ function Shows() {
         },
       })
       .then((data) => {
+        if(data.data.role.id !== 6){
+          navigate('/home', {replace: true})
+        }
         theatreID.current = data.data.theatre.id;
         getShows();
       })
@@ -131,7 +134,7 @@ function Shows() {
     hold = [];
     setSelectedOptions([]);
   };
-  
+
   // get and set selected data to the variables
   function selectedEdit(theatre) {
     setTitle(theatre.attributes.title);

@@ -7,6 +7,7 @@ import axios from "axios";
 import { API, TOKEN } from "../../environment/constant";
 import { ERROR } from "../../environment/toast";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 
 function Dashboard() {
   const [countMovies, SetMoviesCount] = useState(0);
@@ -17,9 +18,31 @@ function Dashboard() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("jwt");
+  let decoded = jwt_decode(token);
+  let ID = decoded.id;
+
+  // get user for the cinema
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     setLoading(true);
-
+    getUser();
     axios
       .get(`${API}/movies`, {
         headers: {

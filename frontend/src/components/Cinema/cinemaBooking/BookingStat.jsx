@@ -6,6 +6,7 @@ import axios from "axios";
 import moment from "moment";
 import {BsCalendar2Date} from 'react-icons/bs'
 import {MdAirlineSeatReclineExtra} from 'react-icons/md'
+import { useNavigate } from "react-router-dom";
 
 function BookingStat() {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ function BookingStat() {
   const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
 
+  const navigate = useNavigate(); 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
   let ID = decoded.id;
@@ -108,6 +110,9 @@ function BookingStat() {
       })
       .then((data) => {
         // console.log(data.data);
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
+        }
         cinemaID.current = data.data?.cinema.id;
         getBooking();
         getCinemaSeats();

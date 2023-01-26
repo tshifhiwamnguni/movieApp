@@ -9,6 +9,7 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import "./adminProfile.css";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 function AdminProfile() {
   let ID;
@@ -23,6 +24,7 @@ function AdminProfile() {
   const token = localStorage.getItem("jwt");
   const [firstname, setFirstname]=useState('');
   const [lastname, setLastname]=useState('');
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     
@@ -35,6 +37,9 @@ function AdminProfile() {
     axios
       .get(`${API}/users/${ID}`)
       .then((data) => {
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
+        }
         setEmail(data.data.email);
         setName(data.data.username);
         setPhone(data.data.cellphone);

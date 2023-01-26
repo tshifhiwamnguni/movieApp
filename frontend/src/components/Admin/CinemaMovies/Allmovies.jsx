@@ -10,6 +10,8 @@ import { MdAddPhotoAlternate } from "react-icons/md";
 import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { RiVideoAddFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 
 function AllMovies() {
   const [movies, setMovies] = useState([]);
@@ -27,6 +29,29 @@ function AllMovies() {
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [query, setQuery] = useState("");
+  const navigate = useNavigate(); 
+
+  const token = localStorage.getItem("jwt");
+  let decoded = jwt_decode(token);
+  let ID = decoded.id;
+
+  // get user for the cinema
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getMovies = async () => {
     setLoading(true);
@@ -197,6 +222,7 @@ function AllMovies() {
   };
 
   useEffect(() => {
+    getUser();
     getMovies();
     getCinema();
   }, []);
