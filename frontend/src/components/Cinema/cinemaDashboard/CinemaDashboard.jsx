@@ -29,7 +29,7 @@ function CinemaDashboard() {
       })
       .then((data) => {
         // console.log(data.data?.cinema.id);
-        if(data.data.role.id !== 6){
+        if(data.data.role.id !== 5){
           navigate('/home', {replace: true})
         }
         cinemaID.current = data.data?.cinema.id;

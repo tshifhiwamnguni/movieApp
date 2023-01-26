@@ -103,14 +103,14 @@ function BookingStat() {
 // get a user
   const getUser = async () => {
     await axios
-      .get(`${API}/users/${ID}?populate=cinema`, {
+      .get(`${API}/users/${ID}?populate=*`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((data) => {
-        // console.log(data.data);
-        if (data.data.role.id !== 6) {
+        console.log(data.data);
+        if (data.data.role.id !== 5) {
           navigate("/home", { replace: true });
         }
         cinemaID.current = data.data?.cinema.id;
