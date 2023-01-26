@@ -1,5 +1,5 @@
 import {useState, useRef} from "react";
-import womenKing from "../../../assets/womanKing.jpeg"
+// import womenKing from "../../../assets/womanKing.jpeg"
 import axios from "axios";
 const API = "https://strapi-movie-app.onrender.com/api";
 
