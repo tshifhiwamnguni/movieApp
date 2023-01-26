@@ -10,7 +10,7 @@ import {MdAirlineSeatReclineExtra} from 'react-icons/md'
 function BookingStatTheatre() {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const cinemaID = useRef();
+  const theatreID = useRef();
   const [bookingDate, setBookingDate] = useState('');
   const [seat, setSeat] = useState('');
   const [cinemaSeats, setCinemaSeat] = useState([]);
@@ -80,7 +80,7 @@ function BookingStatTheatre() {
     setLoading(true);
     await axios
       .get(
-        `${API}/cinema-seats?populate=*&filters[cinema]=${cinemaID.current}`,
+        `${API}/theatre-seats?populate=*&filters[cinema]=${theatreID.current}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -101,14 +101,14 @@ function BookingStatTheatre() {
 // get a user
   const getUser = async () => {
     await axios
-      .get(`${API}/users/${ID}?populate=cinema`, {
+      .get(`${API}/users/${ID}?populate=theatre`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((data) => {
         // console.log(data.data);
-        cinemaID.current = data.data?.cinema.id;
+        theatreID.current = data.data?.theatre.id;
         getBooking();
         getCinemaSeats();
       })
@@ -120,7 +120,7 @@ function BookingStatTheatre() {
   const getBooking = async () => {
     await axios
       .get(
-        `${API}/booking-cinemas?populate=*&filters[cinema]=${cinemaID.current}`,
+        `${API}/booking-theatres?populate=*&filters[theatre]=${theatreID.current}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -199,8 +199,8 @@ function BookingStatTheatre() {
                       book.attributes.users_permissions_user.data.attributes
                         .lastname}
                   </td>
-                  <td>{book.attributes.movie.data.attributes.title}</td>
-                  <td>{book.attributes?.cinema_seat?.data?.attributes?.seat}</td>
+                  <td>{book.attributes.show.data.attributes.title}</td>
+                  <td>{book.attributes?.theatre_seat?.data?.attributes?.seat}</td>
                   <td>{moment(book.attributes.bookingDate).format('YYYY-MM-DD HH:mm:ss')}</td>
                   <td>
                     {moment(book.attributes.createdAt).format(
