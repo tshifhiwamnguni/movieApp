@@ -18,7 +18,7 @@ function Review() {
   const getShow = async () => {
     setLoading(true);
     axios
-      .get(`${API}/movies/${showId}?populate=genres`, {
+      .get(`${API}/shows/${showId}?populate=genres`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
