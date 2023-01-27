@@ -117,7 +117,7 @@ function Home() {
                 Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/cimema/mov/")}>
+            <li onClick={() => navigate("/cinema/mov/")}>
               <a>
                 <TbMovie style={{ fontSize: "1.5rem" }} />
                 Movies
