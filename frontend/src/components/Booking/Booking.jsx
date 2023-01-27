@@ -29,7 +29,7 @@ useEffect(()=>{
          console.log("state: ",bookedSeat)
          setIsActive(true)
     }
-  
+
   }
 
 

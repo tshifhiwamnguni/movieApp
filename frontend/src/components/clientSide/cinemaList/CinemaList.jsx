@@ -45,15 +45,13 @@ function CinemaList() {
     console.log(index - 1);
   }
 
-  function setContextCinemaName(id) {
-    cinemaCtx._setCinemaId({
-      cinemaId: id,
-    });
+  function setCinemaId(id) {
+  localStorage.setItem("cinemaId", id)
     navigate("../movieList");
   }
 
   function close() {
-    console.log(cinemaCtx.cinemaName);
+    // console.log(cinemaCtx.cinemaName);
   }
 
   return (
@@ -81,7 +79,7 @@ function CinemaList() {
                     <button
                       className="btn btn-primary radius"
                       onClick={() => {
-                        setContextCinemaName(element.id);
+                        setCinemaId(element.id);
                       }}
                     >
                       Select

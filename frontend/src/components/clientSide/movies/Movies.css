@@ -14,3 +14,13 @@
     
     box-shadow: 0px 0px 29px 20px rgba(158,158,158,0.75);
   }
+
+  .layer {
+  
+    display: flex;   
+
+  }
+
+  .genre{
+    margin-right: 5px;
+  }
