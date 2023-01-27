@@ -35,8 +35,9 @@ function AdminProfile() {
     setLoading(true);
 
     axios
-      .get(`${API}/users/${ID}`)
+      .get(`${API}/users/${ID}?populate=*`)
       .then((data) => {
+        console.log(data)
         if (data.data.role.id !== 3) {
           navigate("/home", { replace: true });
         }
@@ -47,7 +48,8 @@ function AdminProfile() {
         setLastname(data.data.lastname);
       })
       .catch((error) => {
-        ERROR(error.response.data.error.message);
+        // ERROR(error.response.data.error.message);
+        console.log(error)
       })
       .finally(() => setLoading(false));
   }, [ID]);

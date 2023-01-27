@@ -65,13 +65,22 @@ const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
 const BookingStat = lazy(() =>
   import("./components/Cinema/cinemaBooking/BookingStat")
 );
-const Review = lazy(() => import("./components/Cinema/Reviews/Review"));
 const Payment = lazy(() => import("./components/clientSide/payment/Payment"));
 const TheatreNavbar = lazy(()=>import('./components/Theatre/TheatreNavbar/TheatreNavbar'));
 const Shows = lazy(()=>import('./components/Theatre/Shows/Shows'));
 const Snack = lazy(()=> import('./components/Theatre/Snacks/Snacks'));
 const TheatreReview = lazy(()=>import('./components/Theatre/Reviews/Reviews'));
 const BookingStatTheatre = lazy(()=>import('./components/Theatre/TheatreBooking/TheatreBooking'));
+
+const Landing = lazy(() => import("./components/Admin/dash/dash"));
+const History = lazy(() => import("./components/customers/bookingHistory/history"));
+const Review = lazy(() => import("./components/customers/review/review"));
+const Test = lazy(() => import("./components/test/test"));
+const Reviews = lazy(() => import("./components/customers/reviews/reviews"));
+const StarRatings = lazy(() => import("./components/customers/star_ratings/star_ratings"));
+const Filter = lazy(() => import("./components/customers/filterObjects/filter"));
+const Example = lazy(() => import("./components/customers/addExtras/snacks"));
+const ReviewView = lazy(()=>import('./components/Cinema/Reviews/Review'))
 
 function App() {
   return (
@@ -85,7 +94,7 @@ function App() {
           }
         >
           <Routes>
-            {/* client related routes */}
+         
 
             <Route path="login" element={<Login />}></Route>
 
@@ -99,7 +108,7 @@ function App() {
               <Route path="payment" element={<Payment />} />
             </Route>
 
-            {/* ========================================================================================================= */}
+         
 
             {/* Public routes */}
             <Route path="login" element={<Login />}></Route>
@@ -161,6 +170,16 @@ function App() {
               <Route path="stats" element={<BookingStatTheatre />} />
               <Route path="review/:showId" element={<TheatreReview />} />
             </Route>
+
+            <Route path="/landing" element={<Landing/>}></Route>
+            <Route path="/history" element={<History/>}></Route>
+            <Route path="/review" element={<Review/>}></Route>
+            <Route path="/test" element={<Test/>}></Route>
+            <Route path="/reviews" element={<Reviews/>}></Route>
+            <Route path="/stars" element={<StarRatings/>}></Route>
+            <Route path="/filter" element={<Filter/>}></Route>
+            <Route path="/snacks" element={<Example/>}></Route>
+
           </Routes>
         </Suspense>
       </Router>

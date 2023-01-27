@@ -5,6 +5,7 @@ import { API, TOKEN } from "../../environment/constant";
 import { BiRename } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
+
 import { ERROR, SUCCESS } from "../../environment/toast";
 import "./users.css";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,10 @@ function Users() {
   const [roles, setRoles] = useState([]);
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
+
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [deleteLoader, setDeleteLoader]=useState(false);
+
   const [query, setQuery] = useState("");
   const navigate = useNavigate(); 
 
@@ -58,7 +63,7 @@ function Users() {
         setUsers(data.data);
       })
       .catch((error) => {
-        ERROR(error.response.data.error.message);
+        // ERROR(error.response.data.error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -78,7 +83,7 @@ function Users() {
         setRoles(data.data.roles);
       })
       .catch((error) => {
-        ERROR(error.response.data.error.message);
+        // ERROR(error.response.data.error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -92,6 +97,12 @@ function Users() {
     setEmail(user.email);
     setUserRole(user.role.id);
     userID.current = user.id;
+
+
+    setIsBlocked(user.blocked);
+
+
+
   }
 
   const deleteUser = async () => {
@@ -123,7 +134,7 @@ function Users() {
       blocked: newBlock,
     };
 
-    console.log(newBlock);
+    // console.log(newBlock);
 
     axios
       .put(`${API}/users/${userID.current}`, blocked, {

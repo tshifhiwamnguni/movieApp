@@ -4,17 +4,19 @@ import jwt_decode from "jwt-decode";
 import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
-import {BsCalendar2Date} from 'react-icons/bs'
-import {MdAirlineSeatReclineExtra} from 'react-icons/md'
+import { BsCalendar2Date } from "react-icons/bs";
+import { MdAirlineSeatReclineExtra } from "react-icons/md";
 
 function BookingStatTheatre() {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
   const theatreID = useRef();
-  const [bookingDate, setBookingDate] = useState('');
-  const [seat, setSeat] = useState('');
+  const [bookingDate, setBookingDate] = useState("");
+  const [seat, setSeat] = useState("");
   const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
+  const [pageCount, setPageCount] = useState();
+  const [page, setPage] = useState(1);
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -22,61 +24,71 @@ function BookingStatTheatre() {
 
   // get and set selected data to the variables
   function selectedEdit(books) {
-    console.log(books)
+    console.log(books);
     setBookingDate(books.bookingDate);
-    setSeat(books.attributes?.cinema_seat?.data?.attributes?.seat)
+    setSeat(books.attributes?.cinema_seat?.data?.attributes?.seat);
     bookId.current = books.id;
-    console.log('ID from press' + bookId.current)
+    console.log("ID from press" + bookId.current);
   }
 
-  const updateBooking = () =>{
-   setLoading(true);
+  const updateBooking = () => {
+    setLoading(true);
 
     const bookingData = {
-      data:{
+      data: {
         bookingDate: bookingDate,
-        cinema_seat: parseInt(seat)
-      }
-    }
+        cinema_seat: parseInt(seat),
+      },
+    };
 
     console.log(bookingData);
-    console.log('id ' + bookId.current);
+    console.log("id " + bookId.current);
 
     let flag = false;
-    
-    bookings.forEach(element => {
+
+    bookings.forEach((element) => {
       // console.log(element);
-      if (element.attributes.cinema_seat?.data?.attributes?.seat !== seat && element.bookingDate?.substr(1,16) !== bookingDate) {
-        console.log('update');
+      if (
+        element.attributes.cinema_seat?.data?.attributes?.seat !== seat &&
+        element.bookingDate?.substr(1, 16) !== bookingDate
+      ) {
+        console.log("update");
         flag = true;
-      }else{
-        flag= false;
-        console.log('donot update')
+      } else {
+        flag = false;
+        console.log("donot update");
       }
 
-      if(flag){
-        axios.put(`${API}/booking-cinemas/${bookId.current}?populate=*`, bookingData,
-        {
-          headers:{
-            Authorization: `Bearer ${TOKEN}`
-          }
-        }).then((data)=>{
-          console.log(data.data);
-          getBooking();
-        }).catch((err)=>{
-          console.log(err)
-        }).finally(()=>{
-          setLoading(false);
-          getBooking();
-        })
+      if (flag) {
+        axios
+          .put(
+            `${API}/booking-cinemas/${bookId.current}?populate=*`,
+            bookingData,
+            {
+              headers: {
+                Authorization: `Bearer ${TOKEN}`,
+              },
+            }
+          )
+          .then((data) => {
+            console.log(data.data);
+            getBooking();
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setLoading(false);
+            getBooking();
+          });
       }
     });
 
     // console.log(bookingData)
-  }
+  };
 
   // get cinema seats
-  const getCinemaSeats = async() =>{
+  const getCinemaSeats = async () => {
     setLoading(true);
     await axios
       .get(
@@ -93,12 +105,13 @@ function BookingStatTheatre() {
       })
       .catch((err) => {
         console.log(err);
-      }).finally(()=>{
-        setLoading(false)
       })
-  }
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-// get a user
+  // get a user
   const getUser = async () => {
     await axios
       .get(`${API}/users/${ID}?populate=theatre`, {
@@ -130,11 +143,26 @@ function BookingStatTheatre() {
       .then((b) => {
         console.log(b.data.data);
         setBookings(b.data.data);
+        setPageCount(b.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  //   change page number
+  async function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  async function handlePreviousPage() {
+    setPage(page - 1);
+  }
+
+  //   request for page change
+  useEffect(() => {
+    getBooking();
+  }, [page]);
 
   useEffect(() => {
     getUser();
@@ -200,13 +228,18 @@ function BookingStatTheatre() {
                         .lastname}
                   </td>
                   <td>{book.attributes.show.data.attributes.title}</td>
-                  <td>{book.attributes?.theatre_seat?.data?.attributes?.seat}</td>
-                  <td>{moment(book.attributes.bookingDate).format('YYYY-MM-DD HH:mm:ss')}</td>
+                  <td>
+                    {book.attributes?.theatre_seat?.data?.attributes?.seat}
+                  </td>
+                  <td>
+                    {moment(book.attributes.bookingDate).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )}
+                  </td>
                   <td>
                     {moment(book.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
                     )}
-                    
                   </td>
                   <td>
                     {moment(book.attributes.updatedAt).format(
@@ -222,7 +255,6 @@ function BookingStatTheatre() {
                       >
                         Edit
                       </label>
-                      
                     </div>
                   </th>
                 </tr>
@@ -231,10 +263,26 @@ function BookingStatTheatre() {
           </tbody>
         </table>
       </div>
+      <hr />
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-primary glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-primary glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
+      </div>
 
-
-       {/* edit modal */}
-       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+      {/* edit modal */}
+      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative">
           <label
@@ -245,7 +293,6 @@ function BookingStatTheatre() {
           </label>
           <h3 className="text-lg font-bold">Edit booking</h3>
           <div className="py-4">
-            
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Movie date</span>
@@ -269,7 +316,7 @@ function BookingStatTheatre() {
               </label>
               <label className="input-group">
                 <span>
-                  <MdAirlineSeatReclineExtra/>
+                  <MdAirlineSeatReclineExtra />
                 </span>
                 <select
                   onClick={(e) => setSeat(e.target.value)}
@@ -279,7 +326,11 @@ function BookingStatTheatre() {
                     Select snack size
                   </option>
                   {cinemaSeats.map((seats) => {
-                    return <option key={seats.id} value={seats.id}>{seats.attributes.seat}</option>;
+                    return (
+                      <option key={seats.id} value={seats.id}>
+                        {seats.attributes.seat}
+                      </option>
+                    );
                   })}
                 </select>
               </label>
@@ -297,8 +348,6 @@ function BookingStatTheatre() {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }
