@@ -6,20 +6,16 @@ import axios from "axios";
 import moment from "moment";
 import {BsCalendar2Date} from 'react-icons/bs'
 import {MdAirlineSeatReclineExtra} from 'react-icons/md'
-import { useNavigate } from "react-router-dom";
 
-function BookingStat() {
+function BookingStatTheatre() {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const cinemaID = useRef();
+  const theatreID = useRef();
   const [bookingDate, setBookingDate] = useState('');
   const [seat, setSeat] = useState('');
   const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
 
-  const navigate = useNavigate(); 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
   let ID = decoded.id;
@@ -84,7 +80,7 @@ function BookingStat() {
     setLoading(true);
     await axios
       .get(
-        `${API}/cinema-seats?populate=*&filters[cinema]=${cinemaID.current}`,
+        `${API}/theatre-seats?populate=*&filters[cinema]=${theatreID.current}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -105,17 +101,14 @@ function BookingStat() {
 // get a user
   const getUser = async () => {
     await axios
-      .get(`${API}/users/${ID}?populate=*`, {
+      .get(`${API}/users/${ID}?populate=theatre`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
       .then((data) => {
-        console.log(data.data);
-        if (data.data.role.id !== 5) {
-          navigate("/home", { replace: true });
-        }
-        cinemaID.current = data.data?.cinema.id;
+        // console.log(data.data);
+        theatreID.current = data.data?.theatre.id;
         getBooking();
         getCinemaSeats();
       })
@@ -127,7 +120,7 @@ function BookingStat() {
   const getBooking = async () => {
     await axios
       .get(
-        `${API}/booking-cinemas?populate=*&filters[cinema]=${cinemaID.current}`,
+        `${API}/booking-theatres?populate=*&filters[theatre]=${theatreID.current}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -137,7 +130,6 @@ function BookingStat() {
       .then((b) => {
         console.log(b.data.data);
         setBookings(b.data.data);
-        setPageCount(b.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
@@ -147,20 +139,6 @@ function BookingStat() {
   useEffect(() => {
     getUser();
   }, []);
-
-     //   change page number
-     async function handleNextPage() {
-      setPage(page + 1);
-    }
-  
-    async function handlePreviousPage() {
-      setPage(page - 1);
-    }
-  
-    //   request for page change
-    useEffect(() => {
-      getBooking();
-    }, [page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -221,8 +199,8 @@ function BookingStat() {
                       book.attributes.users_permissions_user.data.attributes
                         .lastname}
                   </td>
-                  <td>{book.attributes.movie.data.attributes.title}</td>
-                  <td>{book.attributes?.cinema_seat?.data?.attributes?.seat}</td>
+                  <td>{book.attributes.show.data.attributes.title}</td>
+                  <td>{book.attributes?.theatre_seat?.data?.attributes?.seat}</td>
                   <td>{moment(book.attributes.bookingDate).format('YYYY-MM-DD HH:mm:ss')}</td>
                   <td>
                     {moment(book.attributes.createdAt).format(
@@ -253,23 +231,7 @@ function BookingStat() {
           </tbody>
         </table>
       </div>
-      <hr />
-        <div className="flex gap-3 justify-center mt-3">
-          <button
-            className="btn btn-primary glass"
-            onClick={handlePreviousPage}
-            disabled={page === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-primary glass"
-            onClick={handleNextPage}
-            disabled={page === pageCount}
-          >
-            Next
-          </button>
-        </div>
+
 
        {/* edit modal */}
        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
@@ -341,4 +303,4 @@ function BookingStat() {
   );
 }
 
-export default BookingStat;
+export default BookingStatTheatre;

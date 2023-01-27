@@ -25,10 +25,6 @@ function Login() {
     }
   );
 
-  function move() {
-    navigate("forgot", { replace: true });
-  }
-
   const login = async (e) => {
     e.preventDefault();
 
@@ -70,7 +66,7 @@ function Login() {
                 navigate("/admin/", { replace: true });
               }
               if(data.data.role.id === 6){
-                navigate('/theatre', {replace: true});
+                navigate('/theatre/dash', {replace: true});
               }
               if(data.data.role.id === 5){
                 navigate('/cinema/dash', {replace: true});

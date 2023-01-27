@@ -6,6 +6,7 @@ import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
 import './snacks.css'
+import { useNavigate } from "react-router-dom";
 
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
@@ -27,6 +28,7 @@ function Snacks() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
+  const navigate = useNavigate(); 
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -41,6 +43,9 @@ function Snacks() {
         },
       })
       .then((data) => {
+        if(data.data.role.id !== 5){
+            navigate('/home', {replace: true})
+          }
         cinemaID.current = data.data?.cinema.id;
         getSnacks();
         getPages();
@@ -345,7 +350,7 @@ function Snacks() {
   const getPages = async () => {
     await axios
       .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
       )
       .then((rev) => {
         // console.log(rev.data.meta.pagination);
@@ -367,13 +372,13 @@ function Snacks() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <div className="flex">
+      <div className="flex xs:flex-col md:gap-3 xs:gap-3">
       <label htmlFor="my-modal-8" className="btn btn-primary gap-2">
         <BiMoviePlay style={{ fontSize: "1.5rem" }} />
         Add snacks
       </label>
-      <div className="form-control flex-1">
-          <div className="input-group justify-end">
+      <div className="form-control lg:flex-1 md:flex-1">
+          <div className="input-group justify-end sm:justify-end">
             <input
               type="text"
               placeholder="Search…"

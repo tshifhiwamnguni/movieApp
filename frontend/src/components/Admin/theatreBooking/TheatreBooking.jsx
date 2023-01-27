@@ -3,10 +3,8 @@ import moment from "moment";
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
 import { API, TOKEN } from "../../environment/constant";
-import { RiMovie2Fill } from "react-icons/ri";
-import { MdAirlineSeatReclineNormal } from "react-icons/md";
-import { BiMoviePlay } from "react-icons/bi";
-import { SUCCESS } from "../../environment/toast";
+import { useNavigate } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 
 function TheatreBooking() {
   const [bookings, setBookings] = useState([]);
@@ -20,6 +18,29 @@ function TheatreBooking() {
   const bookId = useRef();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
+  const navigate = useNavigate(); 
+
+  const token = localStorage.getItem("jwt");
+  let decoded = jwt_decode(token);
+  let ID = decoded.id;
+
+  // get user for the cinema
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        if (data.data.role.id !== 3) {
+          navigate("/home", { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getBookings = async () => {
     setLoading(true);
@@ -113,6 +134,7 @@ function TheatreBooking() {
   }, [page]);
 
   useEffect(() => {
+    getUser();
     getBookings();
     getTheatres();
     getTheatreSeats();

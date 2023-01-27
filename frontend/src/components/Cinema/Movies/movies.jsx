@@ -62,6 +62,9 @@ function CinMovies() {
         },
       })
       .then(async (data) => {
+        if(data.data.role.id !== 5){
+            navigate('/home', {replace: true})
+          }
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })
@@ -90,11 +93,6 @@ function CinMovies() {
   async function handlePreviousPage() {
     setPage(page - 1);
   }
-
-  //   request for page change
-  useEffect(() => {
-    getMovies();
-  }, [page]);
 
   // get movies per cinema
   const getMovies = async () => {
@@ -128,6 +126,11 @@ function CinMovies() {
     setImage(mov.attributes.movieImage);
     setPrice(mov.attributes.price);
     movieId.current = mov.id;
+    mov.attributes.genres.data?.map((g) => {
+      hold.push(g.id);
+      // console.log(hold);
+    });
+    setSelectedOptions([...selectedOptions, ...hold]);
   }
 
   // get image when you click
@@ -148,6 +151,20 @@ function CinMovies() {
     };
 
     input.click();
+  };
+
+  //   clear data
+  let hold = [];
+  const clearData = () => {
+    // console.log("fdhsgjk");
+    setTitle("");
+    setDuration("");
+    setDescription("");
+    setImage("");
+    setPrice(0);
+
+    hold = [];
+    setSelectedOptions([]);
   };
 
   // updating movie data
@@ -352,8 +369,8 @@ function CinMovies() {
   // search use effect
 
   useEffect(() => {
-    setLoading(true);
     if (query) {
+      setLoading(true);
       axios
         .get(
           `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
@@ -375,18 +392,18 @@ function CinMovies() {
     } else {
       getMovies();
     }
-  }, [query]);
+  }, [query, page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <div className="flex">
-        <label htmlFor="my-modal-7" className="btn btn-primary gap-2">
+      <div className="flex xs:flex-col md:gap-3 xs:gap-3">
+        <label htmlFor="my-modal-7" className="btn btn-primary xs:w-full gap-2">
           <BiMoviePlay style={{ fontSize: "1.5rem" }} />
           Add movies
         </label>
-        <div className="form-control flex-1">
-          <div className="input-group justify-end">
+        <div className="form-control lg:flex-1 md:flex-1">
+          <div className="input-group justify-end sm:justify-end">
             <input
               type="text"
               placeholder="Search…"
@@ -561,6 +578,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-3"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -700,6 +718,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-4"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -729,6 +748,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-7"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -869,7 +889,7 @@ function CinMovies() {
             <img src={image} alt="nice" />
           </div>
           <div className="modal-action">
-            <label htmlFor="my-modal-8" className="btn">
+            <label htmlFor="my-modal-8" className="btn" onClick={clearData}>
               Done
             </label>
           </div>

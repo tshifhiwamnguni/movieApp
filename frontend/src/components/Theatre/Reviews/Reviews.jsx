@@ -4,23 +4,21 @@ import { AiTwotoneStar } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { API, TOKEN } from "../../environment/constant";
 import "./rev.css";
-import { useNavigate } from "react-router-dom";
-import jwt_decode from 'jwt-decode'
 
 function Review() {
-  const { movieId } = useParams();
+  const { showId } = useParams();
   const [loading, setLoading] = useState(false);
   const [movie, setMovie] = useState({});
   const [reviews, setReviews] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
-  const navigate = useNavigate(); 
-  //   console.log(movieId);
 
-  const getMovie = async () => {
+  //   console.log(showId);
+
+  const getShow = async () => {
     setLoading(true);
     axios
-      .get(`${API}/movies/${movieId}?populate=genres`, {
+      .get(`${API}/shows/${showId}?populate=genres`, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
@@ -54,10 +52,10 @@ function Review() {
 
     await axios
       .get(
-        `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[page]=${page}&pagination[pageSize]=6`
+        `${API}/review-theatres?populate=*&filters[show]=${showId}&pagination[page]=${page}&pagination[pageSize]=6`
       )
       .then((rev) => {
-        // console.log('rev ' ,rev.data);
+        console.log('rev ' ,rev.data);
         setReviews(rev.data.data);
         setPageCount(rev.data.meta.pagination.pageCount);
       })
@@ -69,47 +67,22 @@ function Review() {
       });
   };
 
-  const token = localStorage.getItem("jwt");
-  let decoded = jwt_decode(token);
-  let ID = decoded.id;
-
-  // get user for the cinema
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then((data) => {
-        if (data.data.role.id !== 5) {
-          navigate("/home", { replace: true });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    getUser();
-    getMovie();
+    getShow();
   }, []);
 
   return (
     <div className="hero min-h-screen mt-24">
       <div className="card card-compact bg-base-300 h-full w-full shadow-xl">
         <div className="card-body">
-          <h3 className=" card-title text-center font-bold text-4xl">
-            Reviews
-          </h3>
+          <h3 className=" card-title text-center font-bold text-4xl">Reviews</h3>
           <div className="flex justify-center">
             <div className="mt-5">
               {!loading ? (
                 <div className="flex justify-center">
                   <div className="avatar">
                     <div className="w-36 ">
-                      <img src={movie?.attributes?.movieImage} alt="Avatar" />
+                      <img src={movie?.attributes?.showImage} alt="Avatar" />
                     </div>
                   </div>
                 </div>
@@ -166,47 +139,12 @@ function Review() {
                           <div className="flex-row rating gap-1">
                             <span className="font-bold">Rating: </span>
                             <span className="badge badge-primary font-bold">
-                              {revv?.attributes?.rating === 1 ? (
-                                <div className="star">
-                                  <AiTwotoneStar />{" "}
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {revv?.attributes?.rating === 2 ? (
-                                <div className="star">
-                                  <AiTwotoneStar /> <AiTwotoneStar />
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {revv?.attributes?.rating === 3 ? (
-                                <div className="star">
-                                  <AiTwotoneStar /> <AiTwotoneStar />
-                                  <AiTwotoneStar />
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {revv?.attributes?.rating === 4 ? (
-                                <div className="star">
-                                  <AiTwotoneStar /> <AiTwotoneStar />
-                                  <AiTwotoneStar />
-                                  <AiTwotoneStar />
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {revv?.attributes?.rating === 5 ? (
-                                <div className="star">
-                                  <AiTwotoneStar /> <AiTwotoneStar />
-                                  <AiTwotoneStar />
-                                  <AiTwotoneStar />
-                                  <AiTwotoneStar />
-                                </div>
-                              ) : (
-                                ""
-                              )}
+                           
+                              { revv?.attributes?.rating ===1 ?(<div className="star"><AiTwotoneStar/> </div>): ''}
+                              { revv?.attributes?.rating ===2 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/></div>): ''}
+                              { revv?.attributes?.rating ===3 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/><AiTwotoneStar/></div>): ''}
+                              { revv?.attributes?.rating ===4 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/><AiTwotoneStar/><AiTwotoneStar/></div>): ''}
+                               { revv?.attributes?.rating ===5 ?(<div className="star"><AiTwotoneStar/> <AiTwotoneStar/><AiTwotoneStar/><AiTwotoneStar/><AiTwotoneStar/></div>): ''}
                             </span>
                           </div>
                         </div>
@@ -237,11 +175,7 @@ function Review() {
             >
               Previous
             </button>
-            <button
-              className="btn btn-primary glass"
-              onClick={handleNextPage}
-              disabled={page === pageCount}
-            >
+            <button className="btn btn-primary glass" onClick={handleNextPage} disabled={page === pageCount}>
               Next
             </button>
           </div>
@@ -252,3 +186,4 @@ function Review() {
 }
 
 export default Review;
+

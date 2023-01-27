@@ -6,12 +6,12 @@ import { BsHouse } from "react-icons/bs";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbMovie } from "react-icons/tb";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import {BsBookmarkCheck} from 'react-icons/bs'
+import { BsBookmarkCheck } from "react-icons/bs";
 // import "./navbar.css";
-import {Outlet} from "react-router-dom" ;
+import { Outlet } from "react-router-dom";
 
-function Home() {
-  const navigate = useNavigate(); 
+function TheatreNavbar() {
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
@@ -27,7 +27,7 @@ function Home() {
   const active = true;
   return (
     <>
-      <div className="drawer" data-theme='dark'>
+      <div className="drawer" data-theme="dark">
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
@@ -50,37 +50,40 @@ function Home() {
               </label>
             </div>
             <div className="flex-1 px-2 mx-2">
-              <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
-              <a className="" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
+              <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Show</a>
+              <a
+                className=""
+                style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}
+              >
                 Theatre
               </a>
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/cinema/dash/")}>
+                <li onClick={() => navigate("/theatre/dash/")}>
                   <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/snacks/")}>
+                <li onClick={() => navigate("/theatre/snacks/")}>
                   <a>
                     <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
                     Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/mov/")}>
+                <li onClick={() => navigate("/theatre/shows/")}>
                   <a>
                     <TbMovie style={{ fontSize: "1.5rem" }} />
-                    Movies
+                    Shows
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/stats/")}>
-              <a>
-                <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
-                Bookings
-              </a>
-            </li>
+                <li onClick={() => navigate("/theatre/stats/")}>
+                  <a>
+                    <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
+                    Bookings
+                  </a>
+                </li>
                 <li onClick={logout}>
                   <a>
                     <IoMdLogOut style={{ fontSize: "1.5rem" }} />
@@ -91,8 +94,7 @@ function Home() {
             </div>
           </div>
           <div className="flex justify-center align-center">
-           
-          <Outlet />
+            <Outlet />
           </div>
         </div>
 
@@ -105,25 +107,25 @@ function Home() {
             >
               <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
-            <li onClick={() => navigate("/cinema/dash/")}>
+            <li onClick={() => navigate("/theatre/dash/")}>
               <a className={active ? "active" : ""}>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
-            <li onClick={() => navigate("/cinema/snacks/")}>
+            <li onClick={() => navigate("/theatre/snacks/")}>
               <a>
                 <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
                 Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/cimema/mov/")}>
+            <li onClick={() => navigate("/theatre/shows/")}>
               <a>
                 <TbMovie style={{ fontSize: "1.5rem" }} />
-                Movies
+                Shows
               </a>
             </li>
-            <li onClick={() => navigate("/cinema/stats/")}>
+            <li onClick={() => navigate("/theatre/stats/")}>
               <a>
                 <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
                 Bookings
@@ -142,4 +144,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default TheatreNavbar;

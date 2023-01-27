@@ -7,6 +7,8 @@ import { MdEmail } from "react-icons/md";
 import { GiPlayerNext } from "react-icons/gi";
 import { ERROR, SUCCESS } from "../../environment/toast";
 import "./users.css";
+import { useNavigate } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 
 function Users() {
   const [loading, setLoading] = useState(false);
@@ -19,8 +21,29 @@ function Users() {
   const [userRole, setUserRole] = useState("");
   const userID = useRef();
   const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
+  const navigate = useNavigate(); 
+
+  const token = localStorage.getItem("jwt");
+  let decoded = jwt_decode(token);
+  let ID = decoded.id;
+
+  // get user for the cinema
+  const getUser = async () => {
+    await axios
+      .get(`${API}/users/${ID}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        if (data.data.role.id !== 3) {
+          navigate("/home", { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getUsers = async () => {
     setLoading(true);
@@ -156,6 +179,7 @@ function Users() {
   };
 
   useEffect(() => {
+    getUser();
     getUsers();
     getRoles();
   }, []);
