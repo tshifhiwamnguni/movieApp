@@ -35,7 +35,7 @@ function AdminProfile() {
     setLoading(true);
 
     axios
-      .get(`${API}/users/${ID}`)
+      .get(`${API}/users/${ID}?populate=*`)
       .then((data) => {
         if (data.data.role.id !== 3) {
           navigate("/home", { replace: true });
