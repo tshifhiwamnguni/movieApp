@@ -33,6 +33,7 @@ const AdminProfile = lazy(() =>
 const ClientSide = lazy(() => import("./components/clientSide/ClientSide"));
 
 const ClientHome = lazy(() =>
+
   import("./components/clientSide/ClientHome/clientHome")
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
@@ -71,6 +72,9 @@ const StarRatings = lazy(() => import("./components/customers/star_ratings/star_
 const Filter = lazy(() => import("./components/customers/filterObjects/filter"));
 const Example = lazy(() => import("./components/customers/addExtras/snacks"));
 
+const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'));
+const ReviewView = lazy(()=>import('./components/Cinema/Reviews/Review'))
+const Payment = lazy(()=>import('./components/clientSide/payment/Payment'))
 function App() {
   return (
     <div className="App">
@@ -94,23 +98,12 @@ function App() {
               <Route path="cinemaList" element={<CinemaList />} />
               <Route path="theatreList" element={<TheatreList />} />
               <Route path="book" element={<Booking />}></Route>
+              <Route path="payment" element={<Payment />} />
             </Route>
 
          
 
-            <Route path="customer" element={<Customer />}></Route>
-
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="/" element={<Splash />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-
-            <Route path="*" element={<Splash />}></Route>
-            {/* <Route path="/admin" element={!getToken() ? <Home /> : <Navigate to="login"/>} > */}
-            <Route path="forgot" element={<ForgotPassword />}></Route>
-            <Route path="reset" element={<ResetPassword />}></Route>
-
+    
             {/* Public routes */}
             <Route path="login" element={<Login />}></Route>
             <Route path="customer" element={<Customer />}></Route>
@@ -149,10 +142,12 @@ function App() {
                 !getToken() ? <CinemaNavbar /> : <Navigate to={"/login"} />
               }
             >
-              <Route path="cinema/" element={<Navigate replace to="dash" />} />
+              <Route path="cinema" element={<Navigate replace to="/dash/" />} />
               <Route path="dash" element={<CinemaDashboard />} />
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
+              <Route path="stats" element={<BookingStat/>}/>
+              <Route path="review/:movieId" element={<ReviewView/>}/>
             </Route>
 
             <Route path="/landing" element={<Landing/>}></Route>

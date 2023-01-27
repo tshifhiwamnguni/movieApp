@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef, useContext  } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "./CinemaList.css";
-import CinemaContext from '../../../context/CinemaContext'
+import CinemaContext from "../../../context/CinemaContext";
 import { useNavigate } from "react-router-dom";
 
-
 function CinemaList() {
-  const cinemaCtx = useContext(CinemaContext)
-  const navigate = useNavigate()
+  const cinemaCtx = useContext(CinemaContext);
+  const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
 
   const initData = {
@@ -17,7 +16,7 @@ function CinemaList() {
       name: "The Watcher",
       postalCode: "2092",
       province: "Gauteng",
-      surbub: "Auckland pack"
+      surbub: "Auckland pack",
     },
   };
   const [modelData, setModelData] = useState(initData);
@@ -46,19 +45,17 @@ function CinemaList() {
     console.log(index - 1);
   }
 
-
-
   function setContextCinemaName(id) {
     cinemaCtx._setCinemaId({
-      cinemaId:id
-    })
-    navigate('../movieList')
+      cinemaId: id,
+    });
+    navigate("../movieList");
   }
 
-  function close(){
+  function close() {
     console.log(cinemaCtx.cinemaName);
   }
-  
+
   return (
     <div className="mt-24 ">
       <div>
@@ -66,31 +63,35 @@ function CinemaList() {
         <div className="container">
           {movies.map((element) => {
             return (
-
-            
-                
-              
-              <div key={element.id}
-               className="card w-96 bg-base-100 shadow-xl">
-                <figure className="px-10 pt-10">
+              <div
+                key={element.id}
+                className="card cardMod w-96 bg-base-100 shadow-xl"
+              >
+                <figure className="">
                   <img
                     src="https://placeimg.com/400/225/arch"
                     alt="Shoes"
-                    className="rounded-xl"
+                    className=""
                   />
                 </figure>
                 <div className="card-body items-center text-center">
                   <h2 className="card-title">{element.attributes.name}</h2>
-                  <p>{element.attributes.description}</p>
 
                   <div className="card-actions">
-                    <button className="btn btn-primary" onClick={()=>{setContextCinemaName(element.id)}}>Select</button>
+                    <button
+                      className="btn btn-primary radius"
+                      onClick={() => {
+                        setContextCinemaName(element.id);
+                      }}
+                    >
+                      Select
+                    </button>
                     <label
                       onClick={() => {
                         select(element.id);
                       }}
                       htmlFor="my-modal-5"
-                      className="btn"
+                      className="btn radius"
                     >
                       view details
                     </label>
@@ -104,23 +105,27 @@ function CinemaList() {
                     <div className="modal">
                       <div className="modal-box w-11/12 max-w-5xl">
                         <h3 className="font-bold text-lg">
-                           Cinema: {modelData.attributes.name}
+                          Cinema: {modelData.attributes.name}
                         </h3>
                         <h3 className="font-bold text-lg">
                           city: {modelData.attributes.city}
                         </h3>
                         <h3 className="font-bold text-lg">
-                         Postal code:{modelData.attributes.postalCode}
+                          Postal code:{modelData.attributes.postalCode}
                         </h3>
                         <h3 className="font-bold text-lg">
                           province: {modelData.attributes.province}
                         </h3>
                         <h3 className="font-bold text-lg">
-                          suburb:  {modelData.attributes.surbub}
+                          suburb: {modelData.attributes.surbub}
                         </h3>
 
                         <div className="modal-action">
-                          <label htmlFor="my-modal-5" className="btn" onClick={close}>
+                          <label
+                            htmlFor="my-modal-5"
+                            className="btn"
+                            onClick={close}
+                          >
                             close
                           </label>
                         </div>
@@ -129,9 +134,7 @@ function CinemaList() {
                   </div>
                 </div>
               </div>
-            )
-            
-                    
+            );
           })}{" "}
         </div>
       </div>
