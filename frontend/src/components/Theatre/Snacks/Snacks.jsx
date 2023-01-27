@@ -6,7 +6,7 @@ import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
 import "./snacks.css";
-
+import { useNavigate } from "react-router-dom";
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
@@ -27,6 +27,7 @@ function Snacks() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -41,6 +42,9 @@ function Snacks() {
         },
       })
       .then(async(data) => {
+        if(data.data.role.id !== 6){
+          navigate('/home', {replace: true})
+        }
         theatreID.current = await data.data.theatre.id;
         getSnacks();
       })
