@@ -59,19 +59,15 @@ function Movies() {
   function select(index) {
     setModelData(movies[index - 1]);
     console.log(index - 1);
+    console.log('mdoel , ',modelData);
   }
 
-  function stop() {
-    console.log(iframeRef.current.contentWindow.frames);
-    iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
-  }
+  
 
 
   function selectMovie(_id) {
    
-      cinemaCtx._setMovieId({
-        movieId:_id
-      })
+     localStorage.setItem('movieId', _id)
       console.log(cinemaCtx.movieId)
       navigate('../book')
    
@@ -87,7 +83,7 @@ function Movies() {
               return (
                 <div>
                  
-               {element.attributes.cinema.data.id === cinemaID ?
+               {element.attributes.cinema.data.id == cinemaID ?
                 <div 
                   key={element.id}
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
@@ -141,15 +137,14 @@ function Movies() {
                             src="https://www.youtube.com/embed/d9MyW72ELq0"
                             title="Avatar: The Way of Water | Official Trailer"
                             frameborder="0"
-
-                          //   allow="autoplay"
+                             allow="autoplay"
                           ></iframe>
                 <p>{modelData.attributes.description}</p>
 
 
 
                           <div className="modal-action">
-                            <label onClick={stop} htmlFor="my-modal-5" className="btn radius">
+                            <label  htmlFor="my-modal-5" className="btn radius">
                               close
                             </label>
                           </div>

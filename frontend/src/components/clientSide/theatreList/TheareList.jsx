@@ -81,6 +81,7 @@ function TheareList() {
                         <label
                           onClick={() => {
                             select(element.id);
+                            console.log(element.id);
                           }}
                           htmlFor="my-modal-5"
                           className="btn radius"

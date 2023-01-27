@@ -65,10 +65,10 @@ function Plays() {
     console.log(index - 1);
   }
 
-  function stop() {
-    console.log(iframeRef.current.contentWindow.frames);
-    iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
-  }
+  // function stop() {
+  //   console.log(iframeRef.current.contentWindow.frames);
+  //   iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
+  // }
 
 
   function selectMovie(_id) {
@@ -158,22 +158,13 @@ function Plays() {
                           {modelData.attributes.title}
                         </h3>
 
-                        <iframe
-                          ref={iframeRef}
-                          width="966"
-                          height="543"
-                          src="https://www.youtube.com/embed/d9MyW72ELq0"
-                          title="Avatar: The Way of Water | Official Trailer"
-                          frameborder="0"
-
-                        //   allow="autoplay"
-                        ></iframe>
+                     
               <p>{modelData.attributes.description}</p>
 
 
 
                         <div className="modal-action">
-                          <label onClick={stop} htmlFor="my-modal-5" className="btn radius">
+                          <label htmlFor="my-modal-5" className="btn radius">
                             close
                           </label>
                         </div>
