@@ -37,6 +37,7 @@ function Movies() {
         headers: {
           Authorization:
             "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+            
   }})
       .then((response) => {
         // Handle success.
@@ -45,7 +46,7 @@ function Movies() {
   
         console.log(localStorage.getItem("cinemaId"));
         setCinemaID(localStorage.getItem("cinemaId"))
-       
+      
         setMovies(response.data.data);
       })
       .catch((error) => {
@@ -86,7 +87,7 @@ function Movies() {
               return (
                 <div>
                  
-               {element.attributes.cinema.data.id == cinemaID ?
+               {element.attributes.cinema.data.id === cinemaID ?
                 <div 
                   key={element.id}
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
