@@ -4,10 +4,9 @@ import "./spin.css";
 function Spin() {
   return (
     <>
-      <div className="hero min-h-screen spn">
-        <progress className="progress w-56"></progress>
+      <div className="loader-container" data-theme="dark">
+        <div className="loader"></div>
       </div>
-      
     </>
   );
 }
