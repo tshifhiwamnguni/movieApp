@@ -24,7 +24,7 @@ function Review() {
         },
       })
       .then((mov) => {
-        console.log('mov ' , mov.data.data);
+        console.log(mov.data);
         setMovie(mov.data.data);
       })
       .catch((err) => {
@@ -43,36 +43,22 @@ function Review() {
     setPage(page - 1);
   }
 
-  //   get pages
-  const getPages = async () => {
-    await axios
-      .get(
-        `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[pageSize]=6`
-      )
-      .then((rev) => {
-        // console.log(rev.data.meta.pagination.pageSize);
-        setPageCount(rev.data.meta.pagination.pageSize);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   useEffect(() => {
     getReviews();
   }, [page]);
   // get reviews for cinema
-  const getReviews = async (pages = 1) => {
+  const getReviews = async () => {
     setLoading(true);
-    console.log(page);
 
     await axios
       .get(
         `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[page]=${page}&pagination[pageSize]=6`
       )
       .then((rev) => {
-        console.log('rev ' ,rev.data);
+        // console.log('rev ' ,rev.data);
         setReviews(rev.data.data);
+        setPageCount(rev.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
@@ -84,12 +70,11 @@ function Review() {
 
   useEffect(() => {
     getMovie();
-    getPages();
   }, []);
 
   return (
     <div className="hero min-h-screen mt-24">
-      <div className="card card-compact bg-base-200 w-full shadow-xl">
+      <div className="card card-compact bg-base-300 h-full w-full shadow-xl">
         <div className="card-body">
           <h3 className=" card-title text-center font-bold text-4xl">Reviews</h3>
           <div className="flex justify-center">
@@ -138,9 +123,9 @@ function Review() {
                           <div className="avatar placeholder">
                             <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
                               <span className="text-3xl">
-                                {/* {revv.attribute.users_permissions_user.data.attributes.firstname
+                                {revv.attributes.users_permissions_user.data.attributes.firstname
                                   ?.slice(0, 1)
-                                  ?.toUpperCase()} */}
+                                  ?.toUpperCase()}
                               </span>
                             </div>
                           </div>
