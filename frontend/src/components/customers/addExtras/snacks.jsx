@@ -57,27 +57,32 @@ export default function Example() {
 
 
   function selectSnack(props) {
- 
-      setSelectedSnacks(selectedSnacks => [...selectedSnacks, props])
-      console.log("state: ", selectedSnacks)
+
+    setSelectedSnacks(selectedSnacks => [...selectedSnacks, props])
+    console.log("state: ", selectedSnacks)
   }
 
 
-  function handleDelete(index) {
-    console.log(index);
-    if (selectedSnacks.includes(index)) {
+  function handleDeleteSnack(data) {
+    console.log('index ', data);
+    let index = selectedSnacks.findIndex(seat => seat.id === data.id)
 
-      console.log("delete ", index);
-      const newElements = [...selectedSnacks];
-      newElements.splice(index, 1);
-      setSelectedSnacks(newElements);
-    }
-
-
+    console.log("delete ", index);
+    const newElements = [...selectedSnacks];
+    newElements.splice(index, 1);
+    setSelectedSnacks(newElements);
   }
 
 
+  function handleDeleteSeat(data) {
+    console.log('data ', data);
+    let index = seats.findIndex(seat => seat === data)
 
+    console.log("delete ", index);
+    const newElements = [...seats];
+    newElements.splice(index, 1);
+    setSeats(newElements);
+  }
 
 
 
@@ -132,7 +137,7 @@ export default function Example() {
                           <div key={i}>
                             <div className=" flex justify-between p-1">
                               <p className="flex text-2xl text-gray-500">
-                                <MdDeleteOutline onClick={() => { handleDelete(element) }} className="Md" /> seat - {element}
+                                <MdDeleteOutline onClick={()=>{handleDeleteSeat(element)}} className="Md" /> seat - {element}
                               </p>
                               <p className=" text-2xl text-gray-500">R100,00</p>
                             </div>
@@ -159,7 +164,7 @@ export default function Example() {
                             <div key={i}>
                               <div className=" flex justify-between p-1">
                                 <p className="flex text-2xl text-gray-500">
-                                  <MdDeleteOutline onClick={() => { handleDelete(element) }} className="Md" /> {element.attributes.name}, {element.attributes.snackSize}
+                                  <MdDeleteOutline onClick={() => { handleDeleteSnack(element) }} className="Md" /> {element.attributes.name}, {element.attributes.snackSize}
                                 </p>
                                 <p className=" text-2xl text-gray-500">R{element.attributes.price}</p>
                               </div>
