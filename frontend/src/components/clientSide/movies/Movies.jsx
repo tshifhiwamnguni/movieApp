@@ -45,6 +45,9 @@ function Movies() {
         console.log(response.data.data)
   
         console.log(localStorage.getItem("cinemaId"));
+        console.log(localStorage.getItem("cinemaData"))
+        const cinemaData = localStorage.getItem("cinemaData")
+        console.log('data ' ,cinemaData)
         setCinemaID(localStorage.getItem("cinemaId"))
       
         setMovies(response.data.data);
@@ -57,8 +60,8 @@ function Movies() {
 
 
   function select(index) {
-    setModelData(movies[index - 1]);
-    console.log(index - 1);
+    setModelData(index);
+    console.log(index);
     console.log('mdoel , ',modelData);
   }
 
@@ -78,14 +81,14 @@ function Movies() {
         <div>
           <h1 className="text-center text-5xl font-bold mb-4">Movies</h1>
           <div className="container">
-            {movies.map((element) => {
+            {movies.map((element,k) => {
               
               return (
                 <div>
                  
                {element.attributes.cinema.data.id == cinemaID ?
                 <div 
-                  key={element.id}
+                  key={k}
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
                 >
                   
@@ -100,8 +103,8 @@ function Movies() {
                     <h2 className="card-title">{element.attributes.title}</h2>
                     <div className="layer">
                     {element.attributes.genres.data.map(
-            el=>{
-               return<div className="genre">{el.attributes.name}  </div>;
+            (el,i)=>{
+               return<div key={i} className="genre">{el.attributes.name}  </div>;
             }
           )}
           </div>
@@ -110,7 +113,7 @@ function Movies() {
                       <button className="btn btn-primary radius" onClick={()=>{selectMovie(element.id)}}>book now</button>
                       <label
                         onClick={() => {
-                          select(element.id);
+                          select(element);
                         }}
                         htmlFor="my-modal-5"
                         className="btn radius"
@@ -136,7 +139,7 @@ function Movies() {
                             height="543"
                             src="https://www.youtube.com/embed/d9MyW72ELq0"
                             title="Avatar: The Way of Water | Official Trailer"
-                            frameborder="0"
+                            frameBorder="0"
                              allow="autoplay"
                           ></iframe>
                 <p>{modelData.attributes.description}</p>

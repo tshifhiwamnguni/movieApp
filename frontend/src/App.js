@@ -183,7 +183,7 @@ function App() {
             <Route path="/reviews" element={<Reviews/>}></Route>
             <Route path="/stars" element={<StarRatings/>}></Route>
             <Route path="/filter" element={<Filter/>}></Route>
-            <Route path="/snacks" element={<Example/>}></Route>
+            <Route path="/snackss" element={<Example/>}></Route>
 
           </Routes>
         </Suspense>

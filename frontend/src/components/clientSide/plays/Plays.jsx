@@ -61,8 +61,8 @@ function Plays() {
 
 
   function select(index) {
-    setModelData(plays[index - 1]);
-    console.log(index - 1);
+    setModelData(index);
+    console.log(index);
   }
 
   // function stop() {
@@ -71,7 +71,7 @@ function Plays() {
   // }
 
 
-  function selectMovie(_id) {
+  function selectPlay(_id) {
    
       // cinemaCtx._setMovieId({
       //   movieId:_id
@@ -135,10 +135,10 @@ function Plays() {
           </div>
 
                   <div className="card-actions">
-                    <button className="btn btn-primary radius" onClick={()=>{selectMovie(element.id)}}>book now</button>
+                    <button className="btn btn-primary radius" onClick={()=>{selectPlay(element.id)}}>book now</button>
                     <label
                       onClick={() => {
-                        select(element.id);
+                        select(element);
                       }}
                       htmlFor="my-modal-5"
                       className="btn radius"

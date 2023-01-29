@@ -46,7 +46,19 @@ function CinemaList() {
   }
 
   function setCinemaId(id) {
-  localStorage.setItem("cinemaId", id)
+    localStorage.setItem("cinemaId", id.id)
+
+
+
+
+    let data = {
+      city: id.attributes.city,
+      name:id.attributes.name,
+      province:id.attributes.province,
+      surbub:id.attributes.province
+    }
+    console.log(data)
+    localStorage.setItem("cinemaData", data)
     navigate("../movieList");
   }
 
@@ -59,10 +71,10 @@ function CinemaList() {
       <div>
         <h1 className="text-center text-5xl font-bold mb-4">Cinema list</h1>
         <div className="container">
-          {movies.map((element) => {
+          {movies.map((element, k) => {
             return (
               <div
-                key={element.id}
+                key={k}
                 className="card cardMod w-96 bg-base-100 shadow-xl"
               >
                 <figure className="">
@@ -79,7 +91,7 @@ function CinemaList() {
                     <button
                       className="btn btn-primary radius"
                       onClick={() => {
-                        setCinemaId(element.id);
+                        setCinemaId(element);
                       }}
                     >
                       Select

@@ -35,7 +35,7 @@ useEffect(()=>{
 
   function book() {
     console.log(bookedSeat);
-    naviage('../payment')
+    naviage('../../snackss')
 
   }
 
