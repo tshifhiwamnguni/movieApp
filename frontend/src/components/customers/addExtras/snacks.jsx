@@ -17,13 +17,33 @@ export default function Example() {
   const [cinemaLocation, setCinemaLocation] = useState()
   const [cinemaId, setCinemaId] = useState()
   const [selectedSnacks, setSelectedSnacks] = useState([])
+  const [movieName, setMovieName] = useState()
+  const [movieImage, setMovieImage] = useState()
+  const [totalPrice, setTotalPrice] = useState()
 
-
-
-
+  const [refresh, setRefresh] = useState(true)
 
 
   useEffect(() => {
+   
+     axios.get('https://strapi-movie-app.onrender.com/api/cinema-snacks?populate=*', {
+      headers: {
+        Authorization:
+          "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+
+      }
+    })
+      .then((res) => {
+        setTotalPrice(price * seats.length)
+        console.log(res.data.data);
+        setSnack(res.data.data)
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      
     console.log('locatiobn ', localStorage.getItem('cinemaLocation'));
     console.log('id ', localStorage.getItem('cinemaId'));
     console.log('name ', localStorage.getItem('cinemaName'));
@@ -34,32 +54,45 @@ export default function Example() {
     setCinemaId(localStorage.getItem('cinemaId'))
     setCinemaName(localStorage.getItem('cinemaName'))
     setSeats(localStorage.getItem('seats').split(','))
+    setPrice(localStorage.getItem('moviePrice'))
+    setMovieName(localStorage.getItem('movieName'))
+    setMovieImage(localStorage.getItem('movieImage'))
 
 
-    axios.get('https://strapi-movie-app.onrender.com/api/cinema-snacks?populate=*', {
-      headers: {
-        Authorization:
-          "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+   
+  setTotalPrice(getTotal())
 
-      }
-    })
-      .then((res) => {
-        console.log(res.data.data);
-        setSnack(res.data.data)
-
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, []);
 
+ 
 
+  function call() {
+    setRefresh(!refresh)
+    console.log("first")
+  }
+
+  useEffect(() => {
+    setTotalPrice(getTotal())
+    console.log('logger', totalPrice);
+  }, [refresh])
+
+  useEffect(() => {
+    function delay(){
+      setTimeout(() => {
+    call()
+
+      }, 2000);
+    }
+    delay()
+  }, [])
 
 
   function selectSnack(props) {
 
     setSelectedSnacks(selectedSnacks => [...selectedSnacks, props])
-    console.log("state: ", selectedSnacks)
+
+    // setTotalPrice(getTotal() )
+    setRefresh(!refresh)
   }
 
 
@@ -71,6 +104,7 @@ export default function Example() {
     const newElements = [...selectedSnacks];
     newElements.splice(index, 1);
     setSelectedSnacks(newElements);
+
   }
 
 
@@ -82,8 +116,31 @@ export default function Example() {
     const newElements = [...seats];
     newElements.splice(index, 1);
     setSeats(newElements);
+
   }
 
+
+
+  function getTotal() {
+    let snacks = getSnackTotal()
+    let seats = getSeatTotal()
+    let total = seats + snacks
+    return total
+  }
+
+  function getSeatTotal() {
+    let seatPrice = price * seats.length
+
+    return seatPrice
+
+  }
+  function getSnackTotal() {
+    let totalSnack = 0;
+    selectedSnacks.map(element => {
+      totalSnack += element.attributes.price
+    })
+    return totalSnack
+  }
 
 
   return (
@@ -105,13 +162,13 @@ export default function Example() {
                       >
                         <img
                           className="h-12 w-16"
-                          src={womenKing}
+                          src={movieImage}
                           alt="movie poster"
                         />
                       </label>
                       <div className="mt-1 flex rounded shadow-sm">
                         <h2 className="h-12 w-auto text-center text-2xl font-bold text-gray-900">
-                          Pirates of the carribean
+                          {movieName} {price}
                         </h2>
                       </div>
                     </div>
@@ -137,7 +194,11 @@ export default function Example() {
                           <div key={i}>
                             <div className=" flex justify-between p-1">
                               <p className="flex text-2xl text-gray-500">
-                                <MdDeleteOutline onClick={()=>{handleDeleteSeat(element)}} className="Md" /> seat - {element}
+                                <MdDeleteOutline onClick={() => {
+                                  handleDeleteSeat(element)
+                                  setRefresh(!refresh)
+
+                                }} className="Md" /> seat - {element}
                               </p>
                               <p className=" text-2xl text-gray-500">R100,00</p>
                             </div>
@@ -179,7 +240,9 @@ export default function Example() {
                     </div>
                     <div className="flex justify-between">
                       <div></div>
-                      <span className="text-2xl font-bold text-gray-900">Total</span>
+                      <div>
+                        <span className="text-2xl font-bold text-gray-900">Total</span><br />
+                        R{totalPrice} </div>
                     </div>
 
 
@@ -206,6 +269,10 @@ export default function Example() {
 
                     <button
                       type="button"
+                      onClick={() => {
+                        setTotalPrice(getTotal())
+                        console.log('checkout');
+                      }}
                       className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8"
                     >
                       Checkout
@@ -260,6 +327,7 @@ export default function Example() {
                                 >
                                   <BsFillPlusSquareFill className="text-2xl" />
                                   <h1 onClick={() => {
+                                    setTotalPrice(getTotal())
                                     selectSnack(element)
                                   }}>Add snakc</h1>
                                 </button>

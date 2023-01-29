@@ -70,10 +70,12 @@ function Movies() {
   
 
 
-  function selectMovie(_id) {
-   
-     localStorage.setItem('movieId', _id)
-   
+  function selectMovie(data) {
+   console.log(data);
+     localStorage.setItem('movieId', data.id)
+    localStorage.setItem('moviePrice', data.attributes.price)
+    localStorage.setItem('movieName', data.attributes.title)
+    localStorage.setItem('movieImage', data.attributes.movieImage)
       navigate('../book')
    
   }
@@ -112,7 +114,7 @@ function Movies() {
           </div>
 
                     <div className="card-actions">
-                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element.id)}}>book now</button>
+                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element)}}>book now</button>
                       <label
                         onClick={() => {
                           select(element);
