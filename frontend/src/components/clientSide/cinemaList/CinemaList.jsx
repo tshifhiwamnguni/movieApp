@@ -3,6 +3,7 @@ import axios from "axios";
 import "./CinemaList.css";
 import CinemaContext from "../../../context/CinemaContext";
 import { useNavigate } from "react-router-dom";
+import { MdLocalGasStation } from "react-icons/md";
 
 function CinemaList() {
   const cinemaCtx = useContext(CinemaContext);
@@ -48,17 +49,14 @@ function CinemaList() {
   function setCinemaId(id) {
     localStorage.setItem("cinemaId", id.id)
 
+  
+    console.log(id.attributes);
+    
+    localStorage.setItem("cinemaName", id.attributes.name)
+    localStorage.setItem("cinemaLocation", id.attributes.surbub)
+    // console.log(id.attributes.name)
+    // console.log(id.attributes.surbub)
 
-
-
-    let data = {
-      city: id.attributes.city,
-      name:id.attributes.name,
-      province:id.attributes.province,
-      surbub:id.attributes.province
-    }
-    console.log(data)
-    localStorage.setItem("cinemaData", data)
     navigate("../movieList");
   }
 

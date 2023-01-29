@@ -45,9 +45,11 @@ function Movies() {
         console.log(response.data.data)
   
         console.log(localStorage.getItem("cinemaId"));
-        console.log(localStorage.getItem("cinemaData"))
-        const cinemaData = localStorage.getItem("cinemaData")
-        console.log('data ' ,cinemaData)
+        console.log(localStorage.getItem("cinemaName"))
+        console.log(localStorage.getItem("cinemaLocation"))
+   
+       
+        
         setCinemaID(localStorage.getItem("cinemaId"))
       
         setMovies(response.data.data);
@@ -71,7 +73,7 @@ function Movies() {
   function selectMovie(_id) {
    
      localStorage.setItem('movieId', _id)
-      console.log(cinemaCtx.movieId)
+   
       navigate('../book')
    
   }

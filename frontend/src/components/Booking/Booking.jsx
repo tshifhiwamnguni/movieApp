@@ -34,7 +34,13 @@ useEffect(()=>{
 
 
   function book() {
+
+
+
     console.log(bookedSeat);
+
+    localStorage.setItem("seats", bookedSeat)
+    console.log("booked " ,   localStorage.getItem('seats'))
     naviage('../../snackss')
 
   }
