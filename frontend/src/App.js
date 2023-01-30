@@ -18,13 +18,13 @@ const CinemaBooking = lazy(() =>
   import("./components/Admin/cinemaBooking/CinemaBooking")
 );
 const Dashboard = lazy(() => import("./components/Admin/dash/dash"));
-const Login = lazy(() => import("./components/login/login"));
+const Login = lazy(() => import("./components/auth/login/login"));
 const Home = lazy(() => import("./components/Admin/Navbar/navbar"));
 const ForgotPassword = lazy(() =>
-  import("./components/passwords/forgot_password/ForgotPassword")
+  import("./components/auth/passwords/forgot_password/ForgotPassword")
 );
 const ResetPassword = lazy(() =>
-  import("./components/passwords/reset_password/ResetPassword")
+  import("./components/auth/passwords/reset_password/ResetPassword")
 );
 const Booking = lazy(() => import("./components/Booking/Booking"));
 const AdminProfile = lazy(() =>
@@ -36,6 +36,7 @@ const ClientHome = lazy(() =>
   import("./components/clientSide/ClientHome/clientHome")
 );
 const Movies = lazy(() => import("./components/clientSide/movies/Movies"));
+const Plays = lazy(() => import("./components/clientSide/plays/Plays"));
 
 // client side lazyLoads
 const CinemaList = lazy(() =>
@@ -46,7 +47,7 @@ const TheatreList = lazy(() =>
 );
 
 const Splash = lazy(() => import("./components/splashpage/Splash"));
-const Register = lazy(() => import("./components/register/Register"));
+const Register = lazy(() => import("./components/auth/register/Register"));
 const Customer = lazy(() => import("./components/Customer/Customer"));
 const CinemaDashboard = lazy(() =>
   import("./components/Cinema/cinemaDashboard/CinemaDashboard")
@@ -62,10 +63,7 @@ const CinemaNavbar = lazy(() =>
   import("./components/Cinema/CinemaNavbar/CinemaNavbar")
 );
 const CinMovies = lazy(() => import("./components/Cinema/Movies/movies"));
-const BookingStat = lazy(() =>
-  import("./components/Cinema/cinemaBooking/BookingStat")
-);
-const Payment = lazy(() => import("./components/clientSide/payment/Payment"));
+
 const TheatreNavbar = lazy(()=>import('./components/Theatre/TheatreNavbar/TheatreNavbar'));
 const Shows = lazy(()=>import('./components/Theatre/Shows/Shows'));
 const Snack = lazy(()=> import('./components/Theatre/Snacks/Snacks'));
@@ -81,6 +79,11 @@ const StarRatings = lazy(() => import("./components/customers/star_ratings/star_
 const Filter = lazy(() => import("./components/customers/filterObjects/filter"));
 const Example = lazy(() => import("./components/customers/addExtras/snacks"));
 const ReviewView = lazy(()=>import('./components/Cinema/Reviews/Review'))
+const BookingStat = lazy(()=>import('./components/Cinema/cinemaBooking/BookingStat'));
+
+const Payment = lazy(()=>import('./components/clientSide/payment/Payment'))
+const PreReg = lazy(()=>import('./components/auth/preRegistration/RegistrationSelector'))
+
 
 function App() {
   return (
@@ -97,15 +100,17 @@ function App() {
          
 
             <Route path="login" element={<Login />}></Route>
-
+          <Route path="pre" element={<PreReg />}></Route>
             <Route path="/client" element={<ClientSide />}>
               {/* <Route path="/client" element={<Navigate replace to='clientHome' />} /> */}
               <Route path="clientHome" element={<ClientHome />} />
               <Route path="movieList" element={<Movies />} />
+              <Route path="plays" element={<Plays />} />
               <Route path="cinemaList" element={<CinemaList />} />
               <Route path="theatreList" element={<TheatreList />} />
               <Route path="book" element={<Booking />}></Route>
               <Route path="payment" element={<Payment />} />
+              
             </Route>
 
          
@@ -178,7 +183,7 @@ function App() {
             <Route path="/reviews" element={<Reviews/>}></Route>
             <Route path="/stars" element={<StarRatings/>}></Route>
             <Route path="/filter" element={<Filter/>}></Route>
-            <Route path="/snacks" element={<Example/>}></Route>
+            <Route path="/snackss" element={<Example/>}></Route>
 
           </Routes>
         </Suspense>

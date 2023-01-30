@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 const cors = require("cors"); //import cors module
-const { resolve } = require("path");
+
 
 const bodyParser = require('body-parser')
-const routes = require("./routes")
+
 app.use(express.json()); 
 
 app.use(bodyParser.json())
@@ -13,6 +13,7 @@ app.use(
         extended: true
     })
 );
+const routes = require("./routes")
 app.use("/", routes) // User endpoint API
 
 app.use(cors());
@@ -58,7 +59,7 @@ app.post("/create-payment-intent", async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "EUR",
-  
+      amount: addCash(),
       automatic_payment_methods: { enabled: false },
     });
 

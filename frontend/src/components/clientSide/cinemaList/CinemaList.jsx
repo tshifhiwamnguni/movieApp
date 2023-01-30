@@ -3,6 +3,7 @@ import axios from "axios";
 import "./CinemaList.css";
 import CinemaContext from "../../../context/CinemaContext";
 import { useNavigate } from "react-router-dom";
+import { MdLocalGasStation } from "react-icons/md";
 
 function CinemaList() {
   const cinemaCtx = useContext(CinemaContext);
@@ -45,15 +46,22 @@ function CinemaList() {
     console.log(index - 1);
   }
 
-  function setContextCinemaName(id) {
-    cinemaCtx._setCinemaId({
-      cinemaId: id,
-    });
+  function setCinemaId(id) {
+    localStorage.setItem("cinemaId", id.id)
+
+  
+    console.log(id.attributes);
+    
+    localStorage.setItem("cinemaName", id.attributes.name)
+    localStorage.setItem("cinemaLocation", id.attributes.surbub)
+    // console.log(id.attributes.name)
+    // console.log(id.attributes.surbub)
+
     navigate("../movieList");
   }
 
   function close() {
-    console.log(cinemaCtx.cinemaName);
+    // console.log(cinemaCtx.cinemaName);
   }
 
   return (
@@ -61,10 +69,10 @@ function CinemaList() {
       <div>
         <h1 className="text-center text-5xl font-bold mb-4">Cinema list</h1>
         <div className="container">
-          {movies.map((element) => {
+          {movies.map((element, k) => {
             return (
               <div
-                key={element.id}
+                key={k}
                 className="card cardMod w-96 bg-base-100 shadow-xl"
               >
                 <figure className="">
@@ -81,7 +89,7 @@ function CinemaList() {
                     <button
                       className="btn btn-primary radius"
                       onClick={() => {
-                        setContextCinemaName(element.id);
+                        setCinemaId(element);
                       }}
                     >
                       Select

@@ -1,14 +1,19 @@
 import { MdEmail } from "react-icons/md";
-import { IoCall } from "react-icons/io5";
+
 import { BiRename } from "react-icons/bi";
+import { MdLocationOn } from "react-icons/md";
 import {AiFillLock} from "react-icons/ai"
 import axios from "axios";
-import { API } from "../environment/constant";
-import { getToken } from "../environment/helpers";
+import { API } from "../../environment/constant";
+import { getToken } from "../../environment/helpers";
 import jwt_decode from "jwt-decode";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-function Register() {
+
+function TheatreForm() {
+
+
+
 
 
     const [password, setPassword] =useState(0)
@@ -48,15 +53,17 @@ function Register() {
       });
     
   };
+
+
   return (
     <div className="hero min-h-screen flex justify-center align-middle">
     <div className="card w-96 card-compact bg-base-100 shadow-xl">
       <div className="card-body">
-        <h1 className="text-center text-5xl font-bold">Register</h1>
+        <h1 className="text-center text-5xl font-bold">Register a Theatre</h1>
         <form>
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">name</span>
             </label>
             <label className="input-group">
               <span>
@@ -74,7 +81,7 @@ function Register() {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Username</span>
+              <span className="label-text">suburb</span>
             </label>
             <label className="input-group">
               <span>
@@ -92,7 +99,7 @@ function Register() {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">password</span>
+              <span className="label-text">city</span>
             </label>
             <label className="input-group">
               <span>
@@ -110,11 +117,11 @@ function Register() {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Cellphone</span>
+              <span className="label-text">province</span>
             </label>
             <label className="input-group">
               <span>
-                <IoCall style={{ fontSize: "1.5rem" }} />
+                <MdLocationOn style={{ fontSize: "1.5rem" }} />
               </span>
               <input
                 type="tel"
@@ -126,9 +133,26 @@ function Register() {
             </label>
           </div>
 
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">postal code</span>
+            </label>
+            <label className="input-group">
+              <span>
+                <MdLocationOn style={{ fontSize: "1.5rem" }} />
+              </span>
+              <input
+                type="tel"
+                placeholder="e.g 0712345678"
+                className="input input-bordered input-primary w-full"
+                value={cellphone}
+                onChange={(e)=>setPhone(e.target.value)}
+              />
+            </label>
+          </div>
           <div className="flex justify-start mt-9">
             <button className="btn btn-primary" onClick={update}>
-              register
+              Next
             </button>
            
           </div> <span>Already have an account?  <Link className="link"  to={'/login'}>login</Link></span>
@@ -139,4 +163,4 @@ function Register() {
   )
 }
 
-export default Register
+export default TheatreForm
