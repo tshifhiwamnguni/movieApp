@@ -125,7 +125,7 @@ const Reviews = () => {
                         {timestamp || "3 mins ago"}
                       </small>
                     </CardText>
-                    <Greeting rating={stars}/>
+                    {/* <Greeting rating={stars}/> */}
                   </div>
                 </div>
 

@@ -11,8 +11,8 @@ function Review() {
     const [title, setTitle] = useState('')
     const [username, setUsername] = useState('') 
     const [poster, setPoster] = useState('')
-    const [movieid, setMovieid] = useState(0) 
-    const [movie, setMovie] = useState(0)
+    // const [movieid, setMovieid] = useState(0) 
+    // const [movie, setMovie] = useState(0)
      
 
     axios.get('https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*').then((response) => {
@@ -20,9 +20,9 @@ function Review() {
         setTitle(response.data.data[0].attributes.movie.data.attributes.title)
         setUsername(response.data.data[0].attributes.users_permissions_user.data.attributes.username)
         setPoster(response.data.data[0].attributes.movie.data.attributes.movieImage)
-        setMovieid(response.data.data[0].attributes.movie.data.id)
+        // setMovieid(response.data.data[0].attributes.movie.data.id)
         console.log(response.data.data[0].attributes.movie.data.id);
-        let movie = response.data.data[0].attributes.movie.data.id
+        // setMovie = response.data.data[0].attributes.movie.data.id
     }).catch((error) => {
         console.log(error);
     });
@@ -30,7 +30,7 @@ function Review() {
     const addReview = () => {
        
         axios.post('https://strapi-movie-app.onrender.com/api/review-cinemas', 
-        {rating: ratings, comment: reviews, movie: movieid }).then((response) => {
+        {rating: ratings, comment: reviews }).then((response) => {
             console.log(response);
             console.log("response revieved")
         }).catch((error) => {
@@ -75,7 +75,7 @@ function Review() {
 
                             <div>
                                 <label className="text-xl">Firstname</label>
-                                <input  id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" value={username} onChange={(e) => console.log("hello")}/>
+                                <input  id="firstname" name="firstname" type="text" required className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="enter first name" value={username} onChange={(e) => console.log("hello")} readOnly/>
                             </div>
 
                             <div>
