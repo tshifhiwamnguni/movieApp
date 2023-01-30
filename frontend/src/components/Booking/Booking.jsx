@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
+
+
 import "./Booking.css";
 
 function Booking() {
-
+const naviage = useNavigate()
   const [bookedSeat, setBookedSeat] = useState([])
 const  [isActive,setIsActive]=useState(false)
 
@@ -26,12 +29,19 @@ useEffect(()=>{
          console.log("state: ",bookedSeat)
          setIsActive(true)
     }
-  
+
   }
 
 
-  function name() {
+  function book() {
+
+
+
     console.log(bookedSeat);
+
+    localStorage.setItem("seats", bookedSeat)
+    console.log("booked " ,   localStorage.getItem('seats'))
+    naviage('../../snackss')
 
   }
 
@@ -68,7 +78,7 @@ useEffect(()=>{
         </div>
       </div>
     <div className="flex mt-10">
-    <button className="text-center text-5xl font-bold mb-4 btn " onClick={name} >  book  </button>
+    <button className="text-center text-5xl font-bold mb-4 btn btn-primary radius" onClick={book} >  book  </button>
     </div>
     </div>
     </>

@@ -6,6 +6,7 @@ import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
 import './snacks.css'
+import { useNavigate } from "react-router-dom";
 
 import { BiRename } from "react-icons/bi";
 import { TbFileDescription } from "react-icons/tb";
@@ -24,6 +25,10 @@ function Snacks() {
   const [snacksSize, setSnackSize] = useState("");
   const [image, setImage] = useState();
   const snackImageUrl = useRef("");
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
+  const navigate = useNavigate(); 
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -38,8 +43,12 @@ function Snacks() {
         },
       })
       .then((data) => {
+        if(data.data.role.id !== 5){
+            navigate('/home', {replace: true})
+          }
         cinemaID.current = data.data?.cinema.id;
         getSnacks();
+        getPages();
       })
       .catch((err) => {
         console.log(err);
@@ -51,7 +60,7 @@ function Snacks() {
     setSnackName(snc.attributes.name);
     setSnackPrice(snc.attributes.price);
     setSnackQuantity(snc.attributes.quantity);
-    setImage(snc.attributes.snackImage)
+    setImage(snc.attributes.snackImage);
     snackID.current = snc.id;
   }
 
@@ -73,6 +82,7 @@ function Snacks() {
       .finally(() => {
         setLoading(false);
         getSnacks();
+        getPages();
       });
   };
 
@@ -220,6 +230,7 @@ function Snacks() {
       .finally(() => {
         setLoading(false);
         getSnacks();
+        getPages();
 
         setSnackName("");
         setSnackPrice(0);
@@ -228,6 +239,7 @@ function Snacks() {
         setSnackSize("");
       });
   };
+
   // updating snacks data
   const updateSnack = () => {
     setLoading(true);
@@ -241,6 +253,7 @@ function Snacks() {
       },
     };
 
+    console.log(snackData);
     axios
       .put(`${API}/cinema-snacks/${snackID.current}?populate=*`, snackData, {
         headers: {
@@ -256,6 +269,7 @@ function Snacks() {
       .finally(() => {
         setLoading(false);
         getSnacks();
+        getPages();
 
         setSnackName("");
         setSnackPrice(0);
@@ -270,7 +284,7 @@ function Snacks() {
     setLoading(true);
     await axios
       .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*`,
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -293,6 +307,60 @@ function Snacks() {
     getUser();
   }, []);
 
+
+//   search useeffect
+  useEffect(() => {
+    setLoading(true);
+    if(query){
+    axios
+      .get(
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
+      .then((movie) => {
+        setSnacks(movie.data.data);
+        console.log(movie.data)
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+    }else{
+        getSnacks();
+    }
+  }, [query]);
+
+    //   change page number
+    async function handleNextPage() {
+        setPage(page + 1);
+      }
+    
+      async function handlePreviousPage() {
+        setPage(page - 1);
+      }
+    
+      //   request for page change
+      useEffect(() => {
+        getSnacks();
+      }, [page]);
+
+        //   get pages
+  const getPages = async () => {
+    await axios
+      .get(
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
+      )
+      .then((rev) => {
+        // console.log(rev.data.meta.pagination);
+        setPageCount(rev.data.meta.pagination.pageCount);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const snackSize = [
     { value: "small", name: "Small" },
     { value: "Medium", name: "Medium" },
@@ -304,10 +372,39 @@ function Snacks() {
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
+      <div className="flex xs:flex-col md:gap-3 xs:gap-3">
       <label htmlFor="my-modal-8" className="btn btn-primary gap-2">
         <BiMoviePlay style={{ fontSize: "1.5rem" }} />
         Add snacks
       </label>
+      <div className="form-control lg:flex-1 md:flex-1">
+          <div className="input-group justify-end sm:justify-end">
+            <input
+              type="text"
+              placeholder="Search…"
+              className="input input-bordered"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button className="btn btn-square">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        </div>
       <h1 className="text-center font-bold text-3xl mb-4">Snacks</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
@@ -366,7 +463,7 @@ function Snacks() {
                   <td>{snack.attributes.name}</td>
                   <td>{"R" + snack.attributes.price}</td>
                   <td>{snack.attributes.quantity}</td>
-                  <th>{snack.attributes.snackSize}</th>
+                  <td>{snack.attributes.snackSize}</td>
                   <td>
                     {moment(snack.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
@@ -402,6 +499,23 @@ function Snacks() {
         </table>
       </div>
 
+      <hr />
+        <div className="flex gap-3 justify-center mt-3">
+          <button
+            className="btn btn-primary glass"
+            onClick={handlePreviousPage}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <button
+            className="btn btn-primary glass"
+            onClick={handleNextPage}
+            disabled={page === pageCount}
+          >
+            Next
+          </button>
+        </div>
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
@@ -496,14 +610,11 @@ function Snacks() {
                   <IoMdTime />
                 </span>
                 <select
-                  onClick={(e) => setSnackSize(e.target.value)}
+                  onChange={(e) => setSnackSize(e.target.value)}
                   className="select select-info w-full max-w-xs"
                 >
-                  <option disabled selected>
-                    Select snack size
-                  </option>
                   {snackSize.map((snack) => {
-                    return <option key={snack.value}>{snack.name}</option>;
+                    return <option key={snack.value} value={snack.value}>{snack.name}</option>;
                   })}
                 </select>
               </label>
@@ -616,7 +727,7 @@ function Snacks() {
                     Select snack size
                   </option>
                   {snackSize.map((snack) => {
-                    return <option key={snack.value}>{snack.name}</option>;
+                    return <option key={snack.value} value={snack.value}>{snack.name}</option>;
                   })}
                 </select>
               </label>

@@ -1,9 +1,9 @@
 import { React, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { ERROR, SUCCESS } from "../../environment/toast";
+import { ERROR, SUCCESS } from "../../../environment/toast";
 import { ToastContainer } from "react-toastify";
-import Bac from "../../back/back";
+import Bac from "../../../back/back";
 
 
 function ResetPassword() {

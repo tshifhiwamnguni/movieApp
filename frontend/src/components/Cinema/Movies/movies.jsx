@@ -11,6 +11,7 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -26,6 +27,11 @@ function CinMovies() {
   const [cinemaName, setCinemaName] = useState("");
   const [genre, setGenres] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [price, setPrice] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
 
   // checkbox for genres
   const handleCheckboxChange = async (event) => {
@@ -55,7 +61,10 @@ function CinMovies() {
           Authorization: `Bearer ${TOKEN}`,
         },
       })
-      .then((data) => {
+      .then(async (data) => {
+        if(data.data.role.id !== 5){
+            navigate('/home', {replace: true})
+          }
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })
@@ -76,16 +85,30 @@ function CinMovies() {
       .catch((error) => {});
   };
 
+  //   change page number
+  async function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  async function handlePreviousPage() {
+    setPage(page - 1);
+  }
+
   // get movies per cinema
   const getMovies = async () => {
     setLoading(true);
     await axios
-      .get(`${API}/movies?filters[cinema]=${cinemaID.current}&populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+      .get(
+        `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
       .then((movie) => {
+        // console.log(movie.data);
+        setPageCount(movie.data.meta.pagination.pageCount);
         setMovies(movie.data.data);
         setCinemaName(
           movie.data.data[0].attributes.cinema.data.attributes.name
@@ -101,7 +124,13 @@ function CinMovies() {
     setDuration(mov.attributes.duration);
     setDescription(mov.attributes.description);
     setImage(mov.attributes.movieImage);
+    setPrice(mov.attributes.price);
     movieId.current = mov.id;
+    mov.attributes.genres.data?.map((g) => {
+      hold.push(g.id);
+      // console.log(hold);
+    });
+    setSelectedOptions([...selectedOptions, ...hold]);
   }
 
   // get image when you click
@@ -124,6 +153,20 @@ function CinMovies() {
     input.click();
   };
 
+  //   clear data
+  let hold = [];
+  const clearData = () => {
+    // console.log("fdhsgjk");
+    setTitle("");
+    setDuration("");
+    setDescription("");
+    setImage("");
+    setPrice(0);
+
+    hold = [];
+    setSelectedOptions([]);
+  };
+
   // updating movie data
   const updateMovie = () => {
     setLoading(true);
@@ -135,6 +178,7 @@ function CinMovies() {
         duration: duration,
         cinema: parseInt(cinemaID.current),
         genres: selectedOptions,
+        price: price,
       },
     };
 
@@ -228,6 +272,7 @@ function CinMovies() {
             setImage("");
             setDuration(0);
             setGenres([]);
+            setPrice(0);
             movieId.current = null;
           });
       })
@@ -247,6 +292,7 @@ function CinMovies() {
         duration: duration,
         cinema: parseInt(cinemaID.current),
         genres: selectedOptions,
+        price: price,
       },
     };
 
@@ -311,6 +357,7 @@ function CinMovies() {
         setImage("");
         setDuration(0);
         setGenres([]);
+        setPrice(0);
       });
   };
 
@@ -319,13 +366,70 @@ function CinMovies() {
     getGenres();
   }, []);
 
+  // search use effect
+
+  useEffect(() => {
+    if (query) {
+      setLoading(true);
+      axios
+        .get(
+          `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        )
+        .then((movie) => {
+          // console.log(movie.data);
+          setMovies(movie.data.data);
+          setCinemaName(
+            movie.data.data[0].attributes.cinema.data.attributes.name
+          );
+        })
+        .catch((error) => {})
+        .finally(() => setLoading(false));
+    } else {
+      getMovies();
+    }
+  }, [query, page]);
+
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
-      <label htmlFor="my-modal-7" className="btn btn-primary gap-2">
-        <BiMoviePlay style={{ fontSize: "1.5rem" }} />
-        Add movies
-      </label>
+      <div className="flex xs:flex-col md:gap-3 xs:gap-3">
+        <label htmlFor="my-modal-7" className="btn btn-primary xs:w-full gap-2">
+          <BiMoviePlay style={{ fontSize: "1.5rem" }} />
+          Add movies
+        </label>
+        <div className="form-control lg:flex-1 md:flex-1">
+          <div className="input-group justify-end sm:justify-end">
+            <input
+              type="text"
+              placeholder="Search…"
+              className="input input-bordered"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button className="btn btn-square">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
       <h1 className="text-center font-bold text-3xl mb-4">Movies</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
@@ -340,9 +444,10 @@ function CinMovies() {
               <th>Title & Genre</th>
               <th>Duration</th>
               <th>Cinema</th>
+              <th>Price</th>
               <th>Created at</th>
               <th>Updated at</th>
-              <th> Action</th>
+              <th> Actions</th>
               <th></th>
             </tr>
           </thead>
@@ -401,6 +506,7 @@ function CinMovies() {
                       ).toFixed(0)}
                   </td>
                   <td>{cinemaName}</td>
+                  <td>{"R" + mov.attributes.price}</td>
                   <td>
                     {moment(mov.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
@@ -427,6 +533,18 @@ function CinMovies() {
                       >
                         Delete
                       </label>
+
+                      <label
+                        htmlFor="my-modal-11"
+                        className="btn btn-success btn-xs"
+                        onClick={() =>
+                          navigate("/cinema/review/" + mov.id, {
+                            replace: true,
+                          })
+                        }
+                      >
+                        View reviews
+                      </label>
                     </div>
                   </th>
                 </tr>
@@ -434,6 +552,23 @@ function CinMovies() {
             })}
           </tbody>
         </table>
+      </div>
+      <hr />
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-primary glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-primary glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
       </div>
 
       {/* edit modal */}
@@ -443,6 +578,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-3"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -523,6 +659,24 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
+                <span className="label-text">Movie Price</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
                 <span className="label-text">Movie genres</span>
               </label>
               <label className="input-group">
@@ -564,6 +718,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-4"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -593,6 +748,7 @@ function CinMovies() {
           <label
             htmlFor="my-modal-7"
             className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={clearData}
           >
             ✕
           </label>
@@ -673,6 +829,24 @@ function CinMovies() {
 
             <div className="form-control">
               <label className="label">
+                <span className="label-text">Movie Price</span>
+              </label>
+              <label className="input-group">
+                <span>
+                  <IoMdTime />
+                </span>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="e.g 120"
+                  className="input input-bordered w-full"
+                />
+              </label>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
                 <span className="label-text">Movie genres</span>
               </label>
               <label className="input-group">
@@ -707,7 +881,7 @@ function CinMovies() {
         </div>
       </div>
 
-{/* view image */}
+      {/* view image */}
       <input type="checkbox" id="my-modal-8" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
@@ -715,7 +889,7 @@ function CinMovies() {
             <img src={image} alt="nice" />
           </div>
           <div className="modal-action">
-            <label htmlFor="my-modal-8" className="btn">
+            <label htmlFor="my-modal-8" className="btn" onClick={clearData}>
               Done
             </label>
           </div>

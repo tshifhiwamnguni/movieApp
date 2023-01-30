@@ -29,6 +29,9 @@ function CinemaDashboard() {
       })
       .then((data) => {
         // console.log(data.data?.cinema.id);
+        if(data.data.role.id !== 5){
+          navigate('/home', {replace: true})
+        }
         cinemaID.current = data.data?.cinema.id;
         getCinemaMovies();
       })
@@ -64,9 +67,16 @@ function CinemaDashboard() {
   }, []);
   return (
     <div className="min-h-screen">
-      <h1 className="mt-24 mb-16 text-center font-bold text-4xl">
-        {cinemaName.toUpperCase()}
-      </h1>
+      <div className="flex mt-24 mb-16 ">
+        <h1 className="flex-1 font-bold text-4xl">
+          {cinemaName.toUpperCase()}
+        </h1>
+        {/* <div className="flex justify-end">
+          <label htmlFor="my-modal-10" className="btn btn-primary glass ">
+            Add seats
+          </label>
+        </div> */}
+      </div>
 
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-5 justify-center">
         <div className="stats shadow-xl bg-base-300">
@@ -81,7 +91,10 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{movies}</div>
-              <button className="btn btn-ghost glass" onClick={()=>navigate('/cinema/mov', {replace: true})}>
+              <button
+                className="btn btn-ghost glass"
+                onClick={() => navigate("/cinema/mov", { replace: true })}
+              >
                 <IoChevronForwardCircleOutline
                   className="cursor-pointer"
                   style={{ fontSize: "2.5rem" }}
@@ -104,7 +117,10 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{snacks}</div>
-              <button className="btn btn-ghost glass" onClick={()=>navigate('/cinema/snacks', {replace: true})}>
+              <button
+                className="btn btn-ghost glass"
+                onClick={() => navigate("/cinema/snacks", { replace: true })}
+              >
                 <IoChevronForwardCircleOutline
                   className="cursor-pointer"
                   style={{ fontSize: "2.5rem" }}
@@ -127,7 +143,10 @@ function CinemaDashboard() {
             </div>
             <div className="flex">
               <div className="stat-value flex-1 text-blue-400">{bookings}</div>
-              <button className="btn btn-ghost glass">
+              <button
+                className="btn btn-ghost glass"
+                onClick={() => navigate("/cinema/stats", { replace: true })}
+              >
                 <IoChevronForwardCircleOutline
                   className="cursor-pointer"
                   style={{ fontSize: "2.5rem" }}
@@ -135,6 +154,29 @@ function CinemaDashboard() {
                 More info.
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add seats */}
+      <input type="checkbox" id="my-modal-10" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <label
+            htmlFor="my-modal-10"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h3 className="font-bold text-lg">Add seat</h3>
+          <p className="py-4">
+            You've been selected for a chance to get one year of subscription to
+            use Wikipedia for free!
+          </p>
+          <div className="modal-action">
+            <label htmlFor="my-modal-10" className="btn">
+              Yay!
+            </label>
           </div>
         </div>
       </div>

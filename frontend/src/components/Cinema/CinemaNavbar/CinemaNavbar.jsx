@@ -6,6 +6,7 @@ import { BsHouse } from "react-icons/bs";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbMovie } from "react-icons/tb";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import {BsBookmarkCheck} from 'react-icons/bs'
 // import "./navbar.css";
 import {Outlet} from "react-router-dom" ;
 
@@ -74,6 +75,12 @@ function Home() {
                     Movies
                   </a>
                 </li>
+                <li onClick={() => navigate("/cinema/stats/")}>
+              <a>
+                <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
+                Bookings
+              </a>
+            </li>
                 <li onClick={logout}>
                   <a>
                     <IoMdLogOut style={{ fontSize: "1.5rem" }} />
@@ -110,10 +117,16 @@ function Home() {
                 Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/cimema/mov/")}>
+            <li onClick={() => navigate("/cinema/mov/")}>
               <a>
                 <TbMovie style={{ fontSize: "1.5rem" }} />
                 Movies
+              </a>
+            </li>
+            <li onClick={() => navigate("/cinema/stats/")}>
+              <a>
+                <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
+                Bookings
               </a>
             </li>
             <li onClick={logout}>

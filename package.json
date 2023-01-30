@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "moment": "^2.29.4",
     "react-form-input-validation": "^2.1.0"
   }
 }

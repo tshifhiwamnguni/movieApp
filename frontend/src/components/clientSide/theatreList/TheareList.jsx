@@ -1,12 +1,13 @@
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './TheareList.css'
 
 
 function TheareList() {
     const [movies, setMovies] = useState([]);
-
+  const navigate = useNavigate()
     const initData = {
       id: 1,
       attributes: {
@@ -44,9 +45,16 @@ function TheareList() {
       setModelData(movies[index - 1]);
       console.log(index);
     }
+
+    function setTheatreID(id) {
+      localStorage.setItem("theatreId", id)
+      navigate("../plays");
+      }
+    function toPlays() {
   
+    }
     return (
-      <div className='mt-24 '>
+      <div className=' '>
   
   <div>
             <h1 className="text-center text-5xl font-bold mb-4">Theatre list</h1>
@@ -55,27 +63,28 @@ function TheareList() {
                 return (
                   <div
                     key={element.id}
-                    className="card w-96 bg-base-100 shadow-xl"
+                    className="card cardMod w-96 bg-base-100 shadow-xl"
                   >
-                    <figure className="px-10 pt-10">
+                    <figure className="">
                       <img
                         src="https://placeimg.com/400/225/arch"
                         alt="Shoes"
-                        className="rounded-xl"
+                        className=""
                       />
                     </figure>
                     <div className="card-body items-center text-center">
-                      <h2 className="card-title">{element.attributes.title}</h2>
-                      <p>{element.attributes.description}</p>
+                    <h2 className="card-title">{element.attributes.name}</h2>
+                 
   
                       <div className="card-actions">
-                        <button className="btn btn-primary">Select</button>
+                        <button className="btn btn-primary radius" onClick={()=>{setTheatreID(element.id)}}>Select</button>
                         <label
                           onClick={() => {
                             select(element.id);
+                            console.log(element.id);
                           }}
                           htmlFor="my-modal-5"
-                          className="btn"
+                          className="btn radius"
                         >
                          view details
                         </label>
@@ -107,7 +116,7 @@ function TheareList() {
   
   
                             <div className="modal-action">
-                              <label  htmlFor="my-modal-5" className="btn">
+                              <label  htmlFor="my-modal-5" className="btn radius">
                                 close
                               </label>
                             </div>
