@@ -29,13 +29,19 @@ useEffect(()=>{
          console.log("state: ",bookedSeat)
          setIsActive(true)
     }
-  
+
   }
 
 
   function book() {
+
+
+
     console.log(bookedSeat);
-    naviage('../payment')
+
+    localStorage.setItem("seats", bookedSeat)
+    console.log("booked " ,   localStorage.getItem('seats'))
+    naviage('../../snackss')
 
   }
 

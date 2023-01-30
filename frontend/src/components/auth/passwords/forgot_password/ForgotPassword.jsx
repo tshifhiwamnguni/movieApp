@@ -3,8 +3,8 @@ import axios from "axios";
 import { useFormInputValidation } from "react-form-input-validation";
 import "./ForgotPassword.css";
 import { ToastContainer } from "react-toastify";
-import { ERROR, SUCCESS } from "../../environment/toast";
-import Bac from "../../back/back";
+import { ERROR, SUCCESS } from "../../../environment/toast";
+import Bac from "../../../back/back";
 
 function ForgotPassword() {
   const [loading, setLoading] = useState(false);
