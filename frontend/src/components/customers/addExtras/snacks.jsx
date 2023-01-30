@@ -81,7 +81,7 @@ export default function Example() {
       setTimeout(() => {
     call()
 
-      }, 2+000);
+      }, 2000);
     }
     delay()
   }, [])
