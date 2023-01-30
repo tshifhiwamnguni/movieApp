@@ -48,7 +48,6 @@ function Snacks() {
           }
         cinemaID.current = data.data?.cinema.id;
         getSnacks();
-        getPages();
       })
       .catch((err) => {
         console.log(err);
@@ -82,7 +81,6 @@ function Snacks() {
       .finally(() => {
         setLoading(false);
         getSnacks();
-        getPages();
       });
   };
 
@@ -230,7 +228,6 @@ function Snacks() {
       .finally(() => {
         setLoading(false);
         getSnacks();
-        getPages();
 
         setSnackName("");
         setSnackPrice(0);
@@ -269,7 +266,6 @@ function Snacks() {
       .finally(() => {
         setLoading(false);
         getSnacks();
-        getPages();
 
         setSnackName("");
         setSnackPrice(0);
@@ -294,10 +290,11 @@ function Snacks() {
       .then((snac) => {
         // console.log(snac.data.data);
         setSnacks(snac.data.data);
+        setPageCount(snac.data.meta.pagination.pageCount);
         // getMovies();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -323,7 +320,7 @@ function Snacks() {
       )
       .then((movie) => {
         setSnacks(movie.data.data);
-        console.log(movie.data)
+        // console.log(movie.data)
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
@@ -345,21 +342,6 @@ function Snacks() {
       useEffect(() => {
         getSnacks();
       }, [page]);
-
-        //   get pages
-  const getPages = async () => {
-    await axios
-      .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&pagination[pageSize]=5`
-      )
-      .then((rev) => {
-        // console.log(rev.data.meta.pagination);
-        setPageCount(rev.data.meta.pagination.pageCount);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const snackSize = [
     { value: "small", name: "Small" },
