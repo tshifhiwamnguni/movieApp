@@ -81,7 +81,7 @@ export default function Example() {
       setTimeout(() => {
     call()
 
-      }, 2+000);
+      }, 2000);
     }
     delay()
   }, [])
@@ -168,7 +168,7 @@ export default function Example() {
                       </label>
                       <div className="mt-1 flex rounded shadow-sm">
                         <h2 className="h-12 w-auto text-center text-2xl font-bold text-gray-900">
-                          {movieName} {price}
+                          {movieName}
                         </h2>
                       </div>
                     </div>
