@@ -64,6 +64,10 @@ function CinemaList() {
     // console.log(cinemaCtx.cinemaName);
   }
 
+  function addReview(){
+    navigate('/review')
+  }
+
   return (
     <div className="mt-24 ">
       <div>
@@ -73,7 +77,7 @@ function CinemaList() {
             return (
               <div
                 key={k}
-                className="card cardMod w-96 bg-base-100 shadow-xl"
+                className="card cardMod w-fit bg-base-100 shadow-xl"
               >
                 <figure className="">
                   <img
@@ -102,6 +106,14 @@ function CinemaList() {
                       className="btn radius"
                     >
                       view details
+                    </label>
+
+                    <label
+                      onClick={addReview}
+                      htmlFor="my-modal-5"
+                      className="btn radius"
+                    >
+                      Review
                     </label>
 
                     {/* Put this part before </body> tag */}

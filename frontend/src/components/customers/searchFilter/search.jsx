@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Scroll from '../../customers/searchFilter/scroll';
-import SearchList from '../../customers/searchFilter/searchList';
+import SearchList from '../../customers/searchFilter/searchList'
 
 function Search({ details }) {
 
