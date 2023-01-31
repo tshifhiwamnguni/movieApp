@@ -66,51 +66,28 @@ const Reviews = () => {
   };
   console.log(reviews);
 
-  // const Greeting = (props) => {
-  //   if (props.rating === 5) {
-  //       return <CardSubtitle tag="h5">⭐ ⭐ ⭐ ⭐ ⭐ </CardSubtitle>
-  //   } else if (props.rating === 4) {
-  //       return <CardSubtitle tag="h5">⭐ ⭐ ⭐ ⭐ </CardSubtitle>;
-  //   } else if (props.rating === 4) {
-  //       return <CardSubtitle tag="h5">⭐ ⭐ ⭐ </CardSubtitle>;
-  //   } else if (props.rating === 4) {
-  //       return <CardSubtitle tag="h5">⭐ ⭐ </CardSubtitle>;
-  //   } else {
-  //       return <CardSubtitle tag="h5">⭐ </CardSubtitle>;
-  //   }
-  // }
-
   useEffect(() => {
     getReviews();
   },[]);
 
   return (
-    <div className="flex flex-col justify-start items-start bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
-      <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800 py-8">
-        Movie Reviews
-      </h1>
+      <>
+      <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800 py-8  block">Movie Reviews</h1>
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-5 gap-1 w-fit px-8 mx-auto">
 
-      <div className="flex outline p-2 rounded flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
         {data.map((item) => (
-          <div
-            key={item.id}
-            className="flex outline p-2 rounded flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full "
-          >
-            <div className="w-full md:w-40">
-           
-              <img
-                className="w-full md:w-40"
+          <div key={item.id} className="card w-64 bg-primary text-primary-content">
+            <div className="card-body text-center">
+            <img
+                className="h-1/2"
                 src={item.attributes.movie.data.attributes.movieImage}
                 alt="dress"
               />
-            </div>
-            <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full">
-              <div className="w-full flex flex-col justify-start items-start ">
               <CardTitle tag="h1" className="text-center">
                     {item.attributes.movie.data.attributes.title}
-                  </CardTitle>
-                <div className="reviews-body flex align-baseline gap-2">
-                  <CardSubtitle className="mb-2 text-muted" tag="h6">
+              </CardTitle>
+            <div className="flex justify-between">
+            <CardSubtitle className="text-muted" tag="h6">
                     { "Guest user"}
                   </CardSubtitle>
                   <div className="rating">
@@ -124,30 +101,22 @@ const Reviews = () => {
                       }
                     )}
                   </div>
-                </div>
-
-                <div className="reviews-body">
-                  <CardText>
-                    "
-                    {item.attributes.comment ||
-                      "Lorem ipsum dolor sit amet consectetur adipisicing elit."}
-                    "
-                  </CardText>
-                  <CardText>
-                    <small className="text-muted text-bold">
+            </div>
+            <CardText className="flex justify-start">
+              "{item.attributes.comment || "Lorem ipsum dolor sit amet consectetur adipisicing elit."}"
+            </CardText>
+            <CardText>
+              <small className="text-muted text-bold">
                       {item.attributes.createdAt || "3 mins ago"}
-                    </small>
-                  </CardText>
-                </div>
-              </div>
-              <div className="flex justify-end space-x-2 items-end w-full">
-                <MdDelete className="text-2xl text-rose-400" />
-              </div>
+              </small>
+            </CardText>
+            <MdDelete className="text-2xl ml-auto text-rose-400" />
             </div>
           </div>
         ))}
+
       </div>
-    </div>
+      </>
   );
 };
 
