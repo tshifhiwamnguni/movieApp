@@ -64,18 +64,18 @@ function ClientSide() {
                   </a>
                 </li>
 
-                <li onClick={() => navigate("/client/movie/")}>
+                {/* <li onClick={() => navigate("/client/movie/")}>
                   <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
                     All Movies
                   </a>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                   <a>
                     <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                     All plays
                   </a>
-                </li>
+                </li> */}
                 <li onClick={logout}>
                   <a>
                     <IoMdLogOut style={{ fontSize: "1.5rem" }} />
@@ -107,18 +107,18 @@ function ClientSide() {
                 Home
               </a>
             </li>
-            <li onClick={() => navigate("/admin/profile/")}>
+            {/* <li onClick={() => navigate("/admin/profile/")}>
               <a>
                 <CgProfile style={{ fontSize: "1.5rem" }} />
                 Profile
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a>
                 <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                 All movies
               </a>
-            </li>
+            </li> */}
             <li onClick={logout}>
               <a>
                 <IoMdLogOut style={{ fontSize: "1.5rem" }} />

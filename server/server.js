@@ -37,18 +37,18 @@ app.get("/config", (req, res) => {
   });
 });
 
-let dollars
+let dollars;
 
-const addCash = (items) => {
+const addCash = () => {
    const amnt  = dollars
-   console.log(amnt);
+   console.log(' amt  , ',amnt);
   return amnt;
 };
 
 app.post('/lol', async(req, res) => {
   const money = req.body;
   dollars = money.money
-  console.log(money);
+  console.log('muc ' , money);
     res.send({lol:'yes'})
 
 })

@@ -58,7 +58,6 @@ function Login() {
           const { jwt, user } = data;
 
           console.log(user);
-
           setToken(jwt);
           // navigate("/admin/", { replace: true });
 

@@ -23,7 +23,7 @@ export default function CheckoutForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addMoney()
+   
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
