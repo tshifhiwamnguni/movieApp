@@ -42,8 +42,8 @@ function CinemaList() {
   }, []);
 
   function select(index) {
-    setModelData(movies[index - 1]);
-    console.log(index - 1);
+    setModelData(index);
+ 
   }
 
   function setCinemaId(id) {
@@ -100,21 +100,21 @@ function CinemaList() {
                     </button>
                     <label
                       onClick={() => {
-                        select(element.id);
+                        select(element);
                       }}
                       htmlFor="my-modal-5"
                       className="btn radius"
                     >
                       view details
                     </label>
-
+{/* 
                     <label
                       onClick={addReview}
                       htmlFor="my-modal-5"
                       className="btn radius"
                     >
                       Review
-                    </label>
+                    </label> */}
 
                     {/* Put this part before </body> tag */}
                     <input
