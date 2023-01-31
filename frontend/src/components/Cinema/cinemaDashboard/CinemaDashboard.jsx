@@ -71,11 +71,11 @@ function CinemaDashboard() {
         <h1 className="flex-1 font-bold text-4xl">
           {cinemaName.toUpperCase()}
         </h1>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <label htmlFor="my-modal-10" className="btn btn-primary glass ">
             Add seats
           </label>
-        </div>
+        </div> */}
       </div>
 
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-5 justify-center">

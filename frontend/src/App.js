@@ -158,7 +158,7 @@ function App() {
               <Route path="mov" element={<CinMovies />} />
               <Route path="snacks" element={<Snacks />} />
               <Route path="stats" element={<BookingStat />} />
-              <Route path="review/:movieId" element={<Review />} />
+              <Route path="review/:movieId" element={<ReviewView />} />
             </Route>
 
             {/* Admin for theatre path/routes */}
