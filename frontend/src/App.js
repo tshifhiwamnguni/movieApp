@@ -48,7 +48,7 @@ const TheatreList = lazy(() =>
 
 const Splash = lazy(() => import("./components/splashpage/Splash"));
 const Register = lazy(() => import("./components/auth/register/Register"));
-const Customer = lazy(() => import("./components/Customer/Customer"));
+// const Customer = lazy(() => import("./components/Customer/Customer"));
 const CinemaDashboard = lazy(() =>
   import("./components/Cinema/cinemaDashboard/CinemaDashboard")
 );
@@ -117,7 +117,7 @@ function App() {
 
             {/* Public routes */}
             <Route path="login" element={<Login />}></Route>
-            <Route path="customer" element={<Customer />}></Route>
+            {/* <Route path="customer" element={<Customer />}></Route> */}
 
             <Route path="/register" element={<Register />}></Route>
 

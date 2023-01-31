@@ -4,6 +4,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import './snacks.css'
+import { useNavigate } from "react-router-dom";
 
 export default function Example() {
   const [snack, setSnack] = useState();
@@ -22,7 +23,7 @@ export default function Example() {
   const [totalPrice, setTotalPrice] = useState()
 
   const [refresh, setRefresh] = useState(true)
-
+  const navigate = useNavigate()
 
   useEffect(() => {
    
@@ -270,8 +271,21 @@ export default function Example() {
                     <button
                       type="button"
                       onClick={() => {
-                        setTotalPrice(getTotal())
-                        console.log('checkout');
+
+                         axios.post("http://localhost:5252/lol", 
+                      {money: getTotal()}
+                      ).then(async (result) => {
+                             console.log(result);
+                            navigate('../client/payment')
+                      })
+                      
+                        //  fetch("http://localhost:5252/lol", {
+                      
+                        //   body: getTotal()
+                        // }).then(async (result) => {
+                        //     console.log(result);
+                        //     navigate('../client/payment')
+                        // })
                       }}
                       className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8"
                     >

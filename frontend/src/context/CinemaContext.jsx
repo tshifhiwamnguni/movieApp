@@ -1,17 +1,24 @@
 import { createContext, useState } from "react";
 
+
+
+
 const CinemaContext = createContext({
   cinemaId: "1",
   movieId: "1",
 
-
   _setCinemaId: (cinemaId) => {},
-  _setMovieId: (movieId)=>{}
+  _setMovieId: (movieId) => {},
 });
+
+
+
+
+
 export function CinemaContextProvider(props) {
   const [_cinemaId, setCinemaId] = useState();
 
-  const [_movieId, setMovieId] = useState()
+  const [_movieId, setMovieId] = useState();
 
   function setCinemaIdHandler(cinemaId) {
     setCinemaId((prevId) => {
@@ -28,7 +35,7 @@ export function CinemaContextProvider(props) {
     cinemaId: _cinemaId,
     movieId: _movieId,
     _setCinemaId: setCinemaIdHandler,
-    _setMovieId: setMovieIdHandler
+    _setMovieId: setMovieIdHandler,
   };
   return (
     <CinemaContext.Provider value={context}>
@@ -36,5 +43,10 @@ export function CinemaContextProvider(props) {
     </CinemaContext.Provider>
   );
 }
+
+
+
+
+
 
 export default CinemaContext;

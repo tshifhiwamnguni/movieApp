@@ -11,6 +11,9 @@ import  './Movies.css';
 function Movies() {
 
   const cinemaCtx = useContext(CinemaContext)
+
+
+  
   const [movies, setMovies] = useState([]);
   const [cinemaID,setCinemaID] = useState('')
   const navigate = useNavigate()

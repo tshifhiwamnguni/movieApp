@@ -248,7 +248,7 @@ function AllMovies() {
     if(query){
     axios
       .get(
-        `${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$containsi]=${query}`,
+        `${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$contains]=${query}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
