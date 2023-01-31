@@ -79,7 +79,7 @@ const Reviews = () => {
           <div key={item.id} className="card w-64 bg-primary text-primary-content">
             <div className="card-body text-center">
             <img
-                className="h-1/2"
+                className="h-1/2 md:w-full"
                 src={item.attributes.movie.data.attributes.movieImage}
                 alt="dress"
               />
