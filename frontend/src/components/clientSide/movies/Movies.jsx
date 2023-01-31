@@ -10,9 +10,9 @@ import  './Movies.css';
 
 function Movies() {
 
-  const cinemaCtx = useContext(CinemaContext)
+  const [loading, setLoading] = useState(false);
 
-
+  const [query, setQuery] = useState("");
   
   const [movies, setMovies] = useState([]);
   const [cinemaID,setCinemaID] = useState('')
@@ -33,35 +33,61 @@ function Movies() {
   
   let id=true
   const [modelData, setModelData] = useState(initData);
-  useEffect(() => {
-
+  function getMovies(){
     axios
-      .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
-        headers: {
-          Authorization:
-            "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
-            
-  }})
-      .then((response) => {
-        // Handle success.
-        // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
-        console.log(response.data.data)
-  
-        console.log(localStorage.getItem("cinemaId"));
-        console.log(localStorage.getItem("cinemaName"))
-        console.log(localStorage.getItem("cinemaLocation"))
-   
-       
-        
-        setCinemaID(localStorage.getItem("cinemaId"))
+    .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
+      headers: {
+        Authorization:
+          "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+          
+}})
+    .then((response) => {
+      // Handle success.
+      // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
+      console.log(response.data.data)
+
+      console.log(localStorage.getItem("cinemaId"));
+      console.log(localStorage.getItem("cinemaName"))
+      console.log(localStorage.getItem("cinemaLocation"))
+ 
+     
       
-        setMovies(response.data.data);
-      })
-      .catch((error) => {
-        // Handle error.
-      });
+      setCinemaID(localStorage.getItem("cinemaId"))
+    
+      setMovies(response.data.data);
+    })
+    .catch((error) => {
+      // Handle error.
+    });
+  }
+  useEffect(() => {
+getMovies()
+    
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    if(query){
+    axios
+      .get(
+        `https://strapi-movie-app.onrender.com/api/movies?populate=*&filters[title][$containsi]=${query}`,
+        {
+          headers: {
+            Authorization: 
+            "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+          },
+        }
+      )
+      .then((movie) => {
+        setMovies(movie.data.data);
+  
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+    }else{
+      getMovies()
+    }
+  }, [query]);
 
 
   function select(index) {
@@ -85,8 +111,33 @@ function Movies() {
   return (
     <>
       <div className="mt-24">
+      
         <div>
-          <h1 className="text-center text-5xl font-bold mb-4">Movies</h1>
+          <h1 className="text-center text-5xl font-bold mb-4">Movies</h1><div className="input-group justify-end">
+            <input
+              type="text"
+              placeholder="Search…"
+              className="input input-bordered"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button className="btn btn-square">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
           <div className="container">
             {movies.map((element,k) => {
               

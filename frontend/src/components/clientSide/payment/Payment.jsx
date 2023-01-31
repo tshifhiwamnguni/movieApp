@@ -37,7 +37,7 @@ function Payment() {
  
   return (
     <div className="mt-24">
-      <h1>React Stripe and the Payment Element</h1>
+      <h1>PAYMENT</h1>
 
       <Elements stripe={stripePromises} options={{ clientSecret }}>
         <CheckoutForm  />
