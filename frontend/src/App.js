@@ -101,8 +101,8 @@ function App() {
          
 
             <Route path="login" element={<Login />}></Route>
-          <Route path="pre" element={<PreReg />}></Route>
-            <Route path="/client" element={<ClientSide />}>
+            <Route path="pre" element={<PreReg />}></Route>
+              <Route path="/client" element={<ClientSide />}>
               {/* <Route path="/client" element={<Navigate replace to='clientHome' />} /> */}
               <Route path="clientHome" element={<ClientHome />} />
               <Route path="movieList" element={<Movies />} />
