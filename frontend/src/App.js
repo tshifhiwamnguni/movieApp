@@ -99,7 +99,6 @@ function App() {
         >
           <Routes>
          
-
             <Route path="login" element={<Login />}></Route>
             <Route path="pre" element={<PreReg />}></Route>
               <Route path="/client" element={<ClientSide />}>
