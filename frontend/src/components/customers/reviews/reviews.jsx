@@ -84,17 +84,17 @@ const Reviews = () => {
 
   return (
     <>
-      <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800  block">
+      <h1 className="text-4xl mx-auto text-center xl:text-4xl font-semibold leading-6 text-gray-800  block">
         Movie Reviews
       </h1>
 
-      <div class="container">
+      <div className="container">
         <form>
-          <div class="row">
-            <div class="col-25">
-              <label for="fname"></label>
+          <div className="row">
+            <div className="col-25">
+              <label htmlFor="fname"></label>
             </div>
-            <div class="col-75">
+            <div className="col-75">
               <input
                 type="text"
                 id="search"
