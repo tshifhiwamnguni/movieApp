@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { CardSubtitle, CardText, CardTitle } from "reactstrap";
 import womanKing from "../../../assets/womanKing.jpeg";
-import { MdModeEditOutline, MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import Pagination from "../pagination/pagination"
+
 import axios from "axios";
 // import Moment from "moment"
 const API = "https://strapi-movie-app.onrender.com/api";
 
+let PageSize = 10;
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [stars, setStars] = useState();
@@ -16,6 +19,9 @@ const Reviews = () => {
   const [poster, setPoster] = useState("../../../assets/womanKing.jpeg");
 
   const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reviewPerPage, setReviewPerPage] = useState(8)
+  
 
   let index = 2;
   let arr = [];
@@ -66,6 +72,10 @@ const Reviews = () => {
   };
   console.log(reviews);
 
+  const lastPageIndex = currentPage * reviewPerPage;
+  const firstPageIndex = lastPageIndex - reviewPerPage
+  const currentReview = data.slice(firstPageIndex, lastPageIndex)
+
   useEffect(() => {
     getReviews();
   },[]);
@@ -73,9 +83,9 @@ const Reviews = () => {
   return (
       <>
       <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800 py-8  block">Movie Reviews</h1>
-      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-5 gap-1 w-fit px-8 mx-auto">
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-4 gap-16 w-fit px-8 mx-auto">
 
-        {data.map((item) => (
+        {currentReview.map((item) => (
           <div key={item.id} className="card w-64 bg-primary text-primary-content">
             <div className="card-body text-center">
             <img
@@ -116,6 +126,10 @@ const Reviews = () => {
         ))}
 
       </div>
+      
+      <Pagination totalReviews={data.length} reviewsPerPage={reviewPerPage} 
+        setCurrentPage={setCurrentPage} currentPage={currentPage}/>
+    
       </>
   );
 };

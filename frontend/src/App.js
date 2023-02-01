@@ -11,6 +11,7 @@ import { getToken } from "./components/environment/helpers";
 import Spin from "./components/Spinner/Spin";
 
 const Snacks = lazy(() => import("./components/Cinema/Snacks/Snacks"));
+
 const TheatreBooking = lazy(() =>
   import("./components/Admin/theatreBooking/TheatreBooking")
 );
@@ -184,7 +185,7 @@ function App() {
             <Route path="/stars" element={<StarRatings/>}></Route>
             <Route path="/filter" element={<Filter/>}></Route>
             <Route path="/snackss" element={<Example/>}></Route>
-            {/* <Route path="/search" element={<Search/>}></Route> */}
+         
 
           </Routes>
         </Suspense>
