@@ -43,20 +43,13 @@ function CinemaList() {
 
   function select(index) {
     setModelData(index);
- 
   }
 
   function setCinemaId(id) {
-    localStorage.setItem("PlaceId", id.id)
-    localStorage.setItem('type', 'cinema')
-  
-   
-    
-    localStorage.setItem("PlaceName", id.attributes.name)
-    localStorage.setItem("Location", id.attributes.surbub)
-    // console.log(id.attributes.name)
-    // console.log(id.attributes.surbub)
-
+    localStorage.setItem("PlaceId", id.id);
+    localStorage.setItem("type", "cinema");
+    localStorage.setItem("PlaceName", id.attributes.name);
+    localStorage.setItem("Location", id.attributes.surbub);
     navigate("../movieList");
   }
 
@@ -64,8 +57,8 @@ function CinemaList() {
     // console.log(cinemaCtx.cinemaName);
   }
 
-  function addReview(){
-    navigate('/review')
+  function addReview() {
+    navigate("/review");
   }
 
   return (
@@ -75,10 +68,7 @@ function CinemaList() {
         <div className="container">
           {movies.map((element, k) => {
             return (
-              <div
-                key={k}
-                className="card cardMod w-fit bg-base-100 shadow-xl"
-              >
+              <div key={k} className="card cardMod w-fit bg-base-100 shadow-xl">
                 <figure className="">
                   <img
                     src="https://placeimg.com/400/225/arch"
@@ -107,7 +97,7 @@ function CinemaList() {
                     >
                       view details
                     </label>
-{/* 
+                    {/* 
                     <label
                       onClick={addReview}
                       htmlFor="my-modal-5"
