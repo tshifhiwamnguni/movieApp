@@ -47,13 +47,13 @@ function CinemaList() {
   }
 
   function setCinemaId(id) {
-    localStorage.setItem("cinemaId", id.id)
-
+    localStorage.setItem("PlaceId", id.id)
+    localStorage.setItem('type', 'cinema')
   
-    console.log(id.attributes);
+   
     
-    localStorage.setItem("cinemaName", id.attributes.name)
-    localStorage.setItem("cinemaLocation", id.attributes.surbub)
+    localStorage.setItem("PlaceName", id.attributes.name)
+    localStorage.setItem("Location", id.attributes.surbub)
     // console.log(id.attributes.name)
     // console.log(id.attributes.surbub)
 

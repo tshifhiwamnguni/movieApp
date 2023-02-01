@@ -46,13 +46,10 @@ function Movies() {
       // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
       console.log(response.data.data)
 
-      console.log(localStorage.getItem("cinemaId"));
-      console.log(localStorage.getItem("cinemaName"))
-      console.log(localStorage.getItem("cinemaLocation"))
- 
-     
-      
-      setCinemaID(localStorage.getItem("cinemaId"))
+      console.log(localStorage.getItem("PlaceId"));
+      console.log(localStorage.getItem("MName"))
+      console.log(localStorage.getItem("Location"))
+      setCinemaID(localStorage.getItem("PlaceId"))
     
       setMovies(response.data.data);
     })
@@ -101,10 +98,10 @@ getMovies()
 
   function selectMovie(data) {
    console.log(data);
-     localStorage.setItem('movieId', data.id)
-    localStorage.setItem('moviePrice', data.attributes.price)
-    localStorage.setItem('movieName', data.attributes.title)
-    localStorage.setItem('movieImage', data.attributes.movieImage)
+     localStorage.setItem('MId', data.id)
+    localStorage.setItem('MPrice', data.attributes.price)
+    localStorage.setItem('MName', data.attributes.title)
+    localStorage.setItem('Image', data.attributes.movieImage)
       navigate('../book')
    
   }
@@ -142,11 +139,11 @@ getMovies()
             {movies.map((element,k) => {
               
               return (
-                <div>
+                <div key={k}>
                  
                {element.attributes.cinema.data.id == cinemaID ?
                 <div 
-                  key={k}
+                  
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
                 >
                   
@@ -199,7 +196,18 @@ getMovies()
                             title="Avatar: The Way of Water | Official Trailer"
                             frameBorder="0"
                              allow="autoplay"
+                             
                           ></iframe>
+                          {/* <video
+                          width={'966'}
+                          controls
+                          
+                          >
+
+                            <source src="https://youtu.be/G-Cr00UYokU" type="video/mp4"></source>
+                          </video> */}
+
+
                 <p>{modelData.attributes.description}</p>
 
 

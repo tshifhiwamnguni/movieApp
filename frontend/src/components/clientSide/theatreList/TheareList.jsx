@@ -42,12 +42,22 @@ function TheareList() {
   
   
     function select(index) {
-      setModelData(movies[index - 1]);
+      setModelData(index);
       console.log(index);
     }
 
-    function setTheatreID(id) {
-      localStorage.setItem("theatreId", id)
+    function setTheatreID(data) {
+      localStorage.setItem("PlaceId", data.id)
+      localStorage.setItem('type', 'theatre')
+
+
+  
+  
+   
+    
+    localStorage.setItem("PlaceName", data.attributes.name)
+    localStorage.setItem("Location", data.attributes.surbub)
+  
       navigate("../plays");
       }
     function toPlays() {
@@ -77,11 +87,11 @@ function TheareList() {
                  
   
                       <div className="card-actions">
-                        <button className="btn btn-primary radius" onClick={()=>{setTheatreID(element.id)}}>Select</button>
+                        <button className="btn btn-primary radius" onClick={()=>{setTheatreID(element)}}>Select</button>
                         <label
                           onClick={() => {
-                            select(element.id);
-                            console.log(element.id);
+                            select(element);
+                            console.log('selected ' , element);
                           }}
                           htmlFor="my-modal-5"
                           className="btn radius"

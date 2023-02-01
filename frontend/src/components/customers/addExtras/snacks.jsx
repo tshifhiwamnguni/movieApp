@@ -9,14 +9,14 @@ import { useNavigate } from "react-router-dom";
 export default function Example() {
   const [snack, setSnack] = useState();
   const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+
 
 
   const [isAddSnacks, setIsAddSnacks] = useState(false)
   const [seats, setSeats] = useState([0, 0])
-  const [cinemaName, setCinemaName] = useState()
-  const [cinemaLocation, setCinemaLocation] = useState()
-  const [cinemaId, setCinemaId] = useState()
+  const [placeName, setPlaceName] = useState()
+  const [cinemaLocation, setLocation] = useState()
+  const [cinemaId, setPlaceId] = useState()
   const [selectedSnacks, setSelectedSnacks] = useState([])
   const [movieName, setMovieName] = useState()
   const [movieImage, setMovieImage] = useState()
@@ -45,19 +45,19 @@ export default function Example() {
       });
 
       
-    console.log('locatiobn ', localStorage.getItem('cinemaLocation'));
-    console.log('id ', localStorage.getItem('cinemaId'));
-    console.log('name ', localStorage.getItem('cinemaName'));
+    console.log('location ', localStorage.getItem('Location'));
+    console.log('id ', localStorage.getItem('PlaceId'));
+    console.log('name ', localStorage.getItem('PlaceName'));
 
     console.log('seats ', localStorage.getItem('seats'));
 
-    setCinemaLocation(localStorage.getItem('cinemaLocation'))
-    setCinemaId(localStorage.getItem('cinemaId'))
-    setCinemaName(localStorage.getItem('cinemaName'))
+    setLocation(localStorage.getItem('Location'))
+    setPlaceId(localStorage.getItem('PlaceId'))
+    setPlaceName(localStorage.getItem('PlaceName'))
     setSeats(localStorage.getItem('seats').split(','))
-    setPrice(localStorage.getItem('moviePrice'))
-    setMovieName(localStorage.getItem('movieName'))
-    setMovieImage(localStorage.getItem('movieImage'))
+    setPrice(localStorage.getItem('MPrice'))
+    setMovieName(localStorage.getItem('MName'))
+    setMovieImage(localStorage.getItem('Image'))
 
 
    
@@ -180,7 +180,7 @@ export default function Example() {
                       Cinema:
                     </label>
                     <div className="mt-1">
-                      <p className="mt-2 text-2xl text-gray-500">{cinemaName}  - {cinemaLocation}</p>
+                      <p className="mt-2 text-2xl text-gray-500">{placeName}  - {cinemaLocation}</p>
                     </div>
                   </div>
 

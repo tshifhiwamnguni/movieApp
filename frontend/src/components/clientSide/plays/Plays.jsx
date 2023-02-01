@@ -47,8 +47,8 @@ function Plays() {
       // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
       console.log(response.data.data)
 
-      console.log(localStorage.getItem("theatreId"));
-      setCinemaID(localStorage.getItem("theatreId"))
+      console.log(localStorage.getItem("PlaceId"));
+      setCinemaID(localStorage.getItem("PlaceId"))
      
       setPlays(response.data.data);
 
@@ -60,6 +60,7 @@ function Plays() {
       // Handle error.
     });
    }
+
   useEffect(() => {
 
     getPlays()
@@ -96,18 +97,14 @@ function Plays() {
     console.log(index);
   }
 
-  // function stop() {
-  //   console.log(iframeRef.current.contentWindow.frames);
-  //   iframeRef.current.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
-  // }
 
 
-  function selectPlay(_id) {
+  function selectPlay(data) {
    
-      // cinemaCtx._setMovieId({
-      //   movieId:_id
-      // })
-      // console.log(cinemaCtx.movieId)
+    localStorage.setItem('MId', data.id)
+    localStorage.setItem('MPrice', data.attributes.price)
+    localStorage.setItem('MName', data.attributes.title)
+    localStorage.setItem('Image', data.attributes.showImage)
       navigate('../book')
    
   }
@@ -150,14 +147,14 @@ function Plays() {
             </button>
           </div>
         <div className="container">
-          {plays.map((element) => {
+          {plays.map((element, k) => {
             
             return (
-              <div>
+              <div key={k}>
                
              {element.attributes.theatre.data.id == cinemaID ?
               <div 
-                key={element.id}
+                
                 className="card cardMod red w-96 bg-base-100 shadow-xl"
               >
                 
@@ -174,15 +171,15 @@ function Plays() {
                     {element.attributes.title}</h2>
                     <div className="flex">
                     {element.attributes.genres.data.map(
-            el=>{
+            (el, i)=>{
              
-               return<div className="genre btn"> {el.attributes.name} </div>;
+               return<div key={i}  className="genre btn"> {el.attributes.name} </div>;
             }
           )}
           </div>
 
                   <div className="card-actions">
-                    <button className="btn btn-primary radius" onClick={()=>{selectPlay(element.id)}}>book now</button>
+                    <button className="btn btn-primary radius" onClick={()=>{selectPlay(element)}}>book now</button>
                     <label
                       onClick={() => {
                         select(element);
