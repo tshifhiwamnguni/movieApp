@@ -84,12 +84,12 @@ const Reviews = () => {
 
   return (
     <>
-      <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800 py-8  block">
+      <h1 className="text-4xl mx-auto text-center xl:text-2xl font-semibold leading-6 text-gray-800  block">
         Movie Reviews
       </h1>
 
       <div class="container">
-        <form action="action_page.php">
+        <form>
           <div class="row">
             <div class="col-25">
               <label for="fname"></label>
