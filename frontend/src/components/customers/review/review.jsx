@@ -1,13 +1,15 @@
 import { useState, useRef } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Reviews from "../../customers/reviews/reviews"
+import Reviews from "../../customers/reviews/reviews";
 import axios from "axios";
+import PaginatedItems from "../../test/test";
 const API = "https://strapi-movie-app.onrender.com/api";
+
 
 function Review() {
   const reviews = useRef("");
   const ratings = useRef(1);
- 
+
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -22,7 +24,8 @@ function Review() {
       console.log(response);
       setTitle(response.data.data[0].attributes.movie.data.attributes.title);
       setUsername(
-        response.data.data[0].attributes.users_permissions_user.data.attributes.username
+        response.data.data[0].attributes.users_permissions_user.data.attributes
+          .username
       );
       setPoster(
         response.data.data[0].attributes.movie.data.attributes.movieImage
@@ -46,15 +49,14 @@ function Review() {
   //         console.log("error revieved")
   //     });
   // }
-//   console.log(firstname.current.value);
-//   console.log(reviews.current.value);
-//   console.log(ratings.current.value);
+  //   console.log(firstname.current.value);
+  //   console.log(reviews.current.value);
+  //   console.log(ratings.current.value);
 
   const handleReviewChange = async (event) => {
-   
     console.log(reviews.current.value);
     console.log(ratings.current.value);
-
+  
     const data = {
       data: { rating: ratings.current.value, comment: reviews.current.value },
     };
@@ -95,11 +97,8 @@ function Review() {
                   id="firstname"
                   name="firstname"
                   type="text"
-             
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-               
                   value={username}
-                 
                   readOnly
                 />
               </div>
@@ -151,6 +150,8 @@ function Review() {
           </form>
         </div>
       </div>
+    
+   
     </>
   );
 }
