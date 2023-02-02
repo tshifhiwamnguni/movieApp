@@ -3,7 +3,7 @@
 }
 
 .active{
-    background-color: #65C3C8;
+    background-color: orange;
     border-radius: 10px;
 }
 
@@ -32,3 +32,18 @@
 
 }
   
+.bg-black{
+  background-color: black;
+}
+
+.txt-white{
+    color: white;
+}
+.bg-orange{
+    background-color: orange;
+}
+.txt-orange{
+    color: orange;
+}
+
+

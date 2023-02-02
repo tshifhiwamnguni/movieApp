@@ -31,7 +31,7 @@ function ClientSide() {
         <input id="my-drawer-3  " type="checkbox" className="drawer-toggle " />
 
         <div className="drawer-content flex flex-col overflow-scroll ">
-          <div className="w-screen navbar bg-base-300 fixed z-10  bg-accent">
+          <div className="w-screen navbar bg-base-300 fixed z-10  bg-black txt-white">
             <div className="flex-none lg:hidden">
               <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
                 <svg
@@ -55,8 +55,8 @@ function ClientSide() {
             <div className="flex-1 px-2 mx-2">
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
               <a
-                className=""
-                style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}
+                className="txt-orange"
+                style={{  textShadow: "1px 1px 2px black" }}
               >
                 Theatre
               </a>
