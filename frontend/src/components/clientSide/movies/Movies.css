@@ -1,4 +1,10 @@
-
+.container {
+  width: 100%;
+  display: flex;
+flex-wrap: wrap;
+  gap: 1rem;
+  text-align: center;
+}
 .radius {
     border-radius: 10px;
   }
@@ -12,7 +18,7 @@
   .cardMod{
     margin: 1rem;
     
-    box-shadow: 0px 0px 29px 20px rgba(158,158,158,0.75);
+    box-shadow: 0px 0px 20px 20px rgba(158,158,158,0.3);
   }
 
   .layer {

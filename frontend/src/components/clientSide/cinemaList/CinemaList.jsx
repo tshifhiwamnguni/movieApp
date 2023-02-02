@@ -68,7 +68,7 @@ function CinemaList() {
         <div className="container">
           {movies.map((element, k) => {
             return (
-              <div key={k} className="card cardMod w-fit bg-base-100 shadow-xl">
+              <div key={k} className="card cardMod w-96 bg-base-100 shadow-xl">
                 <figure className="">
                   <img
                     src="https://placeimg.com/400/225/arch"

@@ -22,12 +22,11 @@ function UserProfile() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const token = localStorage.getItem("jwt");
-  const [firstname, setFirstname]=useState('');
-  const [lastname, setLastname]=useState('');
-  const navigate = useNavigate(); 
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    
     let decoded = jwt_decode(token);
     ID = decoded.id;
     setUserId(ID);
@@ -37,8 +36,8 @@ function UserProfile() {
     axios
       .get(`${API}/users/${ID}?populate=*`)
       .then((data) => {
-        console.log(data)
-      
+        console.log(data);
+
         setEmail(data.data.email);
         setName(data.data.username);
         setPhone(data.data.cellphone);
@@ -47,7 +46,7 @@ function UserProfile() {
       })
       .catch((error) => {
         // ERROR(error.response.data.error.message);
-        console.log(error)
+        console.log(error);
       })
       .finally(() => setLoading(false));
   }, [ID]);
@@ -61,7 +60,7 @@ function UserProfile() {
         cellphone: cellphone,
         username: name,
         firstname: firstname,
-        lastname: lastname
+        lastname: lastname,
       };
 
       await axios
@@ -79,32 +78,32 @@ function UserProfile() {
   const changePassword = async (e) => {
     e.preventDefault();
 
-    setLoading(true)
+    setLoading(true);
     const data = {
       currentPassword: currentPassword,
       password: password,
-      passwordConfirmation: confirmPassword
+      passwordConfirmation: confirmPassword,
     };
 
-    await axios.post(
-     `${API}/auth/change-password`,
-      data,
-      {
+    await axios
+      .post(`${API}/auth/change-password`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    ).then(()=>{
-      SUCCESS('Successfully change the password');
-    }).catch((error)=>{
-      ERROR(error.response.data.error.message);
-    }).finally(()=>{
-      setLoading(false);
-    })
+      })
+      .then(() => {
+        SUCCESS("Successfully change the password");
+      })
+      .catch((error) => {
+        ERROR(error.response.data.error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
-    <div>
+    <div className="mt-4">
       <ToastContainer />
       <div className="hero min-h-screen flex justify-center align-middle">
         <div className="card w-96 card-compact bg-base-300 shadow-xl">
@@ -199,10 +198,15 @@ function UserProfile() {
                   <input
                     type="tel"
                     placeholder="e.g 0712345678"
-                    className="input input-bordered input-primary w-full"
+                    className="input  input-primary w-full border-lt"
                     value={cellphone}
                     onChange={(e) => setPhone(e.target.value)}
                   />
+                </label>
+                <label className="btn btn-primary radius mt-2" onClick={()=>{
+                  navigate('../history')
+                }}>
+                  booking history
                 </label>
               </div>
 
@@ -221,7 +225,6 @@ function UserProfile() {
       {/* Modal for change password */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
-      
         <div className="modal-box relative">
           <label
             htmlFor="my-modal-3"

@@ -1,9 +1,8 @@
 .container {
   width: 100%;
-  display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  display: flex;
+flex-wrap: wrap;
+
   text-align: center;
 }
 

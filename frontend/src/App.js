@@ -126,6 +126,7 @@ function App() {
               <Route path="payment" element={<Payment />} />
               <Route path="snackss" element={<Example />}></Route>
               <Route path="userProfile" element={<UserProfile/>}/>
+              <Route path="history" element={<History/>}/>
             </Route>
 
             {/* Public routes */}
@@ -190,7 +191,7 @@ function App() {
             </Route>
 
             <Route path="/landing" element={<Landing/>}></Route>
-            <Route path="/history" element={<History/>}></Route>
+            
             <Route path="/review" element={<Review/>}></Route>
             <Route path="/test" element={<Test/>}></Route>
             <Route path="/reviews" element={<Reviews/>}></Route>

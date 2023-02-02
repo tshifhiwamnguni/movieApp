@@ -222,7 +222,7 @@ getMovies()
                     </div>
                   </div>
                 </div>
-                :<div></div>}
+              :null}
                 </div>
               );
             })}{" "}
