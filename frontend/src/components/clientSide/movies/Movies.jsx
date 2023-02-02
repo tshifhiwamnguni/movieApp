@@ -32,7 +32,7 @@ function Movies() {
 
   
   let id=true
-  const [modelData, setModelData] = useState(initData);
+  const [modelData2, setModelData] = useState(initData);
   function getMovies(){
     axios
     .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
@@ -87,16 +87,16 @@ getMovies()
   }, [query]);
 
 
-  function select(index) {
+  function select2(index) {
     setModelData(index);
     console.log(index);
-    console.log('mdoel , ',modelData);
+    console.log('mdoel , ',modelData2);
   }
 
   
 
 
-  function selectMovie(data) {
+  function selectMovie2(data) {
    console.log(data);
      localStorage.setItem('MId', data.id)
     localStorage.setItem('MPrice', data.attributes.price)
@@ -136,12 +136,12 @@ getMovies()
             </button>
           </div>
           <div className="container">
-            {movies.map((element,k) => {
+            {movies.map((element2,k) => {
               
               return (
                 <div key={k}>
                  
-               {element.attributes.cinema.data.id == cinemaID ?
+               {element2.attributes.cinema.data.id == cinemaID ?
                 <div 
                   
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
@@ -149,26 +149,27 @@ getMovies()
                   
                   <figure className="px-10 pt-10">
                     <img
-                      src={element.attributes.movieImage}
+                      src={element2.attributes.movieImage}
                       alt="Shoes"
                       className="rounded-xl"
                     />
                   </figure>
                   <div className="card-body items-center text-center">
-                    <h2 className="card-title">{element.attributes.title}</h2>
+                    <h2 className="card-title">{element2.attributes.title}</h2>
                     <div className="layer">
-                    {element.attributes.genres.data.map(
-            (el,i)=>{
-               return<div key={i} className="genre">{el.attributes.name}  </div>;
+                    {element2.attributes.genres.data.map(
+            (el2,i)=>{
+               return<div key={i} className="genre">{el2.attributes.name}  </div>;
             }
           )}
           </div>
 
                     <div className="card-actions">
-                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element)}}>book now</button>
+                      <button className="btn btn-primary radius" onClick={()=>{selectMovie2(element2)}}>book now</button>
                       <label
                         onClick={() => {
-                          select(element);
+                          console.log('res');
+                          // select2(element2);
                         }}
                         htmlFor="my-modal-5"
                         className="btn radius"
@@ -185,7 +186,7 @@ getMovies()
                       <div className="modal">
                         <div className="modal-box w-11/12 max-w-5xl">
                           <h3 className="font-bold text-lg">
-                            {modelData.attributes.title}
+                            {modelData2.attributes.title}
                           </h3>
 
                           <iframe
@@ -208,7 +209,7 @@ getMovies()
                           </video> */}
 
 
-                <p>{modelData.attributes.description}</p>
+                <p>{modelData2.attributes.description}</p>
 
 
 

@@ -234,7 +234,7 @@ export default function Example() {
 
   return (
     <div className="mt-24">
-      <div className="mx-auto w-2/5">
+      <div className="mx-auto w-4/5">
         <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="mt-5 md:col-span-2 md:mt-0">
             <form>
@@ -264,7 +264,7 @@ export default function Example() {
                       Cinema:
                     </label>
                     <div className="mt-1">
-                      <p className="mt-2 text-xl ">
+                      <p className="mt-2 text-2xl ">
                         <h1></h1>{placeName} - {cinemaLocation}
                       </p>
                     </div>
@@ -374,7 +374,7 @@ export default function Example() {
       </div>
       {isAddSnacks ? (
         <div>
-          <div className="mx-auto sm:mt-0 w-2/5">
+          <div className="mx-auto sm:mt-0 w-4/5">
             <div className="md:grid md:grid-cols-2 md:gap-6">
               <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="overflow-hidden shadow sm:rounded-md">
@@ -382,12 +382,12 @@ export default function Example() {
                     <div className=" gap-6">
                       <div className="col-span-6 sm:col-span-3 mx-auto py-4"></div>
 
-                      <div className="flex flex-wrap">
+                      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-1">
                         {snack.map((element, i) => {
                           return (
                             <div
                               key={i}
-                              className="card mx-auto mb-2 h-fit w-56 text-center bg-primary text-primary-content"
+                              className="card h-fit w-44 m-2 text-center bg-primary text-primary-content"
                             >
                               <div className="card-body flex flex-wrap ">
                                 <h2> {element.attributes.name}</h2>
