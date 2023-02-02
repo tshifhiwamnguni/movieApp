@@ -98,8 +98,8 @@ const BookingStat = lazy(() =>
 );
 
 const Payment = lazy(() => import("./components/clientSide/payment/Payment"));
-const PreReg = lazy(() =>
-  import("./components/auth/preRegistration/RegistrationSelector")
+const UserProfile = lazy(() =>
+  import("./components/clientSide/userProfile/UserProfile")
 );
 
 function App() {
@@ -125,6 +125,7 @@ function App() {
               <Route path="book" element={<Booking />}></Route>
               <Route path="payment" element={<Payment />} />
               <Route path="snackss" element={<Example />}></Route>
+              <Route path="userProfile" element={<UserProfile/>}/>
             </Route>
 
             {/* Public routes */}

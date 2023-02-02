@@ -64,7 +64,7 @@ function Login() {
           const token = localStorage.getItem("jwt");
           let decoded = jwt_decode(token);
           let ID = decoded.id;
-          
+    
       if (localStorage.getItem("seats")) {
         navigate("/client/snackss");
       }

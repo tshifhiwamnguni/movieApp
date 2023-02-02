@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState} from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import {Outlet} from "react-router-dom" ;
 function ClientSide() {
 
     const navigate = useNavigate();
-
+    const [activeNav, setActiveNav] = useState('home');
     // useEffect(() => {
     //   // if (!localStorage.getItem("jwt")) {
     //   //   navigate("/login/", { replace: true });
@@ -57,13 +57,27 @@ function ClientSide() {
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/client/clientHome/")}>
-                  <a  className={active ? "active" : ""}>
+                <li  onClick={() => {
+                  navigate("/client/clientHome/")
+                  setActiveNav('home')
+              }}>
+                  <a  className={activeNav == 'home' ? "active radius" : ""}>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
 
+
+                <li onClick={() => {
+                  navigate("/client/userProfile")
+                  setActiveNav('profile')
+              }}
+              className={activeNav == 'profile' ? "active radius" : ""}>
+              <a>
+                <CgProfile style={{ fontSize: "1.5rem" }} />
+                Profile
+              </a>
+            </li>
                 {/* <li onClick={() => navigate("/client/movie/")}>
                   <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
@@ -74,6 +88,7 @@ function ClientSide() {
                   <a>
                     <RiMovie2Line style={{ fontSize: "1.5rem" }} />
                     All plays
+                    onClick={()=>{ setActiveNav('#')}} className={activeNav !== '#' ? 'active':classes.active}
                   </a>
                 </li> */}
                 <li onClick={logout}>
@@ -107,12 +122,12 @@ function ClientSide() {
                 Home
               </a>
             </li>
-            {/* <li onClick={() => navigate("/admin/profile/")}>
+            <li onClick={() => navigate("/admin/profile/")}>
               <a>
                 <CgProfile style={{ fontSize: "1.5rem" }} />
                 Profile
               </a>
-            </li> */}
+            </li>
             {/* <li>
               <a>
                 <RiMovie2Line style={{ fontSize: "1.5rem" }} />
