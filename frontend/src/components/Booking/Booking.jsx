@@ -8,7 +8,7 @@ function Booking() {
 const naviage = useNavigate()
   const [bookedSeat, setBookedSeat] = useState([])
 const  [isActive,setIsActive]=useState(false)
-
+const [bookingDate, setBookingDate] = useState('');
 useEffect(()=>{
   // console.log("effect");
   console.log("effect ", bookedSeat)
@@ -40,8 +40,9 @@ useEffect(()=>{
     console.log(bookedSeat);
 
     localStorage.setItem("seats", bookedSeat)
+    localStorage.setItem('date', bookingDate)
     console.log("booked " ,   localStorage.getItem('seats'))
-    naviage('../../snackss')
+    naviage('../snackss')
 
   }
 
@@ -76,8 +77,16 @@ useEffect(()=>{
             </div>);
           })}
         </div>
+        <input
+                  type="datetime-local"
+                  onChange={(e) => setBookingDate(e.target.value)}
+                  value={bookingDate}
+                  className="input input-bordered w-full"
+                />
+            
       </div>
     <div className="flex mt-10">
+      
     <button className="text-center text-5xl font-bold mb-4 btn btn-primary radius" onClick={book} >  book  </button>
     </div>
     </div>
