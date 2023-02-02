@@ -56,7 +56,7 @@ function Review() {
   const handleReviewChange = async (event) => {
     console.log(reviews.current.value);
     console.log(ratings.current.value);
-
+  
     const data = {
       data: { rating: ratings.current.value, comment: reviews.current.value },
     };

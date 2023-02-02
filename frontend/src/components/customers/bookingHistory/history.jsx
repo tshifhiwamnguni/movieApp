@@ -69,12 +69,12 @@ function History() {
           }).map((item, index) => (
             <>
               <div
-                className="card w-fit bg-primary text-primary-content mt-16 p-2"
+                className="card w-fit bg-primary text-primary-content p-2"
                 key={item.id}
               >
                 <div className="card-body" >
                   <h2 className="card-title flex justify-start">
-                    <BiMoviePlay className="text-xl"/>
+                    <BiMoviePlay className="text-4xl"/>
                     <span>{item.attributes.movie.data.attributes.title}</span>
                   </h2>
                   <p>
