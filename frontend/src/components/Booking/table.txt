@@ -1,0 +1,47 @@
+{/* <table className='seats'>
+
+        <tbody>
+        <tr className=''>
+          <td>A1</td>
+          <td>A2</td>
+          <td>A3</td>
+          <td>A4</td>
+          <td>A5</td>
+          <td>A6</td>
+        </tr>
+        <tr className=''>
+          <td>B1</td>
+          <td>B2</td>
+          <td>B3</td>
+          <td>B5</td>
+          <td>B5</td>
+          <td>B6</td>
+        </tr>
+        <tr className=''>
+          <td>C1</td>
+          <td>C1</td>
+          <td>C1</td>
+          <td>C1</td>
+          <td>C1</td>
+          <td>C1</td>
+        </tr>
+        <tr className=''>
+          <td>D1</td>
+          <td>D1</td>
+          <td>D1</td>
+          <td>D1</td>
+          <td>D1</td>
+          <td>D1</td>
+        </tr>
+        <tr className=''>
+          <td>E1</td>
+          <td>E1</td>
+          <td>E1</td>
+          <td>E1</td>
+          <td>E1</td>
+          <td>E1</td>
+        </tr>
+    
+
+</tbody>
+      </table> */}
