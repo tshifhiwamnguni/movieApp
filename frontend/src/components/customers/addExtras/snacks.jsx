@@ -151,6 +151,32 @@ export default function Example() {
       },
     };
 
+    if (selectedSnacks.length > 0) {
+      selectedSnacks.map((element) => {
+        let snackData = {
+          data: {
+          quantity: 1,
+          user: ID,
+          cinema_snacks: element.id,
+          cinema: placeId
+          }
+        };
+
+        axios
+          .post(
+            "https://strapi-movie-app.onrender.com/api/cinema-orders",
+            snackData,
+            {
+              headers: {
+                Authorization:
+                  "Bearer c03f2ff3dc732f216fff5ab4e4766d1fc88b820752ff5cc25d47cb4e5e867b67e01f3748cf3d6de665bad7c22f2c995d3f549073874e893ac037685ed2081be326647aac58ae737ccee9dde8d36d56c36f84fe34ecd6e2b42b27dff6662b6e959f420b117d0c3cddcdcf45263bfe82dc75fb854690842ed01bb88f960226d62e",
+              },
+            }
+          )
+          .then(async (result) => {});
+      });
+    }
+
     if (type === "cinema") {
       axios
         .post(
@@ -207,10 +233,8 @@ export default function Example() {
   }
 
   return (
-    <>
-      <div className="mx-auto bg-blue-400 p-4">
-        <h1 className="text-center text-6xl font-bold">Cart</h1>
-      </div>
+    <div className="mt-24">
+      
       <div className="mx-auto w-4/5">
         <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="mt-5 md:col-span-2 md:mt-0">
@@ -293,6 +317,8 @@ export default function Example() {
                                   {element.attributes.name},{" "}
                                   {element.attributes.snackSize}
                                 </p>
+                               
+                             <button className="btn"></button>
                                 <p className=" text-2xl text-gray-500">
                                   R{element.attributes.price}
                                 </p>
@@ -384,7 +410,7 @@ export default function Example() {
                                       selectSnack(element);
                                     }}
                                   >
-                                    Add snakc
+                                    Add snacks
                                   </h1>
                                 </button>
                               </div>{" "}
@@ -402,6 +428,6 @@ export default function Example() {
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 }
