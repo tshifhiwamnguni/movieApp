@@ -73,7 +73,7 @@ function Review() {
       });
 
     // event.preventDefault()
-    navigate("/reviews");
+    navigate("../reviews");
   };
 
   return (

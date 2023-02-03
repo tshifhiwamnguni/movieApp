@@ -129,6 +129,7 @@ function App() {
               <Route path="history" element={<History/>}/>
               <Route path="review" element={<Review/>}/>
                <Route path="test" element={<Test/>}/>
+               <Route path="reviews" element={<Reviews/>}/>
             </Route>
 
             {/* Public routes */}
