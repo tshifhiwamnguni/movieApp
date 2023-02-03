@@ -42,26 +42,23 @@ function CinemaList() {
   }, []);
 
   function select(index) {
-    setModelData(movies[index - 1]);
-    console.log(index - 1);
+    setModelData(index);
   }
 
   function setCinemaId(id) {
-    localStorage.setItem("cinemaId", id.id)
-
-  
-    console.log(id.attributes);
-    
-    localStorage.setItem("cinemaName", id.attributes.name)
-    localStorage.setItem("cinemaLocation", id.attributes.surbub)
-    // console.log(id.attributes.name)
-    // console.log(id.attributes.surbub)
-
+    localStorage.setItem("PlaceId", id.id);
+    localStorage.setItem("type", "cinema");
+    localStorage.setItem("PlaceName", id.attributes.name);
+    localStorage.setItem("Location", id.attributes.surbub);
     navigate("../movieList");
   }
 
   function close() {
     // console.log(cinemaCtx.cinemaName);
+  }
+
+  function addReview() {
+    navigate("/review");
   }
 
   return (
@@ -71,10 +68,7 @@ function CinemaList() {
         <div className="container">
           {movies.map((element, k) => {
             return (
-              <div
-                key={k}
-                className="card cardMod w-96 bg-base-100 shadow-xl"
-              >
+              <div key={k} className="card cardMod w-fit bg-base-100 shadow-xl">
                 <figure className="">
                   <img
                     src="https://placeimg.com/400/225/arch"
@@ -96,13 +90,21 @@ function CinemaList() {
                     </button>
                     <label
                       onClick={() => {
-                        select(element.id);
+                        select(element);
                       }}
                       htmlFor="my-modal-5"
                       className="btn radius"
                     >
                       view details
                     </label>
+                    {/* 
+                    <label
+                      onClick={addReview}
+                      htmlFor="my-modal-5"
+                      className="btn radius"
+                    >
+                      Review
+                    </label> */}
 
                     {/* Put this part before </body> tag */}
                     <input
