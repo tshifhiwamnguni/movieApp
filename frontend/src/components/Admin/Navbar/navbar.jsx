@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -7,10 +7,11 @@ import { CgProfile } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import "./navbar.css";
-import {Outlet} from "react-router-dom" ;
+import { Outlet } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState("home");
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
@@ -26,7 +27,7 @@ function Home() {
   const active = true;
   return (
     <>
-      <div className="drawer" data-theme='dark'>
+      <div className="drawer" data-theme="dark">
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
@@ -50,25 +51,46 @@ function Home() {
             </div>
             <div className="flex-1 px-2 mx-2">
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
-              <a className="" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
+              <a
+                className=""
+                style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}
+              >
                 Theatre
               </a>
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/admin/dashboard/")}>
+                <li
+                  onClick={() => {
+                    navigate("/admin/dashboard/");
+                    setActivePage("home");
+                  }}
+                  className={activePage === "home" ? "active" : ""}
+                >
                   <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/profile/")}>
+                <li
+                  onClick={() => {
+                    navigate("/admin/profile/");
+                    setActivePage("profile");
+                  }}
+                  className={activePage === "profile" ? "active" : ""}
+                >
                   <a>
                     <CgProfile style={{ fontSize: "1.5rem" }} />
                     Profile
                   </a>
                 </li>
-                <li onClick={() => navigate("/admin/users/")}>
+                <li
+                  onClick={() => {
+                    navigate("/admin/users/");
+                    setActivePage("users");
+                  }}
+                  className={activePage === "users" ? "active" : ""}
+                >
                   <a>
                     <FiUsers style={{ fontSize: "1.5rem" }} />
                     All users
@@ -84,8 +106,7 @@ function Home() {
             </div>
           </div>
           <div className="flex justify-center align-center">
-           
-          <Outlet />
+            <Outlet />
           </div>
         </div>
 
@@ -98,19 +119,37 @@ function Home() {
             >
               <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
-            <li onClick={() => navigate("/admin/dashboard/")}>
-              <a className={active ? "active" : ""}>
+            <li
+              onClick={() => {
+                navigate("/admin/dashboard/");
+                setActivePage("home");
+              }}
+              className={activePage === "home" ? "active" : ""}
+            >
+              <a>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
-            <li onClick={() => navigate("/admin/profile/")}>
+            <li
+              onClick={() => {
+                navigate("/admin/profile/");
+                setActivePage("profile");
+              }}
+              className={activePage === "profile" ? "active" : ""}
+            >
               <a>
                 <CgProfile style={{ fontSize: "1.5rem" }} />
                 Profile
               </a>
             </li>
-            <li onClick={() => navigate("/admin/users/")}>
+            <li
+              onClick={() => {
+                navigate("/admin/users/");
+                setActivePage("users");
+              }}
+              className={activePage === "users" ? "active" : ""}
+            >
               <a>
                 <FiUsers style={{ fontSize: "1.5rem" }} />
                 All users

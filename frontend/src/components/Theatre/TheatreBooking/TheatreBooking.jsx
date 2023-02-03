@@ -37,79 +37,33 @@ function BookingStatTheatre() {
     const bookingData = {
       data: {
         bookingDate: bookingDate,
-        cinema_seat: parseInt(seat),
       },
     };
 
     console.log(bookingData);
     console.log("id " + bookId.current);
 
-    let flag = false;
-
-    bookings.forEach((element) => {
-      // console.log(element);
-      if (
-        element.attributes.cinema_seat?.data?.attributes?.seat !== seat &&
-        element.bookingDate?.substr(1, 16) !== bookingDate
-      ) {
-        console.log("update");
-        flag = true;
-      } else {
-        flag = false;
-        console.log("donot update");
-      }
-
-      if (flag) {
-        axios
-          .put(
-            `${API}/booking-cinemas/${bookId.current}?populate=*`,
-            bookingData,
-            {
-              headers: {
-                Authorization: `Bearer ${TOKEN}`,
-              },
-            }
-          )
-          .then((data) => {
-            console.log(data.data);
-            getBooking();
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setLoading(false);
-            getBooking();
-          });
-      }
-    });
-
-    // console.log(bookingData)
-  };
-
-  // get cinema seats
-  const getCinemaSeats = async () => {
-    setLoading(true);
-    await axios
-      .get(
-        `${API}/theatre-seats?populate=*&filters[cinema]=${theatreID.current}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-          },
-        }
-      )
-      .then((b) => {
-        console.log(b.data.data);
-        setCinemaSeat(b.data.data);
+    axios
+      .put(`${API}/booking-theatres/${bookId.current}`, bookingData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        console.log(data.data);
+        getBooking();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setLoading(false);
+        getBooking();
       });
+
+    // console.log(bookingData)
   };
+
 
   // get a user
   const getUser = async () => {
@@ -123,7 +77,6 @@ function BookingStatTheatre() {
         // console.log(data.data);
         theatreID.current = data.data?.theatre.id;
         getBooking();
-        getCinemaSeats();
       })
       .catch((err) => {
         console.log(err);
@@ -185,6 +138,7 @@ function BookingStatTheatre() {
               <th></th>
               <th>Customer Name</th>
               <th>Movie</th>
+              <th>Total Cost</th>
               <th>Seat</th>
               <th>Date</th>
               <th>Created at</th>
@@ -228,8 +182,9 @@ function BookingStatTheatre() {
                         .lastname}
                   </td>
                   <td>{book.attributes.show.data.attributes.title}</td>
+                  <td>{book.attributes.totalPrice}</td>
                   <td>
-                    {book.attributes?.theatre_seat?.data?.attributes?.seat}
+                    {book.attributes?.theatre_seat}
                   </td>
                   <td>
                     {moment(book.attributes.bookingDate).format(
@@ -266,14 +221,14 @@ function BookingStatTheatre() {
       <hr />
       <div className="flex gap-3 justify-center mt-3">
         <button
-          className="btn btn-primary glass"
+          className="btn btn-ghost glass"
           onClick={handlePreviousPage}
           disabled={page === 1}
         >
           Previous
         </button>
         <button
-          className="btn btn-primary glass"
+          className="btn btn-ghost glass"
           onClick={handleNextPage}
           disabled={page === pageCount}
         >
@@ -310,7 +265,7 @@ function BookingStatTheatre() {
               </label>
             </div>
 
-            <div className="form-control">
+            {/* <div className="form-control">
               <label className="label">
                 <span className="label-text">Cinema seat</span>
               </label>
@@ -334,7 +289,7 @@ function BookingStatTheatre() {
                   })}
                 </select>
               </label>
-            </div>
+            </div> */}
 
             <div className="flex justify-end mt-3">
               <label
