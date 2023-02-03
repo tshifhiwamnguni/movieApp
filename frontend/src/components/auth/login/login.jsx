@@ -76,7 +76,7 @@ function Login() {
               console.log("role ", data.data.role.id);
 
               if (data.data.role.id === 4) {
-                navigate("../customer");
+                navigate("/client/clientHome");
               }
               if (data.data.role.id === 1) {
                 navigate("/client/clientHome");
