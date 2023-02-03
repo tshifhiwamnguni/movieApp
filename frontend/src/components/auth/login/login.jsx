@@ -65,9 +65,9 @@ function Login() {
           let decoded = jwt_decode(token);
           let ID = decoded.id;
     
-      if (localStorage.getItem("seats")) {
-        navigate("/client/snackss");
-      }
+      // if (localStorage.getItem("seats")) {
+      //   navigate("/client/snackss");
+      // }
     
 
           axios
@@ -76,7 +76,7 @@ function Login() {
               console.log("role ", data.data.role.id);
 
               if (data.data.role.id === 4) {
-                navigate("../customer");
+                navigate("/client/clientHome");
               }
               if (data.data.role.id === 1) {
                 navigate("/client/clientHome");

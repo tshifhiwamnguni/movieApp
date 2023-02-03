@@ -89,9 +89,9 @@ function CinemaList() {
                       Select
                     </button>
                     <label
-                      onClick={() => {
-                        select(element);
-                      }}
+                      onClick={() => 
+                        select(element)
+                      }
                       htmlFor="my-modal-5"
                       className="btn radius"
                     >

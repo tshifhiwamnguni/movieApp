@@ -265,7 +265,7 @@ export default function Example() {
                     </label>
                     <div className="mt-1">
                       <p className="mt-2 text-2xl ">
-                        <h1></h1>{placeName} - {cinemaLocation}
+                        {placeName} - {cinemaLocation}
                       </p>
                     </div>
                   </div>

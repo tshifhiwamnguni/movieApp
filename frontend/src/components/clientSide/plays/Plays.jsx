@@ -173,7 +173,7 @@ function Plays() {
                     {element.attributes.genres.data.map(
             (el, i)=>{
              
-               return<div key={i}  className="genre btn"> {el.attributes.name} </div>;
+               return<div key={i}  className="genre btn radius"> {el.attributes.name} </div>;
             }
           )}
           </div>

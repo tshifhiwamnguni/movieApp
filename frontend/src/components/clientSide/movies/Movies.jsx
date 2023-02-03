@@ -32,7 +32,7 @@ function Movies() {
 
   
   let id=true
-  const [modelData2, setModelData] = useState(initData);
+  const [modelData, setModelData] = useState(initData);
   function getMovies(){
     axios
     .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
@@ -87,16 +87,16 @@ getMovies()
   }, [query]);
 
 
-  function select2(index) {
+  function select(index) {
     setModelData(index);
     console.log(index);
-    console.log('mdoel , ',modelData2);
+    console.log('mdoel , ',modelData);
   }
 
   
 
 
-  function selectMovie2(data) {
+  function selectMovie(data) {
    console.log(data);
      localStorage.setItem('MId', data.id)
     localStorage.setItem('MPrice', data.attributes.price)
@@ -159,17 +159,17 @@ getMovies()
                     <div className="layer">
                     {element2.attributes.genres.data.map(
             (el2,i)=>{
-               return<div key={i} className="genre">{el2.attributes.name}  </div>;
+               return<div key={i} className=" btn radius genre">{el2.attributes.name}  </div>;
             }
           )}
           </div>
 
                     <div className="card-actions">
-                      <button className="btn btn-primary radius" onClick={()=>{selectMovie2(element2)}}>book now</button>
+                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element2)}}>book now</button>
                       <label
                         onClick={() => {
                           console.log('res');
-                          // select2(element2);
+                          select(element2);
                         }}
                         htmlFor="my-modal-5"
                         className="btn radius"
@@ -186,7 +186,7 @@ getMovies()
                       <div className="modal">
                         <div className="modal-box w-11/12 max-w-5xl">
                           <h3 className="font-bold text-lg">
-                            {modelData2.attributes.title}
+                            {modelData.attributes.title}
                           </h3>
 
                           <iframe
@@ -209,11 +209,17 @@ getMovies()
                           </video> */}
 
 
-                <p>{modelData2.attributes.description}</p>
+                <p>{modelData.attributes.description}</p>
 
 
 
                           <div className="modal-action">
+                          <label  htmlFor="my-modal-5" className="btn radius">
+                              review
+                            </label>
+                            <label  htmlFor="my-modal-5" className="btn radius">
+                             see review
+                            </label>
                             <label  htmlFor="my-modal-5" className="btn radius">
                               close
                             </label>
