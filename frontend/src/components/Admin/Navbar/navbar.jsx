@@ -53,7 +53,7 @@ function Home() {
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
               <a
                 className=""
-                style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}
+                style={{ color: "#641AE6", textShadow: "1px 1px 2px black" }}
               >
                 Theatre
               </a>

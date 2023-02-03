@@ -84,6 +84,7 @@ function BookingStatTheatre() {
   };
 
   const getBooking = async () => {
+    setLoading(true);
     await axios
       .get(
         `${API}/booking-theatres?populate=*&filters[theatre]=${theatreID.current}`,
@@ -100,7 +101,9 @@ function BookingStatTheatre() {
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(()=>{
+        setLoading(false)
+      })
   };
 
   //   change page number
