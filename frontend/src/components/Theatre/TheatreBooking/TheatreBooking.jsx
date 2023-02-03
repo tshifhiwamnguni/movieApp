@@ -185,7 +185,7 @@ function BookingStatTheatre() {
                         .lastname}
                   </td>
                   <td>{book.attributes.show.data.attributes.title}</td>
-                  <td>{book.attributes.totalPrice}</td>
+                  <td>R{book.attributes.totalprice}</td>
                   <td>
                     {book.attributes?.theatre_seat}
                   </td>
