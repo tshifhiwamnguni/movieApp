@@ -4,83 +4,71 @@ import jwt_decode from "jwt-decode";
 import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
-import {BsCalendar2Date} from 'react-icons/bs'
-import {MdAirlineSeatReclineExtra} from 'react-icons/md'
+import { BsCalendar2Date } from "react-icons/bs";
+import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import './bookingStat.css'
 
 function BookingStat() {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
   const cinemaID = useRef();
-  const [bookingDate, setBookingDate] = useState('');
-  const [seat, setSeat] = useState('');
+  const [bookingDate, setBookingDate] = useState("");
+  const [seat, setSeat] = useState("");
   const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
   let ID = decoded.id;
 
   // get and set selected data to the variables
   function selectedEdit(books) {
-    console.log(books)
+    console.log(books);
     setBookingDate(books.bookingDate);
-    setSeat(books.attributes?.cinema_seat?.data?.attributes?.seat)
+    setSeat(books.attributes?.cinema_seat?.data?.attributes?.seat);
     bookId.current = books.id;
-    console.log('ID from press' + bookId.current)
+    console.log("ID from press" + bookId.current);
   }
 
-  const updateBooking = () =>{
-   setLoading(true);
+  const updateBooking = () => {
+    setLoading(true);
 
     const bookingData = {
-      data:{
+      data: {
         bookingDate: bookingDate,
-        cinema_seat: parseInt(seat)
-      }
-    }
+      },
+    };
 
     console.log(bookingData);
-    console.log('id ' + bookId.current);
+    console.log("id " + bookId.current);
 
-    let flag = false;
-    
-    bookings.forEach(element => {
-      // console.log(element);
-      if (element.attributes.cinema_seat?.data?.attributes?.seat !== seat && element.bookingDate?.substr(1,16) !== bookingDate) {
-        console.log('update');
-        flag = true;
-      }else{
-        flag= false;
-        console.log('donot update')
-      }
+    axios
+      .put(`${API}/booking-cinemas/${bookId.current}?populate=*`, bookingData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((data) => {
+        console.log(data.data);
+        getBooking();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        getBooking();
+      });
+  };
 
-      if(flag){
-        axios.put(`${API}/booking-cinemas/${bookId.current}?populate=*`, bookingData,
-        {
-          headers:{
-            Authorization: `Bearer ${TOKEN}`
-          }
-        }).then((data)=>{
-          console.log(data.data);
-          getBooking();
-        }).catch((err)=>{
-          console.log(err)
-        }).finally(()=>{
-          setLoading(false);
-          getBooking();
-        })
-      }
-    });
-
-    // console.log(bookingData)
-  }
+  // console.log(bookingData)
 
   // get cinema seats
-  const getCinemaSeats = async() =>{
+  const getCinemaSeats = async () => {
     setLoading(true);
     await axios
       .get(
@@ -97,12 +85,13 @@ function BookingStat() {
       })
       .catch((err) => {
         console.log(err);
-      }).finally(()=>{
-        setLoading(false)
       })
-  }
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-// get a user
+  // get a user
   const getUser = async () => {
     await axios
       .get(`${API}/users/${ID}?populate=*`, {
@@ -148,19 +137,19 @@ function BookingStat() {
     getUser();
   }, []);
 
-     //   change page number
-     async function handleNextPage() {
-      setPage(page + 1);
-    }
-  
-    async function handlePreviousPage() {
-      setPage(page - 1);
-    }
-  
-    //   request for page change
-    useEffect(() => {
-      getBooking();
-    }, [page]);
+  //   change page number
+  async function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  async function handlePreviousPage() {
+    setPage(page - 1);
+  }
+
+  //   request for page change
+  useEffect(() => {
+    getBooking();
+  }, [page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -192,7 +181,7 @@ function BookingStat() {
               return (
                 <tr key={book.id}>
                   <td>
-                    {!loading ? (
+                    {!loading || book.id !== bookId.current? (
                       <div className="flex items-center space-x-3">
                         <div className="avatar placeholder">
                           <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
@@ -222,13 +211,18 @@ function BookingStat() {
                         .lastname}
                   </td>
                   <td>{book.attributes.movie.data.attributes.title}</td>
-                  <td>{book.attributes?.cinema_seat?.data?.attributes?.seat}</td>
-                  <td>{moment(book.attributes.bookingDate).format('YYYY-MM-DD HH:mm:ss')}</td>
+                  <td>
+                    {book.attributes?.cinema_seat?.data?.attributes?.seat}
+                  </td>
+                  <td>
+                    {moment(book.attributes.bookingDate).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )}
+                  </td>
                   <td>
                     {moment(book.attributes.createdAt).format(
                       "YYYY-MM-DD HH:mm:ss"
                     )}
-                    
                   </td>
                   <td>
                     {moment(book.attributes.updatedAt).format(
@@ -244,7 +238,6 @@ function BookingStat() {
                       >
                         Edit
                       </label>
-                      
                     </div>
                   </th>
                 </tr>
@@ -254,25 +247,25 @@ function BookingStat() {
         </table>
       </div>
       <hr />
-        <div className="flex gap-3 justify-center mt-3">
-          <button
-            className="btn btn-primary glass"
-            onClick={handlePreviousPage}
-            disabled={page === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-primary glass"
-            onClick={handleNextPage}
-            disabled={page === pageCount}
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-ghost glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-ghost glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
+      </div>
 
-       {/* edit modal */}
-       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+      {/* edit modal */}
+      <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative">
           <label
@@ -283,7 +276,6 @@ function BookingStat() {
           </label>
           <h3 className="text-lg font-bold">Edit booking</h3>
           <div className="py-4">
-            
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Movie date</span>
@@ -301,7 +293,7 @@ function BookingStat() {
               </label>
             </div>
 
-            <div className="form-control">
+            {/* <div className="form-control">
               <label className="label">
                 <span className="label-text">Cinema seat</span>
               </label>
@@ -321,7 +313,7 @@ function BookingStat() {
                   })}
                 </select>
               </label>
-            </div>
+            </div> */}
 
             <div className="flex justify-end mt-3">
               <label
@@ -335,8 +327,6 @@ function BookingStat() {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }
