@@ -127,6 +127,8 @@ function App() {
               <Route path="snackss" element={<Example />}></Route>
               <Route path="userProfile" element={<UserProfile/>}/>
               <Route path="history" element={<History/>}/>
+              <Route path="review" element={<Review/>}/>
+               <Route path="test" element={<Test/>}/>
             </Route>
 
             {/* Public routes */}

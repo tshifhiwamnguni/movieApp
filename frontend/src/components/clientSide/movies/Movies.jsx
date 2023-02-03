@@ -105,6 +105,10 @@ getMovies()
       navigate('../book')
    
   }
+
+  function toReviews(){
+    navigate('../review')
+  }
   return (
     <>
       <div className="mt-24">
@@ -214,7 +218,9 @@ getMovies()
 
 
                           <div className="modal-action">
-                          <label  htmlFor="my-modal-5" className="btn radius">
+                          <label  htmlFor="my-modal-5" className="btn radius" onClick={()=>{
+                            toReviews()
+                          }}>
                               review
                             </label>
                             <label  htmlFor="my-modal-5" className="btn radius">

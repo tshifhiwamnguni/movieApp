@@ -61,7 +61,7 @@ function TheareList() {
             return (
               <div
                 key={element.id}
-                className="card cardMod w-96 grow bg-base-100 shadow-xl"
+                className="card cardMod w-96 grows bg-base-100 shadow-xl"
               >
                 <figure className="">
                   <img

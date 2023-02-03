@@ -18,20 +18,17 @@ img {
 
 .cardMod{
   margin: 1rem;
-  
+  color: orange;
   box-shadow: 0px 0px 29px 20px rgba(158,158,158,0.75);
 }
 
-.cardMod:hover{
-  background-color: orange;
-  color: white;
-}
+
 .grow 
 {
   transition: all 0.3s ease-in-out;
 }
 
 .grow:hover {
-  transform: scale(1.06);
-
-}
+  background-color: orange;
+ color: black;
+} 

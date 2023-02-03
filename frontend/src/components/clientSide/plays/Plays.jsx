@@ -161,7 +161,7 @@ function Plays() {
                
                 <figure className="px-10 pt-10">
                   <img
-                    src={element.attributes.movieImage}
+                    src={element.attributes.showImage}
                     alt="Shoes"
                     className="rounded-xl"
                   />
