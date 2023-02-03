@@ -249,14 +249,14 @@ function BookingStat() {
       <hr />
       <div className="flex gap-3 justify-center mt-3">
         <button
-          className="btn btn-primary glass"
+          className="btn btn-ghost glass"
           onClick={handlePreviousPage}
           disabled={page === 1}
         >
           Previous
         </button>
         <button
-          className="btn btn-primary glass"
+          className="btn btn-ghost glass"
           onClick={handleNextPage}
           disabled={page === pageCount}
         >
