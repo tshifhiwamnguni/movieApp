@@ -54,7 +54,7 @@ function History() {
                   name="search"
                   placeholder="Search"
                   onChange={(e) => setSearch(e.target.value)}
-                  className="input rounded w-full max-w-md"
+                  className="input rounded w-full max-w-md border-black border-1"
                 />
               </div>
             </div>
