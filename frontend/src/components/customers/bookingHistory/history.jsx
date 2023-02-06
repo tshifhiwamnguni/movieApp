@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { BiMoviePlay } from "react-icons/bi";
 import axios from "axios";
+import create from 'zustand'
 import Pagination from "../pagination/pagination";
 // import "./history.css"
 
