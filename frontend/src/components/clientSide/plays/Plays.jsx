@@ -161,7 +161,7 @@ function Plays() {
                
                 <figure className="px-10 pt-10">
                   <img
-                    src={element.attributes.movieImage}
+                    src={element.attributes.showImage}
                     alt="Shoes"
                     className="rounded-xl"
                   />
@@ -173,7 +173,7 @@ function Plays() {
                     {element.attributes.genres.data.map(
             (el, i)=>{
              
-               return<div key={i}  className="genre btn"> {el.attributes.name} </div>;
+               return<div key={i}  className="genre btn radius"> {el.attributes.name} </div>;
             }
           )}
           </div>
