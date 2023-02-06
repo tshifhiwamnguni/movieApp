@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,12 @@ import { IoFastFoodOutline } from "react-icons/io5";
 import { TbMovie } from "react-icons/tb";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { BsBookmarkCheck } from "react-icons/bs";
-// import "./navbar.css";
+import "./theatre.css";
 import { Outlet } from "react-router-dom";
 
 function TheatreNavbar() {
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState("home");
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
@@ -53,32 +54,56 @@ function TheatreNavbar() {
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Show</a>
               <a
                 className=""
-                style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}
+                style={{ color: "#641AE6", textShadow: "1px 1px 2px black" }}
               >
                 Theatre
               </a>
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li onClick={() => navigate("/theatre/dash/")}>
+                <li
+                  onClick={() => {
+                    navigate("/theatre/dash/");
+                    setActivePage("home");
+                  }}
+                  className={activePage === "home" ? "active" : ""}
+                >
                   <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/theatre/snacks/")}>
+                <li
+                  onClick={() => {
+                    navigate("/theatre/snacks/");
+                    setActivePage("snacks");
+                  }}
+                  className={activePage === "snacks" ? "active" : ""}
+                >
                   <a>
                     <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
                     Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/theatre/shows/")}>
+                <li
+                  onClick={() => {
+                    navigate("/theatre/shows/");
+                    setActivePage("shows");
+                  }}
+                  className={activePage === "shows" ? "active" : ""}
+                >
                   <a>
                     <TbMovie style={{ fontSize: "1.5rem" }} />
                     Shows
                   </a>
                 </li>
-                <li onClick={() => navigate("/theatre/stats/")}>
+                <li
+                  onClick={() => {
+                    navigate("/theatre/stats/");
+                    setActivePage("bookings");
+                  }}
+                  className={activePage === "bookings" ? "active" : ""}
+                >
                   <a>
                     <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
                     Bookings
@@ -107,25 +132,49 @@ function TheatreNavbar() {
             >
               <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
-            <li onClick={() => navigate("/theatre/dash/")}>
-              <a className={active ? "active" : ""}>
+            <li
+              onClick={() => {
+                navigate("/theatre/dash/");
+                setActivePage("home");
+              }}
+              className={activePage === "home" ? "active" : ""}
+            >
+              <a>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
-            <li onClick={() => navigate("/theatre/snacks/")}>
+            <li
+              onClick={() => {
+                navigate("/theatre/snacks/");
+                setActivePage("snacks");
+              }}
+              className={activePage === "snacks" ? "active" : ""}
+            >
               <a>
                 <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
                 Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/theatre/shows/")}>
+            <li
+              onClick={() => {
+                navigate("/theatre/shows/");
+                setActivePage("shows");
+              }}
+              className={activePage === "shows" ? "active" : ""}
+            >
               <a>
                 <TbMovie style={{ fontSize: "1.5rem" }} />
                 Shows
               </a>
             </li>
-            <li onClick={() => navigate("/theatre/stats/")}>
+            <li
+              onClick={() => {
+                navigate("/theatre/stats/");
+                setActivePage("bookings");
+              }}
+              className={activePage === "bookings" ? "active" : ""}
+            >
               <a>
                 <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
                 Bookings

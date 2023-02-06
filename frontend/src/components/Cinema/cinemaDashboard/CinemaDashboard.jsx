@@ -90,7 +90,7 @@ function CinemaDashboard() {
               Number of movies
             </div>
             <div className="flex">
-              <div className="stat-value flex-1 text-blue-400">{movies}</div>
+              <div className="stat-value flex-1 text-orange-400">{movies}</div>
               <button
                 className="btn btn-ghost glass"
                 onClick={() => navigate("/cinema/mov", { replace: true })}
@@ -116,7 +116,7 @@ function CinemaDashboard() {
               Number of snacks
             </div>
             <div className="flex">
-              <div className="stat-value flex-1 text-blue-400">{snacks}</div>
+              <div className="stat-value flex-1 text-orange-400">{snacks}</div>
               <button
                 className="btn btn-ghost glass"
                 onClick={() => navigate("/cinema/snacks", { replace: true })}
@@ -142,7 +142,7 @@ function CinemaDashboard() {
               Number of booking
             </div>
             <div className="flex">
-              <div className="stat-value flex-1 text-blue-400">{bookings}</div>
+              <div className="stat-value flex-1 text-orange-400">{bookings}</div>
               <button
                 className="btn btn-ghost glass"
                 onClick={() => navigate("/cinema/stats", { replace: true })}

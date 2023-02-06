@@ -12,11 +12,11 @@ function ClientSide() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-      if (!localStorage.getItem("jwt")) {
-        navigate("/login/", { replace: true });
-      }
-    });
+    // useEffect(() => {
+    //   // if (!localStorage.getItem("jwt")) {
+    //   //   navigate("/login/", { replace: true });
+    //   // }
+    // });
   
     function logout() {
       removeToken();

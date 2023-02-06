@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { removeToken } from "../../environment/helpers";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +6,13 @@ import { BsHouse } from "react-icons/bs";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbMovie } from "react-icons/tb";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import {BsBookmarkCheck} from 'react-icons/bs'
-// import "./navbar.css";
-import {Outlet} from "react-router-dom" ;
+import { BsBookmarkCheck } from "react-icons/bs";
+import "./cin.css";
+import { Outlet } from "react-router-dom";
 
 function Home() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const [activePage, setActivePage] = useState("home");
 
   useEffect(() => {
     if (!localStorage.getItem("jwt")) {
@@ -27,7 +28,7 @@ function Home() {
   const active = true;
   return (
     <>
-      <div className="drawer" data-theme='dark'>
+      <div className="drawer" data-theme="halloween">
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col overflow-scroll">
@@ -51,36 +52,63 @@ function Home() {
             </div>
             <div className="flex-1 px-2 mx-2">
               <a style={{ fontSize: "2rem", fontWeight: "bolder" }}>Movie</a>
-              <a className="" style={{ color: "#4AE3D6", textShadow: "1px 1px 2px black" }}>
+              <a
+                className=""
+                style={{ color: "#f28c18", textShadow: "1px 1px 2px black" }}
+              >
                 Theatre
               </a>
             </div>
             <div className="flex-none hidden lg:block m-2">
               <ul className="menu menu-horizontal flex gap-2">
-                <li  onClick={() => navigate("/cinema/dash/")}>
+                <li
+                  onClick={() => {
+                    navigate("/cinema/dash/");
+                    setActivePage("home");
+                  }}
+                  className={activePage == "home" ? "active" : ""}
+                >
                   <a>
                     <BsHouse style={{ fontSize: "1.5rem" }} />
                     Home
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/snacks/")}>
+                <li
+                  onClick={() => {
+                    navigate("/cinema/snacks/");
+                    setActivePage("snacks");
+                  }}
+                  className={activePage == "snacks" ? "active" : ""}
+                >
                   <a>
                     <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
                     Snacks
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/mov/")}>
+                <li
+                  onClick={() => {
+                    navigate("/cinema/mov/");
+                    setActivePage("movies");
+                  }}
+                  className={activePage == "movies" ? "active" : ""}
+                >
                   <a>
                     <TbMovie style={{ fontSize: "1.5rem" }} />
                     Movies
                   </a>
                 </li>
-                <li onClick={() => navigate("/cinema/stats/")}>
-              <a>
-                <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
-                Bookings
-              </a>
-            </li>
+                <li
+                  onClick={() => {
+                    navigate("/cinema/stats/");
+                    setActivePage("bookings");
+                  }}
+                  className={activePage == "bookings" ? "active" : ""}
+                >
+                  <a>
+                    <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
+                    Bookings
+                  </a>
+                </li>
                 <li onClick={logout}>
                   <a>
                     <IoMdLogOut style={{ fontSize: "1.5rem" }} />
@@ -91,8 +119,7 @@ function Home() {
             </div>
           </div>
           <div className="flex justify-center align-center">
-           
-          <Outlet />
+            <Outlet />
           </div>
         </div>
 
@@ -105,25 +132,49 @@ function Home() {
             >
               <IoCloseCircleOutline style={{ fontSize: "2rem" }} />
             </label>
-            <li onClick={() => navigate("/cinema/dash/")}>
-              <a className={active ? "active" : ""}>
+            <li
+              onClick={() => {
+                navigate("/cinema/dash/");
+                setActivePage("home");
+              }}
+              className={activePage == "home" ? "active" : ""}
+            >
+              <a>
                 <BsHouse style={{ fontSize: "1.5rem" }} />
                 Home
               </a>
             </li>
-            <li onClick={() => navigate("/cinema/snacks/")}>
+            <li
+              onClick={() => {
+                navigate("/cinema/snacks/");
+                setActivePage("snacks");
+              }}
+              className={activePage == "snacks" ? "active" : ""}
+            >
               <a>
                 <IoFastFoodOutline style={{ fontSize: "1.5rem" }} />
                 Snacks
               </a>
             </li>
-            <li onClick={() => navigate("/cinema/mov/")}>
+            <li
+              onClick={() => {
+                navigate("/cinema/mov/");
+                setActivePage("movies");
+              }}
+              className={activePage == "movies" ? "active" : ""}
+            >
               <a>
                 <TbMovie style={{ fontSize: "1.5rem" }} />
                 Movies
               </a>
             </li>
-            <li onClick={() => navigate("/cinema/stats/")}>
+            <li
+              onClick={() => {
+                navigate("/cinema/stats/");
+                setActivePage("bookings");
+              }}
+              className={activePage == "bookings" ? "active" : ""}
+            >
               <a>
                 <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
                 Bookings
