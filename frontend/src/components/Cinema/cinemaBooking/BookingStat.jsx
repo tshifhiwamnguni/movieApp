@@ -53,7 +53,7 @@ function BookingStat() {
         },
       })
       .then((data) => {
-        console.log(data.data);
+        console.log(data);
         getBooking();
       })
       .catch((err) => {
