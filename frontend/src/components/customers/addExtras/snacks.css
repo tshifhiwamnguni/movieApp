@@ -1,12 +1,22 @@
-.delete{
- border: solid 1px black;
- border-radius: 2px;
- width: 30px;
- height: 30px;
- text-align: center;
- padding: auto;
-}
+
 
 .Md{
     vertical-align: text-bottom;
 }
+
+.rp{
+  display: flex;
+  flex-direction: column;
+
+width: 400px;
+padding: 2rem;
+}
+
+.lp{
+    width:300px ;
+}
+
+.gr{
+    background-color: green;
+}
+

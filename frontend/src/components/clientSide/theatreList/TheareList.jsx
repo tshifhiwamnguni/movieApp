@@ -55,13 +55,13 @@ function TheareList() {
   return (
     <div className=" ">
       <div>
-        <h1 className="text-center text-5xl font-bold mb-4">Theatre list</h1>
+        <h1 className="text-center text-5xl font-bold mb-4 txt-grey">Theatre list</h1>
         <div className="container">
           {movies.map((element) => {
             return (
               <div
                 key={element.id}
-                className="card cardMod w-96 bg-base-100 shadow-xl"
+                className="card cardMod w-96 grows bg-base-100 shadow-xl"
               >
                 <figure className="">
                   <img

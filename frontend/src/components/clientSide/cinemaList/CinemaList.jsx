@@ -64,11 +64,16 @@ function CinemaList() {
   return (
     <div className="mt-24 ">
       <div>
-        <h1 className="text-center text-5xl font-bold mb-4">Cinema list</h1>
+        <h1 className="text-center text-5xl font-bold mb-4 txt-grey">
+          Cinema list
+        </h1>
         <div className="container">
           {movies.map((element, k) => {
             return (
-              <div key={k} className="card cardMod w-fit bg-base-100 shadow-xl">
+              <div
+                key={k}
+                className="card grow cardMod w-96 bg-base-100 shadow-xl"
+              >
                 <figure className="">
                   <img
                     src="https://placeimg.com/400/225/arch"
@@ -77,7 +82,9 @@ function CinemaList() {
                   />
                 </figure>
                 <div className="card-body items-center text-center">
-                  <h2 className="card-title">{element.attributes.name}</h2>
+                  <h2 className="card-title ">
+                    {element.attributes.name}
+                  </h2>
 
                   <div className="card-actions">
                     <button
@@ -89,9 +96,7 @@ function CinemaList() {
                       Select
                     </button>
                     <label
-                      onClick={() => {
-                        select(element);
-                      }}
+                      onClick={() => select(element)}
                       htmlFor="my-modal-5"
                       className="btn radius"
                     >
@@ -107,40 +112,6 @@ function CinemaList() {
                     </label> */}
 
                     {/* Put this part before </body> tag */}
-                    <input
-                      type="checkbox"
-                      id="my-modal-5"
-                      className="modal-toggle"
-                    />
-                    <div className="modal">
-                      <div className="modal-box w-11/12 max-w-5xl">
-                        <h3 className="font-bold text-lg">
-                          Cinema: {modelData.attributes.name}
-                        </h3>
-                        <h3 className="font-bold text-lg">
-                          city: {modelData.attributes.city}
-                        </h3>
-                        <h3 className="font-bold text-lg">
-                          Postal code:{modelData.attributes.postalCode}
-                        </h3>
-                        <h3 className="font-bold text-lg">
-                          province: {modelData.attributes.province}
-                        </h3>
-                        <h3 className="font-bold text-lg">
-                          suburb: {modelData.attributes.surbub}
-                        </h3>
-
-                        <div className="modal-action">
-                          <label
-                            htmlFor="my-modal-5"
-                            className="btn"
-                            onClick={close}
-                          >
-                            close
-                          </label>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -148,6 +119,33 @@ function CinemaList() {
           })}{" "}
         </div>
       </div>
+
+      <input type="checkbox" id="my-modal-5" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box w-11/12 max-w-5xl">
+            <h3 className="font-bold text-lg">
+              Cinema: {modelData.attributes.name}
+            </h3>
+            <h3 className="font-bold text-lg">
+              city: {modelData.attributes.city}
+            </h3>
+            <h3 className="font-bold text-lg">
+              Postal code:{modelData.attributes.postalCode}
+            </h3>
+            <h3 className="font-bold text-lg">
+              province: {modelData.attributes.province}
+            </h3>
+            <h3 className="font-bold text-lg">
+              suburb: {modelData.attributes.surbub}
+            </h3>
+
+            <div className="modal-action">
+              <label htmlFor="my-modal-5" className="btn" onClick={() => close}>
+                close
+              </label>
+            </div>
+          </div>
+        </div>
     </div>
   );
 }

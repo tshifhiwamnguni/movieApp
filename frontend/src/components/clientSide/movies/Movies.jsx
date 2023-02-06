@@ -105,6 +105,10 @@ getMovies()
       navigate('../book')
    
   }
+
+  function toReviews(){
+    navigate('../review')
+  }
   return (
     <>
       <div className="mt-24">
@@ -136,12 +140,12 @@ getMovies()
             </button>
           </div>
           <div className="container">
-            {movies.map((element,k) => {
+            {movies.map((element2,k) => {
               
               return (
                 <div key={k}>
                  
-               {element.attributes.cinema.data.id == cinemaID ?
+               {element2.attributes.cinema.data.id == cinemaID ?
                 <div 
                   
                   className="card cardMod red w-96 bg-base-100 shadow-xl"
@@ -149,26 +153,27 @@ getMovies()
                   
                   <figure className="px-10 pt-10">
                     <img
-                      src={element.attributes.movieImage}
+                      src={element2.attributes.movieImage}
                       alt="Shoes"
                       className="rounded-xl"
                     />
                   </figure>
                   <div className="card-body items-center text-center">
-                    <h2 className="card-title">{element.attributes.title}</h2>
+                    <h2 className="card-title">{element2.attributes.title}</h2>
                     <div className="layer">
-                    {element.attributes.genres.data.map(
-            (el,i)=>{
-               return<div key={i} className="genre">{el.attributes.name}  </div>;
+                    {element2.attributes.genres.data.map(
+            (el2,i)=>{
+               return<div key={i} className=" btn radius genre">{el2.attributes.name}  </div>;
             }
           )}
           </div>
 
                     <div className="card-actions">
-                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element)}}>book now</button>
+                      <button className="btn btn-primary radius" onClick={()=>{selectMovie(element2)}}>book now</button>
                       <label
                         onClick={() => {
-                          select(element);
+                          console.log('res');
+                          select(element2);
                         }}
                         htmlFor="my-modal-5"
                         className="btn radius"
@@ -213,6 +218,14 @@ getMovies()
 
 
                           <div className="modal-action">
+                          <label  htmlFor="my-modal-5" className="btn radius" onClick={()=>{
+                            toReviews()
+                          }}>
+                              review
+                            </label>
+                            <label  htmlFor="my-modal-5" className="btn radius">
+                             see review
+                            </label>
                             <label  htmlFor="my-modal-5" className="btn radius">
                               close
                             </label>
@@ -222,7 +235,7 @@ getMovies()
                     </div>
                   </div>
                 </div>
-                :<div></div>}
+              :null}
                 </div>
               );
             })}{" "}

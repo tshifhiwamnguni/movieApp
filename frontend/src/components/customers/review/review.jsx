@@ -73,12 +73,12 @@ function Review() {
       });
 
     // event.preventDefault()
-    navigate("/reviews");
+    navigate("../reviews");
   };
 
   return (
-    <>
-      <h2 className="h-12 w-auto text-center text-3xl font-bold text-gray-900 mt-8">
+    <div className="mt-24">
+      <h2 className="h-12 w-auto text-center text-3xl font-bold text-gray-900 ">
         Add Review
       </h2>
       <div className="flex min-h-full items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
@@ -89,7 +89,7 @@ function Review() {
               {title}
             </h2>
           </div>
-          <form className="mt-2 border-4 px-8 rounded-md py-8 space-y-6">
+          <form className=" border-4 px-8 rounded-md py-8 space-y-6">
             <div className="flex gap-2 flex-col rounded-md shadow-sm">
               <div>
                 <label className="text-xl">Firstname</label>
@@ -152,7 +152,7 @@ function Review() {
       </div>
     
    
-    </>
+    </div>
   );
 }
 
