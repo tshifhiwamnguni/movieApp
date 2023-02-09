@@ -12,10 +12,9 @@ import { getUser } from "../../../services/theatre.service";
 function BookingStat() {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const cinemaID = useRef();
+  // const cinemaID = useRef();
+  const [cinemaID, setCinemaID] = useState("");
   const [bookingDate, setBookingDate] = useState("");
-  const [seat, setSeat] = useState("");
-  const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -27,11 +26,8 @@ function BookingStat() {
 
   // get and set selected data to the variables
   function selectedEdit(books) {
-    console.log(books);
     setBookingDate(books.bookingDate);
-    setSeat(books.attributes?.cinema_seat?.data?.attributes?.seat);
     bookId.current = books.id;
-    console.log("ID from press" + bookId.current);
   }
 
   const updateBooking = () => {
@@ -65,42 +61,16 @@ function BookingStat() {
       });
   };
 
-  // console.log(bookingData)
-
-  // get cinema seats
-  const getCinemaSeats = async () => {
-    setLoading(true);
-    await axios
-      .get(
-        `${API}/cinema-seats?populate=*&filters[cinema]=${cinemaID.current}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-          },
-        }
-      )
-      .then((b) => {
-        // console.log(b.data.data);
-        setCinemaSeat(b.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
   // get a user
   const getUsers = async () => {
+    setLoading(true);
     await getUser(ID)
       .then((data) => {
         if (data.data.role.id !== 5) {
           navigate("/home", { replace: true });
         }
-        cinemaID.current = data.data?.cinema.id;
+        setCinemaID(data.data?.cinema.id)
         getBooking();
-        getCinemaSeats();
       })
       .catch((err) => {
         console.log(err);
@@ -111,9 +81,10 @@ function BookingStat() {
   };
 
   const getBooking = async () => {
+    setLoading(true);
     await axios
       .get(
-        `${API}/booking-cinemas?populate=*&filters[cinema]=${cinemaID.current}`,
+        `${API}/booking-cinemas?populate=*&filters[cinema]=${cinemaID}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -127,7 +98,9 @@ function BookingStat() {
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(()=>{
+        setLoading(false)
+      })
   };
 
   useEffect(() => {
@@ -145,12 +118,13 @@ function BookingStat() {
 
   //   request for page change
   useEffect(() => {
-    if(cinemaID.current ===null || cinemaID.current === undefined) {
+    if (cinemaID === null) {
       getUsers();
       getBooking();
+    }else if(cinemaID !== null){
+      getBooking();
     }
-   
-  }, [page]);
+  }, [page, cinemaID]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -293,29 +267,6 @@ function BookingStat() {
                 />
               </label>
             </div>
-
-            {/* <div className="form-control">
-              <label className="label">
-                <span className="label-text">Cinema seat</span>
-              </label>
-              <label className="input-group">
-                <span>
-                  <MdAirlineSeatReclineExtra/>
-                </span>
-                <select
-                  onClick={(e) => setSeat(e.target.value)}
-                  className="select select-info w-full max-w-xs"
-                >
-                  <option disabled selected>
-                    Select snack size
-                  </option>
-                  {cinemaSeats.map((seats) => {
-                    return <option key={seats.id} value={seats.id}>{seats.attributes.seat}</option>;
-                  })}
-                </select>
-              </label>
-            </div> */}
-
             <div className="flex justify-end mt-3">
               <label
                 className="btn btn-success"
