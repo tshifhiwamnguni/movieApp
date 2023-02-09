@@ -5,9 +5,9 @@ import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
 import { BsCalendar2Date } from "react-icons/bs";
-import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import './bookingStat.css'
+import "./bookingStat.css";
+import { getUser } from "../../../services/theatre.service";
 
 function BookingStat() {
   const [loading, setLoading] = useState(false);
@@ -80,7 +80,7 @@ function BookingStat() {
         }
       )
       .then((b) => {
-        console.log(b.data.data);
+        // console.log(b.data.data);
         setCinemaSeat(b.data.data);
       })
       .catch((err) => {
@@ -92,15 +92,9 @@ function BookingStat() {
   };
 
   // get a user
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+  const getUsers = async () => {
+    await getUser(ID)
       .then((data) => {
-        console.log(data.data);
         if (data.data.role.id !== 5) {
           navigate("/home", { replace: true });
         }
@@ -110,6 +104,9 @@ function BookingStat() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -134,7 +131,7 @@ function BookingStat() {
   };
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, []);
 
   //   change page number
@@ -148,7 +145,11 @@ function BookingStat() {
 
   //   request for page change
   useEffect(() => {
-    getBooking();
+    if(cinemaID.current ===null || cinemaID.current === undefined) {
+      getUsers();
+      getBooking();
+    }
+   
   }, [page]);
 
   return (
@@ -181,7 +182,7 @@ function BookingStat() {
               return (
                 <tr key={book.id}>
                   <td>
-                    {!loading || book.id !== bookId.current? (
+                    {!loading || book.id !== bookId.current ? (
                       <div className="flex items-center space-x-3">
                         <div className="avatar placeholder">
                           <div className="bg-neutral-focus text-neutral-content rounded-full w-14">
