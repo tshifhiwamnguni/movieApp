@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../services/theatre.service";
 
 function Shows() {
   const [shows, setShows] = useState([]);
@@ -54,25 +55,27 @@ function Shows() {
   let ID = decoded.id;
 
   // get user for the theatre
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
       .then((data) => {
-        if(data.data.role.id !== 6){
-          navigate('/home', {replace: true})
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
         }
         theatreID.current = data.data.theatre.id;
         getShows();
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   // get genres
   const getGenres = async () => {
+    setLoading(true);
     await axios
       .get(`${API}/genres`, {
         headers: {
@@ -82,7 +85,10 @@ function Shows() {
       .then((data) => {
         setGenres(data.data.data);
       })
-      .catch((error) => {});
+      .catch((error) => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   //   change page number
@@ -107,7 +113,7 @@ function Shows() {
         }
       )
       .then((show) => {
-        console.log(show.data);
+        // console.log(show.data);
         setPageCount(show.data.meta.pagination.pageCount);
         setShows(show.data.data);
         setTheatreName(
@@ -368,7 +374,7 @@ function Shows() {
   };
 
   useEffect(() => {
-    getUser();
+    getUsers();
     getGenres();
   }, []);
 
@@ -398,7 +404,8 @@ function Shows() {
   useEffect(() => {
     if (query) {
       fetchData();
-    } else {
+    } else if(theatreID.current===null) {
+      getUsers();
       getShows();
     }
   }, [query, page]);

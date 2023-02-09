@@ -12,6 +12,7 @@ import { TbFileDescription } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { ERROR, SUCCESS } from "../../environment/toast";
+import { getUser } from "../../../services/theatre.service";
 
 function Snacks() {
   const [loading, setLoading] = useState(false);
@@ -34,23 +35,21 @@ function Snacks() {
   let ID = decoded.id;
 
   // get user for the theatre
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then(async(data) => {
-        if(data.data.role.id !== 6){
-          navigate('/home', {replace: true})
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
+      .then((data) => {
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
         }
-        theatreID.current = await data.data.theatre.id;
+        theatreID.current = data.data.theatre.id;
         getSnacks();
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(()=>{
+        setLoading(false)
+      })
   };
 
   // get and set selected data to the variables
@@ -271,7 +270,7 @@ function Snacks() {
         setSnackQuantity(0);
         setSnackPrice("");
         setSnackSize("");
-        snackID.current = null;
+        // snackID.current = null;
       });
   };
   // get snacks by a theatreID
@@ -302,7 +301,7 @@ function Snacks() {
 
   // get search data
   async function fetchData() {
-    setLoading(true)
+    setLoading(true);
     await axios
       .get(
         `${API}/theatre-snacks?filters[theatre]=${theatreID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
@@ -318,22 +317,21 @@ function Snacks() {
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
-    
   }
 
   //   search useeffect
   useEffect(() => {
     if (query) {
       fetchData();
-    } else {
+    }else if (theatreID.current === null){
+      getUsers();
       getSnacks();
     }
-  }, [query,page]);
+  }, [query, page]);
 
-  
-  useEffect(()=>{
-    getUser();
-  },[])
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   //   change page number
   async function handleNextPage() {

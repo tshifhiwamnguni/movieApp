@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
-import './snacks.css'
+import "./snacks.css";
 import { useNavigate } from "react-router-dom";
 
 import { BiRename } from "react-icons/bi";
@@ -13,10 +13,12 @@ import { TbFileDescription } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { ERROR, SUCCESS } from "../../environment/toast";
+import { getUser } from "../../../services/theatre.service";
 
 function Snacks() {
   const [loading, setLoading] = useState(false);
-  const cinemaID = useRef();
+  // const cinemaID = useRef();
+  const [cinemaID, setCinemaID] = useState();
   const snackID = useRef();
   const [snacks, setSnacks] = useState([]);
   const [snackName, setSnackName] = useState("");
@@ -28,29 +30,28 @@ function Snacks() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
   let ID = decoded.id;
 
   // get user for the cinema
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
       .then((data) => {
-        if(data.data.role.id !== 5){
-            navigate('/home', {replace: true})
-          }
-        cinemaID.current = data.data?.cinema.id;
+        if (data.data.role.id !== 5) {
+          navigate("/home", { replace: true });
+        }
+        setCinemaID(data.data?.cinema.id)
         getSnacks();
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -168,7 +169,7 @@ function Snacks() {
         price: snackPrice,
         quantity: snackQuantity,
         snackSize: snacksSize,
-        cinema: parseInt(cinemaID.current),
+        cinema: parseInt(cinemaID),
       },
     };
 
@@ -280,7 +281,7 @@ function Snacks() {
     setLoading(true);
     await axios
       .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -300,18 +301,13 @@ function Snacks() {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getUser();
-  }, []);
 
-
-//   search useeffect
-  useEffect(() => {
+  // fetch query parameters
+  const getSearchQuery = () => {
     setLoading(true);
-    if(query){
     axios
       .get(
-        `${API}/cinema-snacks?filters[cinema]=${cinemaID.current}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
+        `${API}/cinema-snacks?filters[cinema]=${cinemaID}&populate=*&filters[name][$containsi]=${query}&pagination[pageSize]=5&pagination[page]=${page}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -324,24 +320,34 @@ function Snacks() {
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
-    }else{
-        getSnacks();
+  };
+  //   search useeffect
+  useEffect(() => {
+    if (query) {
+      getSearchQuery();
+    } else if (cinemaID === null || cinemaID === undefined) {
+      // getUsers();
     }
   }, [query]);
 
-    //   change page number
-    async function handleNextPage() {
-        setPage(page + 1);
-      }
-    
-      async function handlePreviousPage() {
-        setPage(page - 1);
-      }
-    
-      //   request for page change
-      useEffect(() => {
-        getSnacks();
-      }, [page]);
+  //   change page number
+  async function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  async function handlePreviousPage() {
+    setPage(page - 1);
+  }
+
+  //   request for page change
+  useEffect(() => {
+    if(cinemaID === null || cinemaID === undefined) {
+      getUsers();
+    }else{
+      getSnacks();
+    }
+   
+  }, [page, cinemaID]);
 
   const snackSize = [
     { value: "small", name: "Small" },
@@ -355,11 +361,11 @@ function Snacks() {
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
       <div className="flex xs:flex-col md:gap-3 xs:gap-3">
-      <label htmlFor="my-modal-8" className="btn btn-primary gap-2">
-        <BiMoviePlay style={{ fontSize: "1.5rem" }} />
-        Add snacks
-      </label>
-      <div className="form-control lg:flex-1 md:flex-1">
+        <label htmlFor="my-modal-8" className="btn btn-primary gap-2">
+          <BiMoviePlay style={{ fontSize: "1.5rem" }} />
+          Add snacks
+        </label>
+        <div className="form-control lg:flex-1 md:flex-1">
           <div className="input-group justify-end sm:justify-end">
             <input
               type="text"
@@ -386,7 +392,7 @@ function Snacks() {
             </button>
           </div>
         </div>
-        </div>
+      </div>
       <h1 className="text-center font-bold text-3xl mb-4">Snacks</h1>
       <div className="overflow-x-auto w-full">
         {loading ? (
@@ -482,22 +488,22 @@ function Snacks() {
       </div>
 
       <hr />
-        <div className="flex gap-3 justify-center mt-3">
-          <button
-            className="btn btn-ghost glass"
-            onClick={handlePreviousPage}
-            disabled={page === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-ghost glass"
-            onClick={handleNextPage}
-            disabled={page === pageCount}
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-ghost glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-ghost glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
+      </div>
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
@@ -596,7 +602,11 @@ function Snacks() {
                   className="select select-info w-full max-w-xs"
                 >
                   {snackSize.map((snack) => {
-                    return <option key={snack.value} value={snack.value}>{snack.name}</option>;
+                    return (
+                      <option key={snack.value} value={snack.value}>
+                        {snack.name}
+                      </option>
+                    );
                   })}
                 </select>
               </label>
@@ -709,7 +719,11 @@ function Snacks() {
                     Select snack size
                   </option>
                   {snackSize.map((snack) => {
-                    return <option key={snack.value} value={snack.value}>{snack.name}</option>;
+                    return (
+                      <option key={snack.value} value={snack.value}>
+                        {snack.name}
+                      </option>
+                    );
                   })}
                 </select>
               </label>
@@ -756,9 +770,8 @@ function Snacks() {
         </label>
       </label>
 
-      
-{/* view image */}
-<input type="checkbox" id="my-modal-6" className="modal-toggle" />
+      {/* view image */}
+      <input type="checkbox" id="my-modal-6" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
           <div className="flex justify-center">

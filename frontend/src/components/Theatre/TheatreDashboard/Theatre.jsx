@@ -4,6 +4,7 @@ import { API, TOKEN } from "../../environment/constant";
 import jwt_decode from "jwt-decode";
 import { IoChevronForwardCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../services/theatre.service";
 
 function Theatre() {
   const [shows, setShows] = useState(0);
@@ -18,27 +19,23 @@ function Theatre() {
   let decoded = jwt_decode(token);
   let ID = decoded.id;
 
-  console.log(ID)
+  // console.log(ID);
 
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
       .then((data) => {
-        // console.log(data.data.role);
+        // console.log(data.data);
         // console.log(data.data.id)
-        if(data.data.role.id !== 6){
-          navigate('/home', {replace: true})
+        if (data.data.role.id !== 6) {
+          navigate("/home", { replace: true });
         }
         theatreID.current = data.data?.theatre.id;
         getTheatreShows();
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(() => {setLoading(false)})
   };
 
   const getTheatreShows = async () => {
@@ -64,7 +61,7 @@ function Theatre() {
   };
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, []);
   return (
     <div className="min-h-screen">
