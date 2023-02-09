@@ -64,6 +64,7 @@ const Reviews = () => {
       .then((response) => {
         console.log(response.data.data);
         setData(response.data.data);
+        // console.log(response.data.data);
         setReviews(response.data.data[1].attributes.comment);
         setTimestamp(response.data.data[1].attributes.createdAt);
         setStars(response.data.data[0].attributes.rating);

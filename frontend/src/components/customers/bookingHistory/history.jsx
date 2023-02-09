@@ -10,22 +10,38 @@ function History() {
   const [currentPage, setCurrentPage] = useState(1);
   const [reviewPerPage, setReviewPerPage] = useState(6);
   const [search, setSearch] = useState("");
+  const [filteredReviews, setFilteredReviews] = useState([]);
+  const [totalPages, setTotalPages] = useState([]);
+  
   console.log(search);
-
+  console.log(totalPages);
+  const filterReviews = (element) => {
+    return element.attributes.users_permissions_user.data.attributes.username === "brandonsss";
+  }
   //   gets bookings data from starpi
   const getBookings = () => {
     axios
-      .get(
-        "https://strapi-movie-app.onrender.com/api/booking-cinemas?populate=*"
-      )
-      .then((response) => {
+      .get("https://strapi-movie-app.onrender.com/api/booking-cinemas?populate=*").then((response) => {
         console.log(response.data.data);
-        setBookings(response.data.data);
-      })
-      .catch((error) => {
+        setTotalPages(response.data.data.filter(filterReviews));
+        
+          // console.log(response.data.data[0].attributes.users_permissions_user.data.attributes.username);
+        
+
+          // response.data.data.forEach(element => {
+          //   // eslint-disable-next-line eqeqeq
+          //   if(element.attributes.users_permissions_user.data.attributes.username === "Shaggy"){
+          //     console.log("hi i m shaggy    ",element)
+          //     filteredReviews.push(element);
+          //   }
+          //   console.log(filteredReviews);
+          // });
+        // setBookings(response.data.data);
+      }).catch((error) => {
         console.log(error);
       });
   };
+
   const lastPageIndex = currentPage * reviewPerPage;
   const firstPageIndex = lastPageIndex - reviewPerPage;
   const currentReview = bookings.slice(firstPageIndex, lastPageIndex);
@@ -65,7 +81,7 @@ function History() {
         <div className="container flex justify-center mx-auto">
           {/* center part with cards for booking data */}
           <div className="grid md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-3 gap-4">
-            {bookings
+            {totalPages
               .filter((item) => {
                 return search.toLowerCase() === ""
                   ? item
