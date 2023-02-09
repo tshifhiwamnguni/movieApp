@@ -83,7 +83,7 @@ const Reviews = () => {
   }, []);
 
   return (
-    <>
+    <div className="mt-24">
       <h1 className="text-4xl mx-auto text-center xl:text-4xl font-semibold leading-6 text-gray-800  block">
         Movie Reviews
       </h1>
@@ -168,7 +168,7 @@ const Reviews = () => {
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
       />
-    </>
+    </div>
   );
 };
 

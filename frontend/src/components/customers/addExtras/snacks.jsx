@@ -55,7 +55,7 @@ export default function Example() {
     // console.log("id ", localStorage.getItem("PlaceId"));
     // console.log("name ", localStorage.getItem("PlaceName"));
 
-    // console.log("seats ", localStorage.getItem("seats"));
+    console.log("seats ", localStorage.getItem("seats"));
     setMId(localStorage.getItem("MId"));
     setDate(localStorage.getItem("date"));
     setLocation(localStorage.getItem("Location"));
@@ -155,11 +155,11 @@ export default function Example() {
       selectedSnacks.map((element) => {
         let snackData = {
           data: {
-          quantity: 1,
-          user: ID,
-          cinema_snacks: element.id,
-          cinema: placeId
-          }
+            quantity: 1,
+            user: ID,
+            cinema_snacks: element.id,
+            cinema: placeId,
+          },
         };
 
         axios
@@ -234,46 +234,50 @@ export default function Example() {
 
   return (
     <div className="mt-24">
-      
       <div className="mx-auto w-4/5">
         <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="mt-5 md:col-span-2 md:mt-0">
             <form>
               <div className="shadow sm:overflow-hidden sm:rounded-md">
                 <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="flex col-span-3 sm:col-span-2 gap-4">
-                      <label
-                        htmlFor="company-website"
-                        className="block text-xl font-medium text-gray-700"
-                      >
+                  <div className="">
+        
+                    <div className="flex">
+                    <div className="lp">
                         <img
-                          className="h-12 w-16"
+                          className="h-42 w-42 img"
                           src={movieImage}
                           alt="movie poster"
                         />
-                      </label>
-                      <div className="mt-1 flex rounded shadow-sm">
-                        <h2 className="h-12 w-auto text-center text-2xl font-bold text-gray-900">
-                          {movieName}
-                        </h2>
                       </div>
-                    </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-2xl font-medium text-gray-700">
+
+                      <div className=" rp">
+                      <label className=" text-2xl font-medium">
+                      Name:
+                    </label>
+                        <div className="">
+                          <h1 className=" text-xl">{movieName}</h1>
+                        </div>
+                     <div>
+                    <label className=" text-2xl font-medium">
                       Cinema:
                     </label>
                     <div className="mt-1">
-                      <p className="mt-2 text-2xl text-gray-500">
+                      <p className="mt-2 text-2xl ">
                         {placeName} - {cinemaLocation}
                       </p>
                     </div>
                   </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+
+                  
 
                   <div>
-                    <label className="block text-2xl font-medium text-gray-700">
+                    <label className=" text-2xl font-medium text-gray-700">
                       Items:
                     </label>
                     <div>
@@ -317,8 +321,8 @@ export default function Example() {
                                   {element.attributes.name},{" "}
                                   {element.attributes.snackSize}
                                 </p>
-                               
-                             <button className="btn"></button>
+
+                           
                                 <p className=" text-2xl text-gray-500">
                                   R{element.attributes.price}
                                 </p>
@@ -337,11 +341,8 @@ export default function Example() {
                         <br />R{totalPrice}{" "}
                       </div>
                     </div>
-                  </div>
-                </div>
-
-                <div className="flex">
-                  <div className="bg-gray-50 px-4 text-left py-3 sm:px-6">
+                  </div><div className="flex ">
+                  <div className=" px-4 text-left py-3 sm:px-6">
                     <label
                       className="inline-flex items-center cursor-pointer rounded-md border border-transparent bg-indigo-600 text-2xl py-4 px-8"
                       onClick={() => {
@@ -353,7 +354,7 @@ export default function Example() {
                     </label>
                   </div>
 
-                  <div className="bg-gray-50 px-4 text-right py-3 sm:px-6">
+                  <div className=" px-4 text-right py-3 sm:px-6">
                     <button
                       type="button"
                       onClick={book}
@@ -363,6 +364,9 @@ export default function Example() {
                     </button>
                   </div>
                 </div>
+                </div>
+
+                
               </div>
             </form>
           </div>
@@ -383,7 +387,7 @@ export default function Example() {
                           return (
                             <div
                               key={i}
-                              className="card h-fit w-64 text-center bg-primary text-primary-content"
+                              className="card h-fit w-44 m-2 text-center bg-primary text-primary-content"
                             >
                               <div className="card-body flex flex-wrap ">
                                 <h2> {element.attributes.name}</h2>
