@@ -9,6 +9,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import { BsBookmarkCheck } from "react-icons/bs";
 import "./theatre.css";
 import { Outlet } from "react-router-dom";
+import {CgProfile} from 'react-icons/cg';
 
 function TheatreNavbar() {
   const navigate = useNavigate();
@@ -99,14 +100,14 @@ function TheatreNavbar() {
                 </li>
                 <li
                   onClick={() => {
-                    navigate("/theatre/stats/");
-                    setActivePage("bookings");
+                    navigate("/theatre/theatreprofile/");
+                    setActivePage("theatreprofile");
                   }}
-                  className={activePage === "bookings" ? "active" : ""}
+                  className={activePage === "theatreprofile" ? "active" : ""}
                 >
                   <a>
-                    <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
-                    Bookings
+                    <CgProfile style={{ fontSize: "1.5rem" }} />
+                    Profile
                   </a>
                 </li>
                 <li onClick={logout}>
@@ -170,13 +171,13 @@ function TheatreNavbar() {
             </li>
             <li
               onClick={() => {
-                navigate("/theatre/stats/");
-                setActivePage("bookings");
+                navigate("/theatre/theatreprofile/");
+                setActivePage("theatreprofile");
               }}
-              className={activePage === "bookings" ? "active" : ""}
+              className={activePage === "theatreprofile" ? "active" : ""}
             >
               <a>
-                <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
+                <CgProfile style={{ fontSize: "1.5rem" }} />
                 Bookings
               </a>
             </li>
