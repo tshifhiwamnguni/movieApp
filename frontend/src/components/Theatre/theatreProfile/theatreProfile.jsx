@@ -11,6 +11,7 @@ import "./theatreProfile.css";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { MdAddPhotoAlternate } from "react-icons/md";
+import { getUser} from '../../../services/theatre.service'
 
 function TheatreProfile() {
   let ID;
@@ -89,7 +90,7 @@ function TheatreProfile() {
           })
           .finally(() => {
             setLoading(false);
-            getUser();
+            getUsers();
             theatreProfile.current = null;
           });
       })
@@ -98,37 +99,35 @@ function TheatreProfile() {
       });
   };
 
-  const getUser = async () => {
-    let decoded = jwt_decode(token);
-    ID = decoded.id;
-    setUserId(ID);
+  let decoded = jwt_decode(token);
+  ID = decoded.id;
 
+  // console.log(ID);
+
+  const getUsers = async () => {
     setLoading(true);
-
-    axios
-      .get(`${API}/users/${ID}?populate=*`)
-      .then((data) => {
-        console.log(data.data);
-        if (data.data.role.id !== 6) {
-          navigate("/home", { replace: true });
-        }
-        setEmail(data.data.email);
-        setName(data.data.username);
-        setPhone(data.data.cellphone);
-        setFirstname(data.data.firstname);
-        setLastname(data.data.lastname);
-        // setImage(data.data.theatre.theatreImage);
-        // theatreID.current = data.data.theatre.id;
-      })
-      .catch((error) => {
-        // ERROR(error.response.data.error.message);
-        console.log(error);
-      })
-      .finally(() => setLoading(false));
+    setUserId(ID);
+    await getUser(ID).then((data) => {
+      // console.log(data.data);
+      if (data.data.role.id !== 6) {
+        navigate("/home", { replace: true });
+      }
+      setEmail(data.data.email);
+      setName(data.data.username);
+      setPhone(data.data.cellphone);
+      setFirstname(data.data.firstname);
+      setLastname(data.data.lastname);
+      setImage(data.data.theatre.theatreImage);
+      theatreID.current = data.data.theatre.id;
+    }).catch((error) => {
+      // ERROR(error.response.data.error.message);
+      console.log(error);
+    })
+    .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, [ID]);
 
   const update = async (e) => {
