@@ -26,6 +26,7 @@ function UserProfile() {
   const [lastname, setLastname] = useState("");
   const navigate = useNavigate();
 
+
   useEffect(() => {
     let decoded = jwt_decode(token);
     ID = decoded.id;
@@ -33,13 +34,12 @@ function UserProfile() {
 
     setLoading(true);
 
-    axios
-      .get(`${API}/users/${ID}?populate=*`)
-      .then((data) => {
+    axios.get(`${API}/users/${ID}?populate=*`).then((data) => {
         console.log(data);
 
         setEmail(data.data.email);
         setName(data.data.username);
+        localStorage.setItem("username", data.data.username);
         setPhone(data.data.cellphone);
         setFirstname(data.data.firstname);
         setLastname(data.data.lastname);
@@ -67,6 +67,7 @@ function UserProfile() {
         .put(`${API}/users/${userI}`, data)
         .then((data) => {
           SUCCESS("Profile updated.");
+          
         })
         .catch((error) => {
           ERROR(error.response.data.error.message);

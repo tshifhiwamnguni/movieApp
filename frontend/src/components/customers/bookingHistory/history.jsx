@@ -12,11 +12,14 @@ function History() {
   const [search, setSearch] = useState("");
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [totalPages, setTotalPages] = useState([]);
+  const [username, setUsername] = useState('');
   
   console.log(search);
   console.log(totalPages);
+  console.log(username);
+  
   const filterReviews = (element) => {
-    return element.attributes.users_permissions_user.data.attributes.username === "brandonsss";
+    return element.attributes.users_permissions_user.data.attributes.username === username;
   }
   //   gets bookings data from starpi
   const getBookings = () => {
@@ -49,6 +52,7 @@ function History() {
   // runs whenever the dom is rendered
   useEffect(() => {
     getBookings();
+    setUsername(localStorage.getItem("username"))
   }, []);
 
   return (
