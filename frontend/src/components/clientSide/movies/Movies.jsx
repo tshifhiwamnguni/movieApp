@@ -13,7 +13,7 @@ function Movies() {
   const [loading, setLoading] = useState(false);
 
   const [query, setQuery] = useState("");
-  
+  const [title, setTitle] = useState("");
   const [movies, setMovies] = useState([]);
   const [cinemaID,setCinemaID] = useState('')
   const navigate = useNavigate()
@@ -45,7 +45,7 @@ function Movies() {
       // Handle success.
       // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
       console.log(response.data.data)
-
+      setTitle(response.data.data)
       console.log(localStorage.getItem("PlaceId"));
       console.log(localStorage.getItem("MName"))
       console.log(localStorage.getItem("Location"))
@@ -77,7 +77,7 @@ getMovies()
       )
       .then((movie) => {
         setMovies(movie.data.data);
-  
+        
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
@@ -101,6 +101,7 @@ getMovies()
      localStorage.setItem('MId', data.id)
     localStorage.setItem('MPrice', data.attributes.price)
     localStorage.setItem('MName', data.attributes.title)
+    console.log(data.attributes.title)
     localStorage.setItem('Image', data.attributes.movieImage)
       navigate('../book')
    
@@ -223,9 +224,17 @@ getMovies()
                           }}>
                               review
                             </label>
-                            <label  htmlFor="my-modal-5" className="btn radius">
+                            <label  htmlFor="my-modal-5" className="btn radius" onClick={() => {
+                              localStorage.setItem(
+                                "Mtitle",
+                                modelData.attributes.title
+                                )
+                                navigate("/reviews");
+                                
+                              }}>
                              see review
                             </label>
+                            
                             <label  htmlFor="my-modal-5" className="btn radius">
                               close
                             </label>

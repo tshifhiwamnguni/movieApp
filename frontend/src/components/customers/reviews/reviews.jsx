@@ -23,10 +23,42 @@ const Reviews = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [reviewPerPage, setReviewPerPage] = useState(8);
   const [search, setSearch] = useState("");
-  console.log(search)
+  const [totalPages, setTotalPages] = useState([]);
+  const [restitle, setRestitle] = useState("");
+
+ 
+  console.log(restitle)
+  console.log(totalPages)
+
 
   let index = 2;
   let arr = [];
+
+  const getReviews = () => {
+    axios
+      .get(
+        "https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*"
+      )
+      .then((response) => {
+        console.log(response.data.data);
+        setData(response.data.data);
+        setTotalPages(response.data.data.filter(filterMovies));
+       
+        setReviews(response.data.data[1].attributes.comment);
+        setTimestamp(response.data.data[1].attributes.createdAt);
+        setStars(response.data.data[0].attributes.rating);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  console.log(reviews);
+
+  const filterMovies = (element) => {
+    console.log(element.attributes.movie.data.attributes.title);
+    console.log(restitle)
+    return element.attributes.movie.data.attributes.title === restitle;
+  }
 
   const StarRatings = () => {
     const [rating, setRating] = useState();
@@ -35,6 +67,7 @@ const Reviews = () => {
     const parentToChild = () => {
       setRating(rating);
     };
+
     return (
       <div className="star-rating text-2xl">
         {[...Array(5)].map((star, index) => {
@@ -54,26 +87,7 @@ const Reviews = () => {
         })}
       </div>
     );
-  };
-
-  const getReviews = () => {
-    axios
-      .get(
-        "https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*"
-      )
-      .then((response) => {
-        console.log(response.data.data);
-        setData(response.data.data);
-        // console.log(response.data.data);
-        setReviews(response.data.data[1].attributes.comment);
-        setTimestamp(response.data.data[1].attributes.createdAt);
-        setStars(response.data.data[0].attributes.rating);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  console.log(reviews);
+  }
 
   const lastPageIndex = currentPage * reviewPerPage;
   const firstPageIndex = lastPageIndex - reviewPerPage;
@@ -81,6 +95,8 @@ const Reviews = () => {
 
   useEffect(() => {
     getReviews();
+    setRestitle(localStorage.getItem("Mtitle"));
+    console.log(restitle);
   }, []);
 
   return (
@@ -109,7 +125,7 @@ const Reviews = () => {
       </div>
 
       <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-4 gap-16 w-fit px-8 mx-auto">
-        {currentReview
+        {totalPages
           .filter((item) => {
             return search.toLowerCase() === ""
               ? item
