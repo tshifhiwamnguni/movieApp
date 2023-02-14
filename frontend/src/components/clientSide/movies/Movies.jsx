@@ -31,7 +31,7 @@ function Movies() {
   };
 
   
-  let id=true
+  let id = true
   const [modelData, setModelData] = useState(initData);
   function getMovies(){
     axios

@@ -3,6 +3,7 @@ import { BiMoviePlay } from "react-icons/bi";
 import axios from "axios";
 import create from 'zustand'
 import Pagination from "../pagination/pagination";
+import useStore from "../store";
 // import "./history.css"
 
 function History() {
@@ -12,14 +13,17 @@ function History() {
   const [search, setSearch] = useState("");
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [totalPages, setTotalPages] = useState([]);
-  const [username, setUsername] = useState('');
+
+
+  const loggedUser = useStore(state => state.loggedUser)
+  console.log(loggedUser)
   
   console.log(search);
   console.log(totalPages);
-  console.log(username);
+
   
   const filterReviews = (element) => {
-    return element.attributes.users_permissions_user.data.attributes.username === username;
+    return element.attributes.users_permissions_user.data.attributes.username === loggedUser;
   }
   //   gets bookings data from starpi
   const getBookings = () => {
@@ -28,18 +32,6 @@ function History() {
         console.log(response.data.data);
         setTotalPages(response.data.data.filter(filterReviews));
         
-          // console.log(response.data.data[0].attributes.users_permissions_user.data.attributes.username);
-        
-
-          // response.data.data.forEach(element => {
-          //   // eslint-disable-next-line eqeqeq
-          //   if(element.attributes.users_permissions_user.data.attributes.username === "Shaggy"){
-          //     console.log("hi i m shaggy    ",element)
-          //     filteredReviews.push(element);
-          //   }
-          //   console.log(filteredReviews);
-          // });
-        // setBookings(response.data.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -52,7 +44,6 @@ function History() {
   // runs whenever the dom is rendered
   useEffect(() => {
     getBookings();
-    setUsername(localStorage.getItem("username"))
   }, []);
 
   return (

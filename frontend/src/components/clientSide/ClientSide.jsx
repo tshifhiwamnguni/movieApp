@@ -9,9 +9,13 @@ import { BiArrowToLeft } from "react-icons/bi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import "./Client.css";
 import { Outlet } from "react-router-dom";
+import create from "zustand";
+
 function ClientSide() {
+  
   const navigate = useNavigate();
   const [activeNav, setActiveNav] = useState("home");
+  const useStore = create(state => (state.username));
   // useEffect(() => {
   //   // if (!localStorage.getItem("jwt")) {
   //   //   navigate("/login/", { replace: true });

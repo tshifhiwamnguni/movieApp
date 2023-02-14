@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "./UserProfile.css";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import create from "zustand"
+import useStore from "../../customers/store";
 
 function UserProfile() {
   let ID;
@@ -25,6 +27,9 @@ function UserProfile() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const navigate = useNavigate();
+  const username = useStore(state => (state.loggedUser = name))
+  const setUser = useStore(state => state.setUser)
+  console.log(username)
 
 
   useEffect(() => {
@@ -205,7 +210,7 @@ function UserProfile() {
                   />
                 </label>
                 <label className="btn btn-primary radius mt-2" onClick={()=>{
-                  navigate('../history')
+                  navigate('../history'); setUser()
                 }}>
                   booking history
                 </label>

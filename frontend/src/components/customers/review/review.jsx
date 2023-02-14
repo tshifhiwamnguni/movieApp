@@ -16,13 +16,14 @@ function Review() {
   const [username, setUsername] = useState("");
   const [poster, setPoster] = useState("");
   // const [movieid, setMovieid] = useState(0)
-  // const [movie, setMovie] = useState(0)
+  // const [movie, setMovie] = useState("")
 
   axios
     .get("https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*")
     .then((response) => {
       console.log(response);
       setTitle(response.data.data[0].attributes.movie.data.attributes.title);
+      
       setUsername(
         response.data.data[0].attributes.users_permissions_user.data.attributes
           .username
