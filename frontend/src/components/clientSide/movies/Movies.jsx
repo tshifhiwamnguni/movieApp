@@ -15,7 +15,7 @@ function Movies() {
   const [query, setQuery] = useState("");
   const [title, setTitle] = useState("");
   const [movies, setMovies] = useState([]);
-  const [cinemaID,setCinemaID] = useState('')
+  const [cinemaID,setCinemaID] = useState()
   const navigate = useNavigate()
   const iframeRef = useRef()
   const initData = {
