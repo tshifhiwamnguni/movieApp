@@ -7,7 +7,7 @@ import Iframe from "react-iframe";
 import { useNavigate } from "react-router-dom";
 import  './Movies.css';
 import useReview from "../../customers/reviewStore";
-
+import filterStorer from "../../customers/filterStore";
 
 function Movies() {
 
@@ -35,6 +35,7 @@ function Movies() {
   const [modelData, setModelData] = useState(initData);
   const movieTitle = useReview(state => (state.selectedMovieTitle = modelData.attributes.title))
   const movieImage = useReview(state => (state.selectedMovieImage = modelData.attributes.movieImage))
+  const reviewMovie = filterStorer(state => (state.reviewMovie = movieTitle))
   console.log(movieTitle)
   console.log(movieImage)
 

@@ -14,7 +14,6 @@ function History() {
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [totalPages, setTotalPages] = useState([]);
 
-
   const loggedUser = useStore(state => state.loggedUser)
   console.log(loggedUser)
   

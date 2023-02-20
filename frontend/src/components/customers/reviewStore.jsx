@@ -4,7 +4,7 @@ import { persist, devtools } from "zustand/middleware"
 let reviewStore = (set) => ({
     selectedMovieTitle: "",
     selectedMovieImage: "",
-    setMovieTitle: (title) => set((state) => ({selectedMovieTitle: localStorage.getItem("")})), 
+    setMovieTitle: (title) => set((state) => ({selectedMovieTitle: localStorage.getItem("")})),
 });
 
 // persist the creates store

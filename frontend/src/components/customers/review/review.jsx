@@ -6,6 +6,7 @@ import PaginatedItems from "../../test/test";
 import { useEffect } from "react";
 import useReviewStore from "../reviewStore";
 import useReview from "../../customers/reviewStore";
+import filterStorer from "../filterStore";
 
 const API = "https://strapi-movie-app.onrender.com/api";
 
@@ -21,9 +22,9 @@ function Review() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const movieTitle = useReview(state => state.selectedMovieTitle);
-  const moviePoster = useReview(state => state.selectedMovieImage);
-  console.log(movieTitle);
-  console.log(moviePoster);
+  const moviePoster = useReview(state => state.selectedMovieImage); // get variable data from store
+  const movieTitleReview = filterStorer(state => (state.reviewMovie = movieTitle))
+  console.log(movieTitleReview)
 
   const getData = async () => {
     await axios
@@ -31,11 +32,10 @@ function Review() {
         "https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*"
       )
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         setTitle(response.data.data[0].attributes.movie.data.attributes.title);
         setUsername(
-          response.data.data[0].attributes.users_permissions_user.data
-            .attributes.username
+          localStorage.getItem("username")
         );
         setPoster(
           response.data.data[0].attributes.movie.data.attributes.movieImage
@@ -46,6 +46,8 @@ function Review() {
         console.log(error);
       });
   };
+
+  
 
   const validate = () => {
     const errors = {};

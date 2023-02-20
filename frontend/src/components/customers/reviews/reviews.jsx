@@ -4,7 +4,8 @@ import womanKing from "../../../assets/womanKing.jpeg";
 import { MdDelete } from "react-icons/md";
 import Pagination from "../pagination/pagination";
 import "./reviews.css"
-
+import useReview from "../reviewStore";
+import filterStorer from "../filterStore";
 import axios from "axios";
 // import Moment from "moment"
 const API = "https://strapi-movie-app.onrender.com/api";
@@ -21,18 +22,20 @@ const Reviews = () => {
 
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [reviewPerPage, setReviewPerPage] = useState(8);
+  const [reviewPerPage, setReviewPerPage] = useState(15);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState([]);
   const [restitle, setRestitle] = useState("");
-
+  const movieTitle = filterStorer(state => state.reviewMovie);
+  console.log(movieTitle)
  
-  console.log(restitle)
   console.log(totalPages)
 
 
   let index = 2;
   let arr = [];
+
+
 
   const getReviews = () => {
     axios
@@ -55,9 +58,7 @@ const Reviews = () => {
   console.log(reviews);
 
   const filterMovies = (element) => {
-    console.log(element.attributes.movie.data.attributes.title);
-    console.log(restitle)
-    return element.attributes.movie.data.attributes.title === restitle;
+    return element.attributes.movie.data.attributes.title === movieTitle;
   }
 
   const StarRatings = () => {
@@ -92,6 +93,7 @@ const Reviews = () => {
   const lastPageIndex = currentPage * reviewPerPage;
   const firstPageIndex = lastPageIndex - reviewPerPage;
   const currentReview = data.slice(firstPageIndex, lastPageIndex);
+  console.log(currentReview)
 
   useEffect(() => {
     getReviews();
@@ -124,8 +126,8 @@ const Reviews = () => {
         </form>
       </div>
 
-      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-4 gap-16 w-fit px-8 mx-auto">
-        {totalPages
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-5 gap-16 w-fit px-8 mx-auto">
+        {currentReview
           .filter((item) => {
             return search.toLowerCase() === ""
               ? item
@@ -135,22 +137,22 @@ const Reviews = () => {
           .map((item) => (
             <div
               key={item.id}
-              className="card w-64 bg-primary text-primary-content"
+              className="card w-72 bg-primary text-primary-content"
             >
               <div className="card-body text-center">
-                <img
+                {/* <img
                   className="h-1/2 md:w-full"
                   src={item.attributes.movie.data.attributes.movieImage}
                   alt="dress"
-                />
-                <CardTitle tag="h1" className="text-center">
+                /> */}
+                <CardTitle tag="h1" className="text-center text-2xl">
                   {item.attributes.movie.data.attributes.title}
                 </CardTitle>
                 <div className="flex justify-between">
-                  <CardSubtitle className="text-muted" tag="h6">
+                  <CardSubtitle className="text-muted text-xl" tag="h6">
                     {"Guest user"}
                   </CardSubtitle>
-                  <div className="rating">
+                  <div className="rating text-2xl">
                     {[...Array(item.attributes.rating || 1)].map(
                       (star, index) => {
                         return (
