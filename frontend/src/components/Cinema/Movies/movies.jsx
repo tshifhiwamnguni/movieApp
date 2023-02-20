@@ -87,10 +87,12 @@ function CinMovies() {
   //   change page number
   async function handleNextPage() {
     setPage(page + 1);
+    console.log(page);
   }
 
   async function handlePreviousPage() {
     setPage(page - 1);
+    console.log(page);
   }
 
   // get movies per cinema
@@ -369,6 +371,7 @@ function CinMovies() {
 
   useEffect(() => {
     if (query) {
+      console.log("I changed");
       setLoading(true);
       axios
         .get(
@@ -391,10 +394,14 @@ function CinMovies() {
     } else if (cinemaID.current === null) {
       getUsers();
       getMovies();
-
     }
-  }, [query, page]);
+  }, [query]);
 
+  useEffect(() => {
+    console.log("I changed");
+    getMovies();
+  }, [page]);
+  
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
@@ -568,7 +575,7 @@ function CinMovies() {
           onClick={handleNextPage}
           disabled={page === pageCount}
         >
-          Next
+          Next js
         </button>
       </div>
 
