@@ -401,7 +401,7 @@ function CinMovies() {
     console.log("I changed");
     getMovies();
   }, [page]);
-  
+
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
@@ -575,7 +575,7 @@ function CinMovies() {
           onClick={handleNextPage}
           disabled={page === pageCount}
         >
-          Next js
+          Next
         </button>
       </div>
 
