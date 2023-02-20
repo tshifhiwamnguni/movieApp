@@ -6,6 +6,7 @@ import ReactPlayer from "react-player";
 import Iframe from "react-iframe";
 import { useNavigate } from "react-router-dom";
 import  './Movies.css';
+import useReview from "../../customers/reviewStore";
 
 
 function Movies() {
@@ -21,18 +22,22 @@ function Movies() {
   const initData = {
     id: 1,
     attributes: {
-      title: "Avatar: The Lost city",
+      title: "",
       duration: 102.2,
       description:
-        "It is a movie where they lost their city it tough and rough",
-      createdAt: "2023-01-16T17:44:29.314Z",
-      updatedAt: "2023-01-17T06:05:41.504Z",
+        "",
+
     },
   };
 
   
   let id = true
   const [modelData, setModelData] = useState(initData);
+  const movieTitle = useReview(state => (state.selectedMovieTitle = modelData.attributes.title))
+  const movieImage = useReview(state => (state.selectedMovieImage = modelData.attributes.movieImage))
+  console.log(movieTitle)
+  console.log(movieImage)
+
   function getMovies(){
     axios
     .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
@@ -86,15 +91,11 @@ getMovies()
     }
   }, [query]);
 
-
   function select(index) {
     setModelData(index);
     console.log(index);
     console.log('mdoel , ',modelData);
   }
-
-  
-
 
   function selectMovie(data) {
    console.log(data);
@@ -110,6 +111,7 @@ getMovies()
   function toReviews(){
     navigate('../review')
   }
+
   return (
     <>
       <div className="mt-24">
@@ -193,7 +195,6 @@ getMovies()
                           <h3 className="font-bold text-lg">
                             {modelData.attributes.title}
                           </h3>
-
                           <iframe
                             ref={iframeRef}
                             width="966"
@@ -212,12 +213,7 @@ getMovies()
 
                             <source src="https://youtu.be/G-Cr00UYokU" type="video/mp4"></source>
                           </video> */}
-
-
                 <p>{modelData.attributes.description}</p>
-
-
-
                           <div className="modal-action">
                           <label  htmlFor="my-modal-5" className="btn radius" onClick={()=>{
                             toReviews()

@@ -16,11 +16,7 @@ function ClientSide() {
   const navigate = useNavigate();
   const [activeNav, setActiveNav] = useState("home");
   const useStore = create(state => (state.username));
-  // useEffect(() => {
-  //   // if (!localStorage.getItem("jwt")) {
-  //   //   navigate("/login/", { replace: true });
-  //   // }
-  // });
+
 
   function logout() {
     removeToken();

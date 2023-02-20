@@ -4,6 +4,9 @@ import Reviews from "../../customers/reviews/reviews";
 import axios from "axios";
 import PaginatedItems from "../../test/test";
 import { useEffect } from "react";
+import useReviewStore from "../reviewStore";
+import useReview from "../../customers/reviewStore";
+
 const API = "https://strapi-movie-app.onrender.com/api";
 
 function Review() {
@@ -17,6 +20,10 @@ function Review() {
   const [poster, setPoster] = useState("");
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const movieTitle = useReview(state => state.selectedMovieTitle);
+  const moviePoster = useReview(state => state.selectedMovieImage);
+  console.log(movieTitle);
+  console.log(moviePoster);
 
   const getData = async () => {
     await axios
@@ -89,9 +96,9 @@ function Review() {
       <div className="flex min-h-full items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div className="flex flex-row gap-4 border-4 rounded-md px-4 py-4">
-            <img className="h-12 w-16" src={poster} alt="movie poster" />
+            <img className="h-12 w-16" src={moviePoster} alt="movie poster" />
             <h2 className="h-12 w-auto text-center text-xl font-bold text-gray-900">
-              {title}
+              {movieTitle}
             </h2>
           </div>
           
