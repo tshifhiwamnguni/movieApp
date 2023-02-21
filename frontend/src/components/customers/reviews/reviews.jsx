@@ -7,6 +7,7 @@ import "./reviews.css"
 import useReview from "../reviewStore";
 import filterStorer from "../filterStore";
 import axios from "axios";
+
 // import Moment from "moment"
 const API = "https://strapi-movie-app.onrender.com/api";
 
@@ -22,7 +23,7 @@ const Reviews = () => {
 
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [reviewPerPage, setReviewPerPage] = useState(15);
+  const [reviewPerPage, setReviewPerPage] = useState(12);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState([]);
   const [restitle, setRestitle] = useState("");
@@ -103,6 +104,7 @@ const Reviews = () => {
 
   return (
     <div className="mt-24">
+      {/* <Home /> */}
       <h1 className="text-4xl mx-auto text-center xl:text-4xl font-semibold leading-6 text-gray-800  block">
         Movie Reviews
       </h1>
@@ -126,7 +128,7 @@ const Reviews = () => {
         </form>
       </div>
 
-      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-5 gap-16 w-fit px-8 mx-auto">
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-4 gap-16 w-fit px-8 mx-auto">
         {currentReview
           .filter((item) => {
             return search.toLowerCase() === ""
@@ -139,7 +141,7 @@ const Reviews = () => {
               key={item.id}
               className="card w-72 bg-primary text-primary-content"
             >
-              <div className="card-body text-center">
+              <div className="card-body ">
                 {/* <img
                   className="h-1/2 md:w-full"
                   src={item.attributes.movie.data.attributes.movieImage}
@@ -150,7 +152,7 @@ const Reviews = () => {
                 </CardTitle>
                 <div className="flex justify-between">
                   <CardSubtitle className="text-muted text-xl" tag="h6">
-                    {"Guest user"}
+                    {item.attributes.users_permissions_user.data.attributes.firstname}
                   </CardSubtitle>
                   <div className="rating text-2xl">
                     {[...Array(item.attributes.rating || 1)].map(
@@ -171,8 +173,16 @@ const Reviews = () => {
                   "
                 </CardText>
                 <CardText>
-                  <small className="text-muted text-bold">
-                    {item.attributes.createdAt || "3 mins ago"}
+                  <small className="text-muted text- flex justify-end">
+                    {/* {item.attributes.createdAt || "3 mins ago"} */}
+                    {new Date(
+                            item.attributes.createdAt
+                          ).toLocaleDateString("ven-ZA", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
                   </small>
                 </CardText>
                 {/* <MdDelete className="text-2xl ml-auto text-rose-400" /> */}
