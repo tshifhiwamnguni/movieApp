@@ -50,7 +50,7 @@ function History() {
       <div className="mt-8">
         <div className="container flex justify-between flex-wrap mt-16 mb-4 gap-4 w-full">
           {/* Top level part with search input and title */}
-          <h1 className="text-4xl text-center xl:text-4xl font-semibold leading-6 text-gray-800 block">
+          <h1 className="text-4xl text-center xl:text-4xl font-semibold leading-6 block">
             Booking History
           </h1>
           <form>
@@ -86,7 +86,7 @@ function History() {
               .map((item, index) => (
                 <>
                   <div
-                    className="card w-fit bg-primary text-primary-content p-2"
+                    className="card w-fit bg-base-300 shadow-xl text-primary-content p-2"
                     key={item.id}
                   >
                     <div className="card-body">

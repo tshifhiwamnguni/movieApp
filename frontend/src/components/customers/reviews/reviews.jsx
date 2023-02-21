@@ -139,7 +139,7 @@ const Reviews = () => {
           .map((item) => (
             <div
               key={item.id}
-              className="card w-72 bg-primary text-primary-content"
+              className="card w-72 bg-base-300 shadow-xl text-primary-content"
             >
               <div className="card-body ">
                 {/* <img
