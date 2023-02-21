@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../services/theatre.service";
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -46,29 +47,27 @@ function CinMovies() {
     }
   };
 
-  // use effect for the selected options of a checkbox
-  useEffect(() => {}, [selectedOptions]);
-
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
   let ID = decoded.id;
 
+  // console.log(ID);
+  // use effect for the selected options of a checkbox
+  useEffect(() => {}, [selectedOptions]);
+
   // get user for the cinema
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then(async (data) => {
-        if(data.data.role.id !== 5){
-            navigate('/home', {replace: true})
-          }
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
+      .then((data) => {
+        if (data.data.role.id !== 5) {
+          navigate("/home", { replace: true });
+        }
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })
-      .catch((err) => {});
+      .catch((err) => {})
+      .finally(() => setLoading(false));
   };
 
   // get genres
@@ -88,10 +87,12 @@ function CinMovies() {
   //   change page number
   async function handleNextPage() {
     setPage(page + 1);
+    console.log(page);
   }
 
   async function handlePreviousPage() {
     setPage(page - 1);
+    console.log(page);
   }
 
   // get movies per cinema
@@ -362,7 +363,7 @@ function CinMovies() {
   };
 
   useEffect(() => {
-    getUser();
+    getUsers();
     getGenres();
   }, []);
 
@@ -370,6 +371,7 @@ function CinMovies() {
 
   useEffect(() => {
     if (query) {
+      console.log("I changed");
       setLoading(true);
       axios
         .get(
@@ -389,10 +391,16 @@ function CinMovies() {
         })
         .catch((error) => {})
         .finally(() => setLoading(false));
-    } else {
+    } else if (cinemaID.current === null) {
+      getUsers();
       getMovies();
     }
-  }, [query, page]);
+  }, [query]);
+
+  useEffect(() => {
+    console.log("I changed");
+    getMovies();
+  }, [page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
