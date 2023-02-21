@@ -226,7 +226,7 @@ getMovies()
                                 "Mtitle",
                                 modelData.attributes.title
                                 )
-                                navigate("/reviews");
+                                navigate("/client/reviews");
                                 
                               }}>
                              see review

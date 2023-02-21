@@ -125,11 +125,11 @@ function App() {
               <Route path="book" element={<Booking />}></Route>
               <Route path="payment" element={<Payment />} />
               <Route path="snackss" element={<Example />}></Route>
-              <Route path="userProfile" element={<UserProfile/>}/>
-              <Route path="history" element={<History/>}/>
-              <Route path="review" element={<Review/>}/>
-               <Route path="test" element={<Test/>}/>
-               <Route path="reviews" element={<Reviews/>}/>
+              <Route path="userProfile" element={<UserProfile />} />
+              <Route path="history" element={<History />} />
+              <Route path="review" element={<Review />} />
+              <Route path="test" element={<Test />} />
+              <Route path="reviews" element={<Reviews />} />
             </Route>
 
             {/* Public routes */}
@@ -193,16 +193,14 @@ function App() {
               <Route path="review/:showId" element={<TheatreReview />} />
             </Route>
 
-            <Route path="/landing" element={<Landing/>}></Route>
-            
-            <Route path="/review" element={<Review/>}></Route>
-            <Route path="/test" element={<Test/>}></Route>
-            <Route path="/reviews" element={<Reviews/>}></Route>
-            <Route path="/stars" element={<StarRatings/>}></Route>
-            <Route path="/filter" element={<Filter/>}></Route>
-            <Route path="/snackss" element={<Example/>}></Route>
-         
+            <Route path="/landing" element={<Landing />}></Route>
 
+            <Route path="/review" element={<Review />}></Route>
+            <Route path="/test" element={<Test />}></Route>
+            {/* <Route path="/reviews" element={<Reviews />}></Route> */}
+            <Route path="/stars" element={<StarRatings />}></Route>
+            <Route path="/filter" element={<Filter />}></Route>
+            <Route path="/snackss" element={<Example />}></Route>
           </Routes>
         </Suspense>
       </Router>

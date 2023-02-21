@@ -27,6 +27,7 @@ function ClientSide() {
 
   return (
     <>
+    {/* <h1 className="text-3xl">HELLO FROM THE BIG GUY</h1> */}
       <div className="drawer ">
         <input id="my-drawer-3  " type="checkbox" className="drawer-toggle " />
 
