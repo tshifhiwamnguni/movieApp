@@ -4,7 +4,8 @@ import womanKing from "../../../assets/womanKing.jpeg";
 import { MdDelete } from "react-icons/md";
 import Pagination from "../pagination/pagination";
 import "./reviews.css"
-
+import useReview from "../reviewStore";
+import filterStorer from "../filterStore";
 import axios from "axios";
 // import Moment from "moment"
 const API = "https://strapi-movie-app.onrender.com/api";
@@ -21,12 +22,44 @@ const Reviews = () => {
 
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [reviewPerPage, setReviewPerPage] = useState(8);
+  const [reviewPerPage, setReviewPerPage] = useState(15);
   const [search, setSearch] = useState("");
-  console.log(search)
+  const [totalPages, setTotalPages] = useState([]);
+  const [restitle, setRestitle] = useState("");
+  const movieTitle = filterStorer(state => state.reviewMovie);
+  console.log(movieTitle)
+ 
+  console.log(totalPages)
+
 
   let index = 2;
   let arr = [];
+
+
+
+  const getReviews = () => {
+    axios
+      .get(
+        "https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*"
+      )
+      .then((response) => {
+        console.log(response.data.data);
+        setData(response.data.data);
+        setTotalPages(response.data.data.filter(filterMovies));
+       
+        setReviews(response.data.data[1].attributes.comment);
+        setTimestamp(response.data.data[1].attributes.createdAt);
+        setStars(response.data.data[0].attributes.rating);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  console.log(reviews);
+
+  const filterMovies = (element) => {
+    return element.attributes.movie.data.attributes.title === movieTitle;
+  }
 
   const StarRatings = () => {
     const [rating, setRating] = useState();
@@ -35,6 +68,7 @@ const Reviews = () => {
     const parentToChild = () => {
       setRating(rating);
     };
+
     return (
       <div className="star-rating text-2xl">
         {[...Array(5)].map((star, index) => {
@@ -54,32 +88,17 @@ const Reviews = () => {
         })}
       </div>
     );
-  };
-
-  const getReviews = () => {
-    axios
-      .get(
-        "https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*"
-      )
-      .then((response) => {
-        console.log(response.data.data);
-        setData(response.data.data);
-        setReviews(response.data.data[1].attributes.comment);
-        setTimestamp(response.data.data[1].attributes.createdAt);
-        setStars(response.data.data[0].attributes.rating);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  console.log(reviews);
+  }
 
   const lastPageIndex = currentPage * reviewPerPage;
   const firstPageIndex = lastPageIndex - reviewPerPage;
   const currentReview = data.slice(firstPageIndex, lastPageIndex);
+  console.log(currentReview)
 
   useEffect(() => {
     getReviews();
+    setRestitle(localStorage.getItem("Mtitle"));
+    console.log(restitle);
   }, []);
 
   return (
@@ -107,7 +126,7 @@ const Reviews = () => {
         </form>
       </div>
 
-      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-4 gap-16 w-fit px-8 mx-auto">
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 lg:grid-cols-5 gap-16 w-fit px-8 mx-auto">
         {currentReview
           .filter((item) => {
             return search.toLowerCase() === ""
@@ -118,22 +137,22 @@ const Reviews = () => {
           .map((item) => (
             <div
               key={item.id}
-              className="card w-64 bg-primary text-primary-content"
+              className="card w-72 bg-primary text-primary-content"
             >
               <div className="card-body text-center">
-                <img
+                {/* <img
                   className="h-1/2 md:w-full"
                   src={item.attributes.movie.data.attributes.movieImage}
                   alt="dress"
-                />
-                <CardTitle tag="h1" className="text-center">
+                /> */}
+                <CardTitle tag="h1" className="text-center text-2xl">
                   {item.attributes.movie.data.attributes.title}
                 </CardTitle>
                 <div className="flex justify-between">
-                  <CardSubtitle className="text-muted" tag="h6">
+                  <CardSubtitle className="text-muted text-xl" tag="h6">
                     {"Guest user"}
                   </CardSubtitle>
-                  <div className="rating">
+                  <div className="rating text-2xl">
                     {[...Array(item.attributes.rating || 1)].map(
                       (star, index) => {
                         return (

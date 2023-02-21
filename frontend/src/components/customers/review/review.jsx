@@ -3,8 +3,12 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Reviews from "../../customers/reviews/reviews";
 import axios from "axios";
 import PaginatedItems from "../../test/test";
-const API = "https://strapi-movie-app.onrender.com/api";
+import { useEffect } from "react";
+import useReviewStore from "../reviewStore";
+import useReview from "../../customers/reviewStore";
+import filterStorer from "../filterStore";
 
+const API = "https://strapi-movie-app.onrender.com/api";
 
 function Review() {
   const reviews = useRef("");
@@ -15,67 +19,77 @@ function Review() {
   const [title, setTitle] = useState("");
   const [username, setUsername] = useState("");
   const [poster, setPoster] = useState("");
-  // const [movieid, setMovieid] = useState(0)
-  // const [movie, setMovie] = useState(0)
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const movieTitle = useReview(state => state.selectedMovieTitle);
+  const moviePoster = useReview(state => state.selectedMovieImage); // get variable data from store
+  const movieTitleReview = filterStorer(state => (state.reviewMovie = movieTitle))
+  console.log(movieTitleReview)
 
-  axios
-    .get("https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*")
-    .then((response) => {
-      console.log(response);
-      setTitle(response.data.data[0].attributes.movie.data.attributes.title);
-      setUsername(
-        response.data.data[0].attributes.users_permissions_user.data.attributes
-          .username
-      );
-      setPoster(
-        response.data.data[0].attributes.movie.data.attributes.movieImage
-      );
-      // setMovieid(response.data.data[0].attributes.movie.data.id)
-      console.log(response.data.data[0].attributes.movie.data.id);
-      // setMovie = response.data.data[0].attributes.movie.data.id
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-  // const addReview = () => {
-
-  //     axios.post('https://strapi-movie-app.onrender.com/api/review-cinemas',
-  //     {rating: ratings, comment: reviews }).then((response) => {
-  //         console.log(response);
-  //         console.log("response revieved")
-  //     }).catch((error) => {
-  //         console.log(error);
-  //         console.log("error revieved")
-  //     });
-  // }
-  //   console.log(firstname.current.value);
-  //   console.log(reviews.current.value);
-  //   console.log(ratings.current.value);
-
-  const handleReviewChange = async (event) => {
-    console.log(reviews.current.value);
-    console.log(ratings.current.value);
-  
-    const data = {
-      data: { rating: ratings.current.value, comment: reviews.current.value },
-    };
-    event.preventDefault();
+  const getData = async () => {
     await axios
-      .post("https://strapi-movie-app.onrender.com/api/review-cinemas", data)
+      .get(
+        "https://strapi-movie-app.onrender.com/api/review-cinemas?populate=*"
+      )
       .then((response) => {
-        console.log(response);
-        console.log("response received");
+        console.log(response.data);
+        setTitle(response.data.data[0].attributes.movie.data.attributes.title);
+        setUsername(
+          localStorage.getItem("username")
+        );
+        setPoster(
+          response.data.data[0].attributes.movie.data.attributes.movieImage
+        );
+        console.log(response.data.data[0].attributes.movie.data.id);
       })
       .catch((error) => {
         console.log(error);
-        console.log("error in posting");
       });
-
-    // event.preventDefault()
-    navigate("../reviews");
   };
 
+  
+
+  const validate = () => {
+    const errors = {};
+    if (!ratings.current.value) {
+      errors.rating = "No rating added!";
+    } else if (ratings.current.value < 1 || ratings.current.value > 5) {
+      errors.rating = "Rating must be between 1 and 5!";
+    }
+    if (!reviews.current.value) {
+      errors.comment = "No comment added!";
+    }
+
+    console.log(errors);
+    setFormErrors(errors);
+  };
+
+  const handleReviewChange = async (event) => {
+    validate();
+    event.preventDefault();
+    const data = {
+      data: { rating: ratings.current.value, comment: reviews.current.value },
+    };
+    if (JSON.stringify(formErrors) === '{}') {
+      return;
+    } else {
+      await axios
+        .post("https://strapi-movie-app.onrender.com/api/review-cinemas", data)
+        .then((response) => {
+          console.log(response);
+          console.log("response received");
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("error in posting");
+        });
+      navigate("../reviews");
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <div className="mt-24">
       <h2 className="h-12 w-auto text-center text-3xl font-bold text-gray-900 ">
@@ -84,11 +98,12 @@ function Review() {
       <div className="flex min-h-full items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div className="flex flex-row gap-4 border-4 rounded-md px-4 py-4">
-            <img className="h-12 w-16" src={poster} alt="movie poster" />
+            <img className="h-12 w-16" src={moviePoster} alt="movie poster" />
             <h2 className="h-12 w-auto text-center text-xl font-bold text-gray-900">
-              {title}
+              {movieTitle}
             </h2>
           </div>
+          
           <form className=" border-4 px-8 rounded-md py-8 space-y-6">
             <div className="flex gap-2 flex-col rounded-md shadow-sm">
               <div>
@@ -118,6 +133,7 @@ function Review() {
                   placeholder="comments"
                 />
               </div>
+              <p className="text-rose-900 font-bold">{formErrors.comment}</p>
 
               <div className="form-control w-full max-w-xs">
                 <span className="label-text">Rating</span>
@@ -133,6 +149,7 @@ function Review() {
                   placeholder="No between 1 -5"
                 />
               </div>
+              <p className="text-rose-900 font-bold">{formErrors.rating}</p>
             </div>
 
             <div className="bg-gray-50 flex justify-end gap-2">
@@ -150,8 +167,6 @@ function Review() {
           </form>
         </div>
       </div>
-    
-   
     </div>
   );
 }

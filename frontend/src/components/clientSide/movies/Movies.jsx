@@ -6,33 +6,39 @@ import ReactPlayer from "react-player";
 import Iframe from "react-iframe";
 import { useNavigate } from "react-router-dom";
 import  './Movies.css';
-
+import useReview from "../../customers/reviewStore";
+import filterStorer from "../../customers/filterStore";
 
 function Movies() {
 
   const [loading, setLoading] = useState(false);
 
   const [query, setQuery] = useState("");
-  
+  const [title, setTitle] = useState("");
   const [movies, setMovies] = useState([]);
-  const [cinemaID,setCinemaID] = useState('')
+  const [cinemaID,setCinemaID] = useState()
   const navigate = useNavigate()
   const iframeRef = useRef()
   const initData = {
     id: 1,
     attributes: {
-      title: "Avatar: The Lost city",
+      title: "",
       duration: 102.2,
       description:
-        "It is a movie where they lost their city it tough and rough",
-      createdAt: "2023-01-16T17:44:29.314Z",
-      updatedAt: "2023-01-17T06:05:41.504Z",
+        "",
+
     },
   };
 
   
-  let id=true
+  let id = true
   const [modelData, setModelData] = useState(initData);
+  const movieTitle = useReview(state => (state.selectedMovieTitle = modelData.attributes.title))
+  const movieImage = useReview(state => (state.selectedMovieImage = modelData.attributes.movieImage))
+  const reviewMovie = filterStorer(state => (state.reviewMovie = movieTitle))
+  console.log(movieTitle)
+  console.log(movieImage)
+
   function getMovies(){
     axios
     .get('https://strapi-movie-app.onrender.com/api/movies?populate=*',{
@@ -45,7 +51,7 @@ function Movies() {
       // Handle success.
       // console.log(response.data.data[1].attributes.cinema.data.attributes.name);
       console.log(response.data.data)
-
+      setTitle(response.data.data)
       console.log(localStorage.getItem("PlaceId"));
       console.log(localStorage.getItem("MName"))
       console.log(localStorage.getItem("Location"))
@@ -77,7 +83,7 @@ getMovies()
       )
       .then((movie) => {
         setMovies(movie.data.data);
-  
+        
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
@@ -86,21 +92,18 @@ getMovies()
     }
   }, [query]);
 
-
   function select(index) {
     setModelData(index);
     console.log(index);
     console.log('mdoel , ',modelData);
   }
 
-  
-
-
   function selectMovie(data) {
    console.log(data);
      localStorage.setItem('MId', data.id)
     localStorage.setItem('MPrice', data.attributes.price)
     localStorage.setItem('MName', data.attributes.title)
+    console.log(data.attributes.title)
     localStorage.setItem('Image', data.attributes.movieImage)
       navigate('../book')
    
@@ -109,6 +112,7 @@ getMovies()
   function toReviews(){
     navigate('../review')
   }
+
   return (
     <>
       <div className="mt-24">
@@ -192,7 +196,6 @@ getMovies()
                           <h3 className="font-bold text-lg">
                             {modelData.attributes.title}
                           </h3>
-
                           <iframe
                             ref={iframeRef}
                             width="966"
@@ -211,21 +214,24 @@ getMovies()
 
                             <source src="https://youtu.be/G-Cr00UYokU" type="video/mp4"></source>
                           </video> */}
-
-
                 <p>{modelData.attributes.description}</p>
-
-
-
                           <div className="modal-action">
                           <label  htmlFor="my-modal-5" className="btn radius" onClick={()=>{
                             toReviews()
                           }}>
                               review
                             </label>
-                            <label  htmlFor="my-modal-5" className="btn radius">
+                            <label  htmlFor="my-modal-5" className="btn radius" onClick={() => {
+                              localStorage.setItem(
+                                "Mtitle",
+                                modelData.attributes.title
+                                )
+                                navigate("/reviews");
+                                
+                              }}>
                              see review
                             </label>
+                            
                             <label  htmlFor="my-modal-5" className="btn radius">
                               close
                             </label>
