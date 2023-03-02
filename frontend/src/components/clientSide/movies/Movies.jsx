@@ -102,7 +102,7 @@ getMovies()
     localStorage.setItem('MPrice', data.attributes.price)
     localStorage.setItem('MName', data.attributes.title)
     localStorage.setItem('Image', data.attributes.movieImage)
-      navigate('../book')
+      // navigate('../book')
    
   }
 

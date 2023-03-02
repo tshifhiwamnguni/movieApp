@@ -402,6 +402,10 @@ function CinMovies() {
           <BiMoviePlay style={{ fontSize: "1.5rem" }} />
           Add movies
         </label>
+        <label htmlFor="my-modal-7" className="btn btn-primary xs:w-full gap-2">
+          <BiMoviePlay style={{ fontSize: "1.5rem" }} />
+          Add movies with csv
+        </label>
         <div className="form-control lg:flex-1 md:flex-1">
           <div className="input-group justify-end sm:justify-end">
             <input

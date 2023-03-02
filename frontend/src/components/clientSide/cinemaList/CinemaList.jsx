@@ -57,9 +57,6 @@ function CinemaList() {
     // console.log(cinemaCtx.cinemaName);
   }
 
-  function addReview() {
-    navigate("/review");
-  }
 
   return (
     <div className="mt-24 ">

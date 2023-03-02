@@ -6,7 +6,6 @@ import "./Booking.css";
 function Booking() {
   const naviage = useNavigate();
   const [bookedSeat, setBookedSeat] = useState([]);
-  const [isActive, setIsActive] = useState(false);
   const [bookingDate, setBookingDate] = useState("");
   useEffect(() => {
     // console.log("effect");
@@ -17,12 +16,11 @@ function Booking() {
     if (bookedSeat.includes(props)) {
       console.log("booked");
       console.log(props);
-
       handleDelete(bookedSeat.findIndex((seat) => seat === props));
     } else {
       setBookedSeat((bookedSeat) => [...bookedSeat, props]);
       console.log("state: ", bookedSeat);
-      setIsActive(true);
+      //  
     }
   }
 
