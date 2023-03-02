@@ -14,6 +14,7 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../../../services/theatre.service";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Papa from 'papaparse';
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -412,6 +413,30 @@ function CinMovies() {
   //   getMovies();
   // }, [page]);
 
+
+
+  function handleFileUpload(event, expectedFieldNames) {
+    const file = event.target.files[0];
+    
+    const reader = new FileReader();
+    reader.onload = () => {
+      const csvString = reader.result;
+      console.log(csvString);
+      const isValid = validateCsvFieldNames(csvString, expectedFieldNames);
+      console.log(isValid); // or do something else with the validation result
+    };
+    reader.readAsText(file);
+  }
+  
+  function validateCsvFieldNames(csvString, fieldNames) {
+    const results = Papa.parse(csvString, { header: true });
+    console.log(results);
+    const parsedFieldNames = results.meta.fields;
+    console.log(parsedFieldNames);
+    return parsedFieldNames.every(fieldName => fieldNames.includes(fieldName));
+  }
+
+
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
@@ -420,7 +445,7 @@ function CinMovies() {
           <BiMoviePlay style={{ fontSize: "1.5rem" }} />
           Add movies
         </label>
-        <label htmlFor="my-modal-7" className="btn btn-primary xs:w-full gap-2">
+        <label htmlFor="my-modal-9" className="btn btn-primary xs:w-full gap-2">
           <BiMoviePlay style={{ fontSize: "1.5rem" }} />
           Add movies with csv
         </label>
@@ -935,6 +960,22 @@ function CinMovies() {
           </div>
         </div>
       </div>
+
+      {/* csv upload module */}
+      <input type="checkbox" id="my-modal-9" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <div className="flex justify-center">
+          <input type="file" onChange={event => handleFileUpload(event, ['title', 'duration', 'genre', 'price', 'movieImage'])} />
+          </div>
+          <div className="modal-action">
+            <label htmlFor="my-modal-9" className="btn" onClick={clearData}>
+              Done
+            </label>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
