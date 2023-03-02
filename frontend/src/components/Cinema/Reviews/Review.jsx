@@ -6,6 +6,7 @@ import { API, TOKEN } from "../../environment/constant";
 import "./rev.css";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from 'jwt-decode'
+import moment from "moment";
 
 function Review() {
   const { movieId } = useParams();
@@ -54,7 +55,7 @@ function Review() {
 
     await axios
       .get(
-        `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[page]=${page}&pagination[pageSize]=6`
+        `${API}/review-cinemas?populate=*&filters[movie]=${movieId}&pagination[page]=${page}&pagination[pageSize]=6&sort=createdAt:desc`,
       )
       .then((rev) => {
         // console.log('rev ' ,rev.data);
@@ -214,6 +215,8 @@ function Review() {
                       <p className="font-bold text-2xl">
                         {revv?.attributes.comment}
                       </p>
+                      <p>{moment(revv?.attributes.createdAt, "YYYYMMDD").add(12, 'hour').subtract(12,'minute').fromNow()}</p>
+                      {/* <p>{moment().format}</p> */}
                     </div>
                   ) : (
                     <div className="flex justify-center">

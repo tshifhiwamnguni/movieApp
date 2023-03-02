@@ -6,7 +6,7 @@ import { BsHouse } from "react-icons/bs";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbMovie } from "react-icons/tb";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { BsBookmarkCheck } from "react-icons/bs";
+import {CgProfile} from 'react-icons/cg';
 import "./cin.css";
 import { Outlet } from "react-router-dom";
 
@@ -99,14 +99,14 @@ function Home() {
                 </li>
                 <li
                   onClick={() => {
-                    navigate("/cinema/stats/");
-                    setActivePage("bookings");
+                    navigate("/cinema/cinemaprofile/");
+                    setActivePage("cinemaprofile");
                   }}
-                  className={activePage == "bookings" ? "active" : ""}
+                  className={activePage == "cinemaprofile"? "active" : ""}
                 >
                   <a>
-                    <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
-                    Bookings
+                    <CgProfile style={{ fontSize: "1.5rem" }} />
+                    Profile
                   </a>
                 </li>
                 <li onClick={logout}>
@@ -170,14 +170,14 @@ function Home() {
             </li>
             <li
               onClick={() => {
-                navigate("/cinema/stats/");
-                setActivePage("bookings");
+                navigate("/cinema/cinemaprofile/");
+                setActivePage("cinemaprofile");
               }}
-              className={activePage == "bookings" ? "active" : ""}
+              className={activePage == "cinemaprofile"? "active" : ""}
             >
               <a>
-                <BsBookmarkCheck style={{ fontSize: "1.5rem" }} />
-                Bookings
+                <CgProfile style={{ fontSize: "1.5rem" }} />
+                Profile
               </a>
             </li>
             <li onClick={logout}>

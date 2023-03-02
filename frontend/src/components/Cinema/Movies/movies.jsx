@@ -12,6 +12,8 @@ import { ToastContainer } from "react-toastify";
 import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../../services/theatre.service";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -32,6 +34,7 @@ function CinMovies() {
   const [pageCount, setPageCount] = useState();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const [hasMore, setHasMore] = useState(true);
 
   // checkbox for genres
   const handleCheckboxChange = async (event) => {
@@ -46,29 +49,27 @@ function CinMovies() {
     }
   };
 
-  // use effect for the selected options of a checkbox
-  useEffect(() => {}, [selectedOptions]);
-
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
   let ID = decoded.id;
 
+  // console.log(ID);
+  // use effect for the selected options of a checkbox
+  useEffect(() => {}, [selectedOptions]);
+
   // get user for the cinema
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      .then(async (data) => {
-        if(data.data.role.id !== 5){
-            navigate('/home', {replace: true})
-          }
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
+      .then((data) => {
+        if (data.data.role.id !== 5) {
+          navigate("/home", { replace: true });
+        }
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })
-      .catch((err) => {});
+      .catch((err) => {})
+      .finally(() => setLoading(false));
   };
 
   // get genres
@@ -88,10 +89,12 @@ function CinMovies() {
   //   change page number
   async function handleNextPage() {
     setPage(page + 1);
+    console.log(page);
   }
 
   async function handlePreviousPage() {
     setPage(page - 1);
+    console.log(page);
   }
 
   // get movies per cinema
@@ -99,7 +102,7 @@ function CinMovies() {
     setLoading(true);
     await axios
       .get(
-        `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
+        `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=8&pagination[page]=${page}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -107,12 +110,20 @@ function CinMovies() {
         }
       )
       .then((movie) => {
-        // console.log(movie.data);
+        console.log(movie.data.data);
         setPageCount(movie.data.meta.pagination.pageCount);
-        setMovies(movie.data.data);
+
+        if (pageCount <= page) {
+          setHasMore(true);
+        } else if (pageCount >= page) {
+          setHasMore(false);
+        }
+        setMovies([...movies, ...movie.data.data]);
         setCinemaName(
           movie.data.data[0].attributes.cinema.data.attributes.name
         );
+
+        handleNextPage();
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
@@ -362,7 +373,7 @@ function CinMovies() {
   };
 
   useEffect(() => {
-    getUser();
+    getUsers();
     getGenres();
   }, []);
 
@@ -370,6 +381,7 @@ function CinMovies() {
 
   useEffect(() => {
     if (query) {
+      console.log("I changed");
       setLoading(true);
       axios
         .get(
@@ -389,10 +401,16 @@ function CinMovies() {
         })
         .catch((error) => {})
         .finally(() => setLoading(false));
-    } else {
+    } else if (cinemaID.current === null) {
+      getUsers();
       getMovies();
     }
-  }, [query, page]);
+  }, [query]);
+
+  // useEffect(() => {
+  //   console.log("I changed");
+  //   getMovies();
+  // }, [page]);
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -441,123 +459,141 @@ function CinMovies() {
         ) : (
           ""
         )}
-        <table className="table w-full z-0">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Title & Genre</th>
-              <th>Duration</th>
-              <th>Cinema</th>
-              <th>Price</th>
-              <th>Created at</th>
-              <th>Updated at</th>
-              <th> Actions</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {movies.map((mov) => {
-              return (
-                <tr key={mov.id}>
-                  <td>
-                    {!loading || mov.id !== movieId.current ? (
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="avatar">
-                            <div className="mask mask-squircle w-12 h-12">
-                              <label
-                                className="cursor-pointer"
-                                htmlFor="my-modal-8"
-                                onClick={() => selectedEdit(mov)}
-                              >
-                                <img
-                                  src={mov.attributes.movieImage}
-                                  alt="Avatar Tailwind CSS Component"
-                                />
-                              </label>
+        <InfiniteScroll
+          dataLength={movies.length}
+          next={getMovies}
+          hasMore={hasMore}
+          loader={
+            loading ? <h4 className="text-center mt-2">Loading...</h4> : ""
+          }
+          scrollableTarget="scrollableDiv"
+        >
+          <table className="table w-full z-0">
+            <div
+              id="scrollableDiv"
+              style={{ height: "70vh", overflow: "auto" }}
+            >
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Title & Genre</th>
+                  <th>Duration</th>
+                  <th>Cinema</th>
+                  <th>Price</th>
+                  <th>Created at</th>
+                  <th>Updated at</th>
+                  <th> Actions</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {movies.map((mov) => {
+                  return (
+                    <tr key={mov.id}>
+                      <td>
+                        {!loading || mov.id !== movieId.current ? (
+                          <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-3">
+                              <div className="avatar">
+                                <div className="mask mask-squircle w-12 h-12">
+                                  <label
+                                    className="cursor-pointer"
+                                    htmlFor="my-modal-8"
+                                    onClick={() => selectedEdit(mov)}
+                                  >
+                                    <img
+                                      src={mov.attributes.movieImage}
+                                      alt="Avatar Tailwind CSS Component"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="d-flex justify-content-center">
-                        <div className="spinner">
-                          <div className="bounce1"></div>
-                          <div className="bounce2"></div>
-                          <div className="bounce3"></div>
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                  <td>
-                    {mov.attributes.title}
-                    <br />
+                        ) : (
+                          <div className="d-flex justify-content-center">
+                            <div className="spinner">
+                              <div className="bounce1"></div>
+                              <div className="bounce2"></div>
+                              <div className="bounce3"></div>
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        {mov.attributes.title}
+                        <br />
 
-                    {mov.attributes.genres?.data.map((genre) => (
-                      <span
-                        key={genre.id}
-                        className="badge badge-ghost badge-sm ml-1"
-                      >
-                        {genre.attributes.name}
-                      </span>
-                    ))}
-                  </td>
-                  <td>
-                    {Math.floor(mov.attributes.duration / 60) +
-                      "h:" +
-                      (
-                        Math.round((mov.attributes.duration % 60) * 100) / 100
-                      ).toFixed(0)}
-                  </td>
-                  <td>{cinemaName}</td>
-                  <td>{"R" + mov.attributes.price}</td>
-                  <td>
-                    {moment(mov.attributes.createdAt).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )}
-                  </td>
-                  <td>
-                    {moment(mov.attributes.updatedAt).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )}
-                  </td>
-                  <th>
-                    <div className="space-x-3">
-                      <label
-                        htmlFor="my-modal-3"
-                        className="btn btn-success btn-xs"
-                        onClick={() => selectedEdit(mov)}
-                      >
-                        Edit
-                      </label>
-                      <label
-                        htmlFor="my-modal-4"
-                        className="btn btn-error btn-xs"
-                        onClick={() => selectedEdit(mov)}
-                      >
-                        Delete
-                      </label>
+                        {mov.attributes.genres?.data.map((genre) => (
+                          <span
+                            key={genre.id}
+                            className="badge badge-ghost badge-sm ml-1"
+                          >
+                            {genre.attributes.name}
+                          </span>
+                        ))}
+                      </td>
+                      <td>
+                        {Math.floor(mov.attributes.duration / 60) +
+                          "h:" +
+                          (
+                            Math.round((mov.attributes.duration % 60) * 100) /
+                            100
+                          ).toFixed(0)}
+                      </td>
+                      <td>{cinemaName}</td>
+                      <td>{"R" + mov.attributes.price}</td>
+                      <td>
+                        {moment(mov.attributes.createdAt).format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                      </td>
+                      <td>
+                        {moment(mov.attributes.updatedAt).format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                      </td>
+                      <th>
+                        <div className="space-x-3">
+                          <label
+                            htmlFor="my-modal-3"
+                            className="btn btn-success btn-xs"
+                            onClick={() => selectedEdit(mov)}
+                          >
+                            Edit
+                          </label>
+                          <label
+                            htmlFor="my-modal-4"
+                            className="btn btn-error btn-xs"
+                            onClick={() => selectedEdit(mov)}
+                          >
+                            Delete
+                          </label>
 
-                      <label
-                        htmlFor="my-modal-11"
-                        className="btn btn-success btn-xs"
-                        onClick={() =>
-                          navigate("/cinema/review/" + mov.id, {
-                            replace: true,
-                          })
-                        }
-                      >
-                        View reviews
-                      </label>
-                    </div>
-                  </th>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                          <label
+                            htmlFor="my-modal-11"
+                            className="btn btn-success btn-xs"
+                            onClick={() =>
+                              navigate("/cinema/review/" + mov.id, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            View reviews
+                          </label>
+                        </div>
+                      </th>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </div>
+          </table>
+        </InfiniteScroll>
       </div>
       <hr />
+      {/*
       <div className="flex gap-3 justify-center mt-3">
         <button
           className="btn btn-ghost glass"
@@ -573,7 +609,7 @@ function CinMovies() {
         >
           Next
         </button>
-      </div>
+      </div> */}
 
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />

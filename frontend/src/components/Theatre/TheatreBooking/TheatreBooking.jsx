@@ -5,15 +5,14 @@ import { API, TOKEN } from "../../environment/constant";
 import axios from "axios";
 import moment from "moment";
 import { BsCalendar2Date } from "react-icons/bs";
-import { MdAirlineSeatReclineExtra } from "react-icons/md";
+import { getUser } from "../../../services/theatre.service";
 
 function BookingStatTheatre() {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const theatreID = useRef();
+  // const theatreID = useRef();
+  const [theatreID, setTheatreID] = useState()
   const [bookingDate, setBookingDate] = useState("");
-  const [seat, setSeat] = useState("");
-  const [cinemaSeats, setCinemaSeat] = useState([]);
   const bookId = useRef();
   const [pageCount, setPageCount] = useState();
   const [page, setPage] = useState(1);
@@ -24,11 +23,8 @@ function BookingStatTheatre() {
 
   // get and set selected data to the variables
   function selectedEdit(books) {
-    console.log(books);
     setBookingDate(books.bookingDate);
-    setSeat(books.attributes?.cinema_seat?.data?.attributes?.seat);
     bookId.current = books.id;
-    console.log("ID from press" + bookId.current);
   }
 
   const updateBooking = () => {
@@ -40,9 +36,6 @@ function BookingStatTheatre() {
       },
     };
 
-    console.log(bookingData);
-    console.log("id " + bookId.current);
-
     axios
       .put(`${API}/booking-theatres/${bookId.current}`, bookingData, {
         headers: {
@@ -50,7 +43,6 @@ function BookingStatTheatre() {
         },
       })
       .then((data) => {
-        console.log(data.data);
         getBooking();
       })
       .catch((err) => {
@@ -64,22 +56,19 @@ function BookingStatTheatre() {
     // console.log(bookingData)
   };
 
-
   // get a user
-  const getUser = async () => {
-    await axios
-      .get(`${API}/users/${ID}?populate=theatre`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+  const getUsers = async () => {
+    setLoading(true);
+    await getUser(ID)
       .then((data) => {
-        // console.log(data.data);
-        theatreID.current = data.data?.theatre.id;
-        getBooking();
+        // console.log(data);
+        setTheatreID(data.data.theatre.id)
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -87,7 +76,7 @@ function BookingStatTheatre() {
     setLoading(true);
     await axios
       .get(
-        `${API}/booking-theatres?populate=*&filters[theatre]=${theatreID.current}`,
+        `${API}/booking-theatres?populate=*&filters[theatre]=${theatreID}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -95,15 +84,16 @@ function BookingStatTheatre() {
         }
       )
       .then((b) => {
-        console.log(b.data.data);
+        // console.log(b.data.data);
         setBookings(b.data.data);
         setPageCount(b.data.meta.pagination.pageCount);
       })
       .catch((err) => {
         console.log(err);
-      }).finally(()=>{
-        setLoading(false)
       })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   //   change page number
@@ -117,11 +107,16 @@ function BookingStatTheatre() {
 
   //   request for page change
   useEffect(() => {
-    getBooking();
-  }, [page]);
+    if (theatreID === null) {
+      getUsers();
+      getBooking();
+    }else if(theatreID !== null){
+      getBooking();
+    }
+  }, [page, theatreID]);
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, []);
 
   return (
@@ -186,9 +181,7 @@ function BookingStatTheatre() {
                   </td>
                   <td>{book.attributes.show.data.attributes.title}</td>
                   <td>R{book.attributes.totalprice}</td>
-                  <td>
-                    {book.attributes?.theatre_seat}
-                  </td>
+                  <td>{book.attributes?.theatre_seat}</td>
                   <td>
                     {moment(book.attributes.bookingDate).format(
                       "YYYY-MM-DD HH:mm:ss"

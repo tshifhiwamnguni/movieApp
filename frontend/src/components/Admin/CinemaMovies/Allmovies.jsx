@@ -11,7 +11,7 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import { ToastContainer } from "react-toastify";
 import { RiVideoAddFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from 'jwt-decode'
+import jwt_decode from "jwt-decode";
 
 function AllMovies() {
   const [movies, setMovies] = useState([]);
@@ -29,7 +29,7 @@ function AllMovies() {
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [query, setQuery] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("jwt");
   let decoded = jwt_decode(token);
@@ -56,11 +56,14 @@ function AllMovies() {
   const getMovies = async () => {
     setLoading(true);
     await axios
-      .get(`${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}`, {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
+      .get(
+        `${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      )
       .then((movie) => {
         // console.log(movie.data);
         setMovies(movie.data.data);
@@ -227,42 +230,42 @@ function AllMovies() {
     getCinema();
   }, []);
 
-    //   change page number
-    async function handleNextPage() {
-      setPage(page + 1);
-    }
-  
-    async function handlePreviousPage() {
-      setPage(page - 1);
-    }
-  
-    //   request for page change
-    useEffect(() => {
-      getMovies();
-    }, [page]);
+  //   change page number
+  async function handleNextPage() {
+    console.log(page);
+    setPage(page + 1);
+  }
 
-    // search use effect
+  async function handlePreviousPage() {
+    setPage(page - 1);
+  }
+
+  //   request for page change
+  useEffect(() => {
+    getMovies();
+  }, [page]);
+
+  // search use effect
 
   useEffect(() => {
     setLoading(true);
-    if(query){
-    axios
-      .get(
-        `${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$contains]=${query}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-          },
-        }
-      )
-      .then((movie) => {
-        setMovies(movie.data.data);
-  
-      })
-      .catch((error) => {})
-      .finally(() => setLoading(false));
-    }else{
-        getMovies();
+    if (query) {
+      axios
+        .get(
+          `${API}/movies?populate=*&pagination[pageSize]=5&pagination[page]=${page}&filters[title][$contains]=${query}`,
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        )
+        .then((movie) => {
+          setMovies(movie.data.data);
+        })
+        .catch((error) => {})
+        .finally(() => setLoading(false));
+    } else {
+      getMovies();
     }
   }, [query]);
 
@@ -270,8 +273,8 @@ function AllMovies() {
     <div className="min-h-screen mt-24 overflow-x-scroll">
       <ToastContainer />
       <div className="flex">
-      <h1 className="text-center font-bold text-3xl mb-4">Movies</h1>
-      <div className="form-control flex-1">
+        <h1 className="text-center font-bold text-3xl mb-4">Movies</h1>
+        <div className="form-control flex-1">
           <div className="input-group justify-end">
             <input
               type="text"
@@ -298,7 +301,7 @@ function AllMovies() {
             </button>
           </div>
         </div>
-        </div>
+      </div>
       <div className="overflow-x-auto w-full">
         {loading ? (
           <progress className="progress progress-primary w-full"></progress>
@@ -390,22 +393,22 @@ function AllMovies() {
         </table>
       </div>
       <hr />
-        <div className="flex gap-3 justify-center mt-3">
-          <button
-            className="btn btn-primary glass"
-            onClick={handlePreviousPage}
-            disabled={page === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-primary glass"
-            onClick={handleNextPage}
-            disabled={page === pageCount}
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex gap-3 justify-center mt-3">
+        <button
+          className="btn btn-primary glass"
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          className="btn btn-primary glass"
+          onClick={handleNextPage}
+          disabled={page === pageCount}
+        >
+          Next
+        </button>
+      </div>
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
       <div className="modal">
