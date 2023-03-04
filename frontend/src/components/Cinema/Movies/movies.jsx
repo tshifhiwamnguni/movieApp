@@ -56,7 +56,7 @@ function CinMovies() {
 
   // console.log(ID);
   // use effect for the selected options of a checkbox
-  useEffect(() => {}, [selectedOptions]);
+  useEffect(() => { }, [selectedOptions]);
 
   // get user for the cinema
   const getUsers = async () => {
@@ -69,7 +69,7 @@ function CinMovies() {
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })
-      .catch((err) => {})
+      .catch((err) => { })
       .finally(() => setLoading(false));
   };
 
@@ -84,7 +84,7 @@ function CinMovies() {
       .then((data) => {
         setGenres(data.data.data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   //   change page number
@@ -126,7 +126,7 @@ function CinMovies() {
 
         handleNextPage();
       })
-      .catch((error) => {})
+      .catch((error) => { })
       .finally(() => setLoading(false));
   };
 
@@ -400,7 +400,7 @@ function CinMovies() {
             movie.data.data[0].attributes.cinema.data.attributes.name
           );
         })
-        .catch((error) => {})
+        .catch((error) => { })
         .finally(() => setLoading(false));
     } else if (cinemaID.current === null) {
       getUsers();
@@ -413,28 +413,79 @@ function CinMovies() {
   //   getMovies();
   // }, [page]);
 
+  const [csvData, setCsvData] = useState()
+  const [isValidFormat, setIsValidFormat] = useState()
+  const addMoviesCSV = async (movieData) => {
+    setLoading(true);
+
+
+    await axios
+      .post(`${API}/movies?populate=*`, movieData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((mov) => {
+        movieId.current = mov.data.data.id;
+      })
+      .catch((error) => {
+        console.log(error);
+        ERROR(error.response.data.error.message);
+      }).finally(()=>setLoading(false));
+  }
+  function addWithCSV() {
+    if (isValidFormat) {
+      csvData.forEach(element => {
+
+        let movieData = {
+          data: {
+            title: element.title,
+            description: element.description,
+            duration: element.duration,
+            cinema: parseInt(cinemaID.current),
+            genres: null,
+            price: element.price,
+            movieImage: element.movieImages
+          }
+        };
+        addMoviesCSV(movieData)
+      })
+
+
+    }
+  }
 
 
   function handleFileUpload(event, expectedFieldNames) {
     const file = event.target.files[0];
-    
+    console.log('expecred fields', expectedFieldNames);
     const reader = new FileReader();
     reader.onload = () => {
       const csvString = reader.result;
-      console.log(csvString);
+      console.log(' csv ', csvString);
       const isValid = validateCsvFieldNames(csvString, expectedFieldNames);
-      console.log(isValid); // or do something else with the validation result
+      // console.log('valid ', isValid); // or do something else with the validation result
+
     };
     reader.readAsText(file);
   }
-  
+
   function validateCsvFieldNames(csvString, fieldNames) {
+    console.log('validat field', fieldNames);
     const results = Papa.parse(csvString, { header: true });
-    console.log(results);
+    console.log('res ', results);
     const parsedFieldNames = results.meta.fields;
-    console.log(parsedFieldNames);
-    return parsedFieldNames.every(fieldName => fieldNames.includes(fieldName));
+    console.log('fields ', parsedFieldNames);
+    // return fieldNames.every(fieldName => {
+    //   console.log(parsedFieldNames.includes(fieldName));
+    //   parsedFieldNames.includes(fieldName)
+    // });
+    const isSubset = (array1, array2) =>
+      array2.every((element) => array1.includes(element));
+    setCsvData(results.data)
+    setIsValidFormat(isSubset(parsedFieldNames, fieldNames))
   }
+
 
 
   return (
@@ -966,10 +1017,10 @@ function CinMovies() {
       <div className="modal">
         <div className="modal-box">
           <div className="flex justify-center">
-          <input type="file" onChange={event => handleFileUpload(event, ['title', 'duration', 'genre', 'price', 'movieImage'])} />
+            <input type="file" onChange={event => handleFileUpload(event, ['title', 'duration', 'description', 'genres', 'price', 'movieImages'])} />
           </div>
           <div className="modal-action">
-            <label htmlFor="my-modal-9" className="btn" onClick={clearData}>
+            <label htmlFor="my-modal-9" className="btn" onClick={addWithCSV}>
               Done
             </label>
           </div>
