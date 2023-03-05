@@ -23,7 +23,7 @@ function ClientSide() {
     navigate("/login/", { replace: true });
   }
 
-  const active = true;
+  // const active = true;
 
   return (
     <>

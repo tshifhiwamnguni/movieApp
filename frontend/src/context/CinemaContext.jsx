@@ -1,8 +1,5 @@
 import { createContext, useState } from "react";
 
-
-
-
 const CinemaContext = createContext({
   cinemaId: "1",
   movieId: "1",
@@ -12,14 +9,9 @@ const CinemaContext = createContext({
 });
 
 
-
-
-
 export function CinemaContextProvider(props) {
   const [_cinemaId, setCinemaId] = useState();
-
   const [_movieId, setMovieId] = useState();
-
   function setCinemaIdHandler(cinemaId) {
     setCinemaId((prevId) => {
       return (prevId = cinemaId);

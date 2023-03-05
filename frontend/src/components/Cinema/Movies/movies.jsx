@@ -13,6 +13,8 @@ import { BiMoviePlay } from "react-icons/bi";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../../../services/theatre.service";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Papa from 'papaparse';
 
 function CinMovies() {
   const [movies, setMovies] = useState([]);
@@ -33,6 +35,7 @@ function CinMovies() {
   const [pageCount, setPageCount] = useState();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const [hasMore, setHasMore] = useState(true);
 
   // checkbox for genres
   const handleCheckboxChange = async (event) => {
@@ -53,7 +56,7 @@ function CinMovies() {
 
   // console.log(ID);
   // use effect for the selected options of a checkbox
-  useEffect(() => {}, [selectedOptions]);
+  useEffect(() => { }, [selectedOptions]);
 
   // get user for the cinema
   const getUsers = async () => {
@@ -66,7 +69,7 @@ function CinMovies() {
         cinemaID.current = data.data?.cinema.id;
         getMovies();
       })
-      .catch((err) => {})
+      .catch((err) => { })
       .finally(() => setLoading(false));
   };
 
@@ -81,7 +84,7 @@ function CinMovies() {
       .then((data) => {
         setGenres(data.data.data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   //   change page number
@@ -100,7 +103,7 @@ function CinMovies() {
     setLoading(true);
     await axios
       .get(
-        `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=5&pagination[page]=${page}`,
+        `${API}/movies?filters[cinema]=${cinemaID.current}&populate=*&pagination[pageSize]=8&pagination[page]=${page}`,
         {
           headers: {
             Authorization: `Bearer ${TOKEN}`,
@@ -108,14 +111,22 @@ function CinMovies() {
         }
       )
       .then((movie) => {
-        // console.log(movie.data);
+        console.log(movie.data.data);
         setPageCount(movie.data.meta.pagination.pageCount);
-        setMovies(movie.data.data);
+
+        if (pageCount <= page) {
+          setHasMore(true);
+        } else if (pageCount >= page) {
+          setHasMore(false);
+        }
+        setMovies([...movies, ...movie.data.data]);
         setCinemaName(
           movie.data.data[0].attributes.cinema.data.attributes.name
         );
+
+        handleNextPage();
       })
-      .catch((error) => {})
+      .catch((error) => { })
       .finally(() => setLoading(false));
   };
 
@@ -389,7 +400,7 @@ function CinMovies() {
             movie.data.data[0].attributes.cinema.data.attributes.name
           );
         })
-        .catch((error) => {})
+        .catch((error) => { })
         .finally(() => setLoading(false));
     } else if (cinemaID.current === null) {
       getUsers();
@@ -397,10 +408,85 @@ function CinMovies() {
     }
   }, [query]);
 
-  useEffect(() => {
-    console.log("I changed");
-    getMovies();
-  }, [page]);
+  // useEffect(() => {
+  //   console.log("I changed");
+  //   getMovies();
+  // }, [page]);
+
+  const [csvData, setCsvData] = useState()
+  const [isValidFormat, setIsValidFormat] = useState()
+  const addMoviesCSV = async (movieData) => {
+    setLoading(true);
+
+
+    await axios
+      .post(`${API}/movies?populate=*`, movieData, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((mov) => {
+        movieId.current = mov.data.data.id;
+      })
+      .catch((error) => {
+        console.log(error);
+        ERROR(error.response.data.error.message);
+      }).finally(()=>setLoading(false));
+  }
+  function addWithCSV() {
+    if (isValidFormat) {
+      csvData.forEach(element => {
+
+        let movieData = {
+          data: {
+            title: element.title,
+            description: element.description,
+            duration: element.duration,
+            cinema: parseInt(cinemaID.current),
+            genres: null,
+            price: element.price,
+            movieImage: element.movieImages
+          }
+        };
+        addMoviesCSV(movieData)
+      })
+
+
+    }
+  }
+
+
+  function handleFileUpload(event, expectedFieldNames) {
+    const file = event.target.files[0];
+    console.log('expecred fields', expectedFieldNames);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const csvString = reader.result;
+      console.log(' csv ', csvString);
+      const isValid = validateCsvFieldNames(csvString, expectedFieldNames);
+      // console.log('valid ', isValid); // or do something else with the validation result
+
+    };
+    reader.readAsText(file);
+  }
+
+  function validateCsvFieldNames(csvString, fieldNames) {
+    console.log('validat field', fieldNames);
+    const results = Papa.parse(csvString, { header: true });
+    console.log('res ', results);
+    const parsedFieldNames = results.meta.fields;
+    console.log('fields ', parsedFieldNames);
+    // return fieldNames.every(fieldName => {
+    //   console.log(parsedFieldNames.includes(fieldName));
+    //   parsedFieldNames.includes(fieldName)
+    // });
+    const isSubset = (array1, array2) =>
+      array2.every((element) => array1.includes(element));
+    setCsvData(results.data)
+    setIsValidFormat(isSubset(parsedFieldNames, fieldNames))
+  }
+
+
 
   return (
     <div className="min-h-screen mt-24 overflow-x-scroll">
@@ -409,6 +495,10 @@ function CinMovies() {
         <label htmlFor="my-modal-7" className="btn btn-primary xs:w-full gap-2">
           <BiMoviePlay style={{ fontSize: "1.5rem" }} />
           Add movies
+        </label>
+        <label htmlFor="my-modal-9" className="btn btn-primary xs:w-full gap-2">
+          <BiMoviePlay style={{ fontSize: "1.5rem" }} />
+          Add movies with csv
         </label>
         <div className="form-control lg:flex-1 md:flex-1">
           <div className="input-group justify-end sm:justify-end">
@@ -445,123 +535,141 @@ function CinMovies() {
         ) : (
           ""
         )}
-        <table className="table w-full z-0">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Title & Genre</th>
-              <th>Duration</th>
-              <th>Cinema</th>
-              <th>Price</th>
-              <th>Created at</th>
-              <th>Updated at</th>
-              <th> Actions</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {movies.map((mov) => {
-              return (
-                <tr key={mov.id}>
-                  <td>
-                    {!loading || mov.id !== movieId.current ? (
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="avatar">
-                            <div className="mask mask-squircle w-12 h-12">
-                              <label
-                                className="cursor-pointer"
-                                htmlFor="my-modal-8"
-                                onClick={() => selectedEdit(mov)}
-                              >
-                                <img
-                                  src={mov.attributes.movieImage}
-                                  alt="Avatar Tailwind CSS Component"
-                                />
-                              </label>
+        <InfiniteScroll
+          dataLength={movies.length}
+          next={getMovies}
+          hasMore={hasMore}
+          loader={
+            loading ? <h4 className="text-center mt-2">Loading...</h4> : ""
+          }
+          scrollableTarget="scrollableDiv"
+        >
+          <table className="table w-full z-0">
+            <div
+              id="scrollableDiv"
+              style={{ height: "70vh", overflow: "auto" }}
+            >
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Title & Genre</th>
+                  <th>Duration</th>
+                  <th>Cinema</th>
+                  <th>Price</th>
+                  <th>Created at</th>
+                  <th>Updated at</th>
+                  <th> Actions</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {movies.map((mov) => {
+                  return (
+                    <tr key={mov.id}>
+                      <td>
+                        {!loading || mov.id !== movieId.current ? (
+                          <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-3">
+                              <div className="avatar">
+                                <div className="mask mask-squircle w-12 h-12">
+                                  <label
+                                    className="cursor-pointer"
+                                    htmlFor="my-modal-8"
+                                    onClick={() => selectedEdit(mov)}
+                                  >
+                                    <img
+                                      src={mov.attributes.movieImage}
+                                      alt="Avatar Tailwind CSS Component"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="d-flex justify-content-center">
-                        <div className="spinner">
-                          <div className="bounce1"></div>
-                          <div className="bounce2"></div>
-                          <div className="bounce3"></div>
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                  <td>
-                    {mov.attributes.title}
-                    <br />
+                        ) : (
+                          <div className="d-flex justify-content-center">
+                            <div className="spinner">
+                              <div className="bounce1"></div>
+                              <div className="bounce2"></div>
+                              <div className="bounce3"></div>
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        {mov.attributes.title}
+                        <br />
 
-                    {mov.attributes.genres?.data.map((genre) => (
-                      <span
-                        key={genre.id}
-                        className="badge badge-ghost badge-sm ml-1"
-                      >
-                        {genre.attributes.name}
-                      </span>
-                    ))}
-                  </td>
-                  <td>
-                    {Math.floor(mov.attributes.duration / 60) +
-                      "h:" +
-                      (
-                        Math.round((mov.attributes.duration % 60) * 100) / 100
-                      ).toFixed(0)}
-                  </td>
-                  <td>{cinemaName}</td>
-                  <td>{"R" + mov.attributes.price}</td>
-                  <td>
-                    {moment(mov.attributes.createdAt).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )}
-                  </td>
-                  <td>
-                    {moment(mov.attributes.updatedAt).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )}
-                  </td>
-                  <th>
-                    <div className="space-x-3">
-                      <label
-                        htmlFor="my-modal-3"
-                        className="btn btn-success btn-xs"
-                        onClick={() => selectedEdit(mov)}
-                      >
-                        Edit
-                      </label>
-                      <label
-                        htmlFor="my-modal-4"
-                        className="btn btn-error btn-xs"
-                        onClick={() => selectedEdit(mov)}
-                      >
-                        Delete
-                      </label>
+                        {mov.attributes.genres?.data.map((genre) => (
+                          <span
+                            key={genre.id}
+                            className="badge badge-ghost badge-sm ml-1"
+                          >
+                            {genre.attributes.name}
+                          </span>
+                        ))}
+                      </td>
+                      <td>
+                        {Math.floor(mov.attributes.duration / 60) +
+                          "h:" +
+                          (
+                            Math.round((mov.attributes.duration % 60) * 100) /
+                            100
+                          ).toFixed(0)}
+                      </td>
+                      <td>{cinemaName}</td>
+                      <td>{"R" + mov.attributes.price}</td>
+                      <td>
+                        {moment(mov.attributes.createdAt).format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                      </td>
+                      <td>
+                        {moment(mov.attributes.updatedAt).format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )}
+                      </td>
+                      <th>
+                        <div className="space-x-3">
+                          <label
+                            htmlFor="my-modal-3"
+                            className="btn btn-success btn-xs"
+                            onClick={() => selectedEdit(mov)}
+                          >
+                            Edit
+                          </label>
+                          <label
+                            htmlFor="my-modal-4"
+                            className="btn btn-error btn-xs"
+                            onClick={() => selectedEdit(mov)}
+                          >
+                            Delete
+                          </label>
 
-                      <label
-                        htmlFor="my-modal-11"
-                        className="btn btn-success btn-xs"
-                        onClick={() =>
-                          navigate("/cinema/review/" + mov.id, {
-                            replace: true,
-                          })
-                        }
-                      >
-                        View reviews
-                      </label>
-                    </div>
-                  </th>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                          <label
+                            htmlFor="my-modal-11"
+                            className="btn btn-success btn-xs"
+                            onClick={() =>
+                              navigate("/cinema/review/" + mov.id, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            View reviews
+                          </label>
+                        </div>
+                      </th>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </div>
+          </table>
+        </InfiniteScroll>
       </div>
       <hr />
+      {/*
       <div className="flex gap-3 justify-center mt-3">
         <button
           className="btn btn-ghost glass"
@@ -577,7 +685,7 @@ function CinMovies() {
         >
           Next
         </button>
-      </div>
+      </div> */}
 
       {/* edit modal */}
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
@@ -903,6 +1011,22 @@ function CinMovies() {
           </div>
         </div>
       </div>
+
+      {/* csv upload module */}
+      <input type="checkbox" id="my-modal-9" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <div className="flex justify-center">
+            <input type="file" onChange={event => handleFileUpload(event, ['title', 'duration', 'description', 'genres', 'price', 'movieImages'])} />
+          </div>
+          <div className="modal-action">
+            <label htmlFor="my-modal-9" className="btn" onClick={addWithCSV}>
+              Done
+            </label>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

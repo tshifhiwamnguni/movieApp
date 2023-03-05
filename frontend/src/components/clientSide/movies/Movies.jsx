@@ -105,7 +105,7 @@ getMovies()
     localStorage.setItem('MName', data.attributes.title)
     console.log(data.attributes.title)
     localStorage.setItem('Image', data.attributes.movieImage)
-      navigate('../book')
+      // navigate('../book')
    
   }
 
