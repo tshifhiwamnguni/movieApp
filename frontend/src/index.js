@@ -8,13 +8,13 @@ import { CinemaContextProvider } from "./context/CinemaContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-
+<GoogleOAuthProvider clientId="826009773988-aktc1gclogs78ccdpe4e3gd2flj4mcob.apps.googleusercontent.com">
     <React.StrictMode>
     <CinemaContextProvider>
       <App />
     </CinemaContextProvider>
     </React.StrictMode>
-  
+    </GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

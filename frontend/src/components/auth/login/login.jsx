@@ -10,12 +10,15 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import jwt_decode from "jwt-decode";
 import Bac from "../../back/back";
 import { AiFillQuestionCircle } from "react-icons/ai";
-// import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import { googleLogout, useGoogleLogin, GoogleLogin } from '@react-oauth/google';
+
 
 function Login() {
   const [loading, setLoading] = useState(false);
   const [ user, setUser ] = useState([]);
+  console.log(user);
   const [ profile, setProfile ] = useState([]);
+  console.log(profile);
 
   const navigate = useNavigate();
   const [fields, errors, form] = useFormInputValidation(
@@ -33,16 +36,30 @@ function Login() {
     navigate("forgot", { replace: true });
   }
 
-  // const googlelogin = useGoogleLogin({
-  //   onSuccess: (codeResponse) => {setUser(codeResponse)
-    
-  //   },
-  //   onError: (error) => console.log('Login Failed:', error)
-  // });
+  const googlelogin = useGoogleLogin({
+    onSuccess: (codeResponse) =>{
+      console.log(codeResponse);
+      getUserInfo(codeResponse)
+    },
+    onError: (error) => console.log('Login Failed:', error)
+});
 
-  const registerGoogleLogin = async () => {
-
+const getUserInfo = (data) => {
+  setUser(data)
+  if (user) {
+    axios
+        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+            headers: {
+                Authorization: `Bearer ${user.access_token}`,
+                Accept: 'application/json'
+            }
+        })
+        .then((res) => {
+            setProfile(res.data);
+        })
+        .catch((err) => console.log(err));
   }
+}
 
   const login = async (e) => {
     e.preventDefault();
@@ -104,26 +121,7 @@ function Login() {
           setLoading(false);
         });
     }
-  };
-
-//   useEffect(
-//     () => {
-//         if (user) {
-//             axios
-//                 .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-//                     headers: {
-//                         Authorization: `Bearer ${user.access_token}`,
-//                         Accept: 'application/json'
-//                     }
-//                 })
-//                 .then((res) => {
-//                     setProfile(res.data);
-//                 })
-//                 .catch((err) => console.log(err));
-//         }
-//     },
-//     [ user ]
-// );
+  };  
 
   return (
     <div>
@@ -146,7 +144,7 @@ function Login() {
               ""
             )}
             <div className="card-body">
-              <form onSubmit={login} noValidate autoComplete="on">
+              <form noValidate autoComplete="on">
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
@@ -192,10 +190,10 @@ function Login() {
                   </span>
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" type="submit">
+                  <button className="btn btn-primary" onClick={login} type="submit">
                     Login
                   </button>
-                  {/* <button className="btn btn-primary" onClick={() => googlelogin()}> Google 🚀 </button> */}
+                  <button onClick={() => googlelogin()}>Sign in with Google 🚀 </button>
                 </div>
                 <span>
                   Don't have an account?{" "}
