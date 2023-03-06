@@ -31,4 +31,9 @@
     40% { transform: scale(1.0) }
   }
   
-  
+  .infinite-scroll-component .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }

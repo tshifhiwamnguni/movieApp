@@ -40,7 +40,7 @@ function Theatre() {
 
   const getTheatreShows = async () => {
     setLoading(true);
-    // console.log(theatreID.current);
+    console.log(theatreID.current);
     await axios
       .get(`${API}/theatres/${theatreID.current}?populate=*`, {
         headers: {

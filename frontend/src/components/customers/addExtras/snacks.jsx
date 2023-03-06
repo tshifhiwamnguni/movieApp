@@ -51,9 +51,6 @@ export default function Example() {
         console.log(err);
       });
 
-    // console.log("location ", localStorage.getItem("Location"));
-    // console.log("id ", localStorage.getItem("PlaceId"));
-    // console.log("name ", localStorage.getItem("PlaceName"));
 
     console.log("seats ", localStorage.getItem("seats"));
     setMId(localStorage.getItem("MId"));
