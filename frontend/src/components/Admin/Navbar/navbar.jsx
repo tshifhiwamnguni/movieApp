@@ -8,6 +8,7 @@ import { FiUsers } from "react-icons/fi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import "./navbar.css";
 import { Outlet } from "react-router-dom";
+import { googleLogout } from '@react-oauth/google';
 
 function Home() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function Home() {
 
   function logout() {
     removeToken();
+    googleLogout();
     navigate("/login/", { replace: true });
   }
 

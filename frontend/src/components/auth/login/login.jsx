@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API } from "../../environment/constant";
 import "./login.css";
@@ -10,7 +10,7 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import jwt_decode from "jwt-decode";
 import Bac from "../../back/back";
 import { AiFillQuestionCircle } from "react-icons/ai";
-import { googleLogout, useGoogleLogin, GoogleLogin } from '@react-oauth/google';
+import { googleLogout, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 
 
 function Login() {
@@ -36,30 +36,13 @@ function Login() {
     navigate("forgot", { replace: true });
   }
 
-  const googlelogin = useGoogleLogin({
-    onSuccess: (codeResponse) =>{
-      console.log(codeResponse);
-      getUserInfo(codeResponse)
-    },
-    onError: (error) => console.log('Login Failed:', error)
-});
-
-const getUserInfo = (data) => {
-  setUser(data)
-  if (user) {
-    axios
-        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-            headers: {
-                Authorization: `Bearer ${user.access_token}`,
-                Accept: 'application/json'
-            }
-        })
-        .then((res) => {
-            setProfile(res.data);
-        })
-        .catch((err) => console.log(err));
-  }
-}
+  const responseMessage = (response) => {
+    console.log(response);
+    navigate("/client/clientHome",{ replace: true })
+  };
+  const errorMessage = (error) => {
+    console.log(error);
+  };
 
   const login = async (e) => {
     e.preventDefault();
@@ -121,7 +104,11 @@ const getUserInfo = (data) => {
           setLoading(false);
         });
     }
-  };  
+  };
+  
+  useEffect(() => {
+    console.log(`Hello world`);
+  },[user]);
 
   return (
     <div>
@@ -189,11 +176,11 @@ const getUserInfo = (data) => {
                     </Link>
                   </span>
                 </div>
-                <div className="form-control mt-6">
+                <div className="form-control my-6 flex gap-8">
                   <button className="btn btn-primary" onClick={login} type="submit">
                     Login
                   </button>
-                  <button onClick={() => googlelogin()}>Sign in with Google 🚀 </button>
+                  <GoogleLogin className="btn btn-primary" onSuccess={responseMessage} onError={errorMessage} />
                 </div>
                 <span>
                   Don't have an account?{" "}

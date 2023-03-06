@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -8,7 +8,7 @@ import { CinemaContextProvider } from "./context/CinemaContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-<GoogleOAuthProvider clientId="826009773988-aktc1gclogs78ccdpe4e3gd2flj4mcob.apps.googleusercontent.com">
+<GoogleOAuthProvider clientId="901368940702-2ierv50r8ub8c222vg0n86ditqvvkb9l.apps.googleusercontent.com">
     <React.StrictMode>
     <CinemaContextProvider>
       <App />
