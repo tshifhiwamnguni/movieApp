@@ -90,6 +90,7 @@ function Review() {
   useEffect(() => {
     getData();
   }, []);
+  
   return (
     <div className="mt-24">
       <h2 className="h-12 w-auto text-center text-3xl font-bold text-gray-900 ">

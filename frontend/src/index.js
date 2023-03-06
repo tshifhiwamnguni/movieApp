@@ -1,14 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {CinemaContextProvider} from './context/CinemaContext'
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { CinemaContextProvider } from "./context/CinemaContext";
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
- <CinemaContextProvider>
-    <App />
- </CinemaContextProvider>
+    <CinemaContextProvider>
+      <App />
+    </CinemaContextProvider>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function

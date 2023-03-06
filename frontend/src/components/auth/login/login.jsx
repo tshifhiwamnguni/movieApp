@@ -30,16 +30,6 @@ function Login() {
     navigate("forgot", { replace: true });
   }
 
-
-
-
-
-
-
-
-
-
-
   const login = async (e) => {
     e.preventDefault();
 
@@ -110,16 +100,6 @@ function Login() {
         });
     }
   };
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div>
