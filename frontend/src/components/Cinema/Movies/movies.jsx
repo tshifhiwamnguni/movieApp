@@ -229,6 +229,7 @@ function CinMovies() {
       })
       .then((data) => {
         SUCCESS("Successfully deleted");
+        getMovies()
       })
       .catch((error) => {
         ERROR(error.response.data.error.message);
@@ -431,7 +432,10 @@ function CinMovies() {
       .catch((error) => {
         console.log(error);
         ERROR(error.response.data.error.message);
-      }).finally(()=>setLoading(false));
+      }).finally(()=>{
+
+        getMovies();
+        setLoading(false)});
   }
   function addWithCSV() {
     if (isValidFormat) {
@@ -443,7 +447,7 @@ function CinMovies() {
             description: element.description,
             duration: element.duration,
             cinema: parseInt(cinemaID.current),
-            genres: null,
+            genres: element.genres.split(','),
             price: element.price,
             movieImage: element.movieImages
           }
@@ -543,12 +547,12 @@ function CinMovies() {
             loading ? <h4 className="text-center mt-2">Loading...</h4> : ""
           }
           scrollableTarget="scrollableDiv"
-        >
-          <table className="table w-full z-0">
-            <div
+        >  <div
               id="scrollableDiv"
               style={{ height: "70vh", overflow: "auto" }}
             >
+          <table className="table w-full z-0">
+          
               <thead>
                 <tr>
                   <th></th>
@@ -664,8 +668,8 @@ function CinMovies() {
                   );
                 })}
               </tbody>
-            </div>
-          </table>
+           
+          </table> </div>
         </InfiniteScroll>
       </div>
       <hr />
