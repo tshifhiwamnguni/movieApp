@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { API } from "../../environment/constant";
 import "./login.css";
@@ -10,9 +10,12 @@ import { ERROR, SUCCESS } from "../../environment/toast";
 import jwt_decode from "jwt-decode";
 import Bac from "../../back/back";
 import { AiFillQuestionCircle } from "react-icons/ai";
+// import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 function Login() {
   const [loading, setLoading] = useState(false);
+  const [ user, setUser ] = useState([]);
+  const [ profile, setProfile ] = useState([]);
 
   const navigate = useNavigate();
   const [fields, errors, form] = useFormInputValidation(
@@ -30,15 +33,16 @@ function Login() {
     navigate("forgot", { replace: true });
   }
 
+  // const googlelogin = useGoogleLogin({
+  //   onSuccess: (codeResponse) => {setUser(codeResponse)
+    
+  //   },
+  //   onError: (error) => console.log('Login Failed:', error)
+  // });
 
+  const registerGoogleLogin = async () => {
 
-
-
-
-
-
-
-
+  }
 
   const login = async (e) => {
     e.preventDefault();
@@ -60,16 +64,10 @@ function Login() {
           console.log('user ' ,user);
           setToken(jwt);
           // navigate("/admin/", { replace: true });
-
           const token = localStorage.getItem("jwt");
           let decoded = jwt_decode(token);
           let ID = decoded.id;
-    
-      // if (localStorage.getItem("seats")) {
-      //   navigate("/client/snackss");
-      // }
-    
-
+  
           axios
             .get(`${API}/users/${ID}?populate=*`)
             .then((data) => {
@@ -104,22 +102,28 @@ function Login() {
         })
         .finally(() => {
           setLoading(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2000);
         });
     }
   };
 
-
-
-
-
-
-
-
-
-
+//   useEffect(
+//     () => {
+//         if (user) {
+//             axios
+//                 .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+//                     headers: {
+//                         Authorization: `Bearer ${user.access_token}`,
+//                         Accept: 'application/json'
+//                     }
+//                 })
+//                 .then((res) => {
+//                     setProfile(res.data);
+//                 })
+//                 .catch((err) => console.log(err));
+//         }
+//     },
+//     [ user ]
+// );
 
   return (
     <div>
@@ -191,6 +195,7 @@ function Login() {
                   <button className="btn btn-primary" type="submit">
                     Login
                   </button>
+                  {/* <button className="btn btn-primary" onClick={() => googlelogin()}> Google 🚀 </button> */}
                 </div>
                 <span>
                   Don't have an account?{" "}

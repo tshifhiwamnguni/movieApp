@@ -9,14 +9,14 @@ import { BiArrowToLeft } from "react-icons/bi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import "./Client.css";
 import { Outlet } from "react-router-dom";
+import create from "zustand";
+
 function ClientSide() {
+  
   const navigate = useNavigate();
   const [activeNav, setActiveNav] = useState("home");
-  // useEffect(() => {
-  //   // if (!localStorage.getItem("jwt")) {
-  //   //   navigate("/login/", { replace: true });
-  //   // }
-  // });
+  const useStore = create(state => (state.username));
+  
 
   function logout() {
     removeToken();
@@ -27,6 +27,7 @@ function ClientSide() {
 
   return (
     <>
+    {/* <h1 className="text-3xl">HELLO FROM THE BIG GUY</h1> */}
       <div className="drawer ">
         <input id="my-drawer-3  " type="checkbox" className="drawer-toggle " />
 

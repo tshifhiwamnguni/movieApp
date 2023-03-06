@@ -200,9 +200,9 @@ function App() {
 
             <Route path="/landing" element={<Landing />}></Route>
 
-            <Route path="/review" element={<Review />}></Route>
+            {/* <Route path="/review" element={<Review />}></Route> */}
             <Route path="/test" element={<Test />}></Route>
-            <Route path="/reviews" element={<Reviews />}></Route>
+            {/* <Route path="/reviews" element={<Reviews />}></Route> */}
             <Route path="/stars" element={<StarRatings />}></Route>
             <Route path="/filter" element={<Filter />}></Route>
             <Route path="/snackss" element={<Example />}></Route>

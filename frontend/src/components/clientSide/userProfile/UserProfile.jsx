@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "./UserProfile.css";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import create from "zustand"
+import useStore from "../../customers/store";
 
 function UserProfile() {
   let ID;
@@ -25,6 +27,10 @@ function UserProfile() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const navigate = useNavigate();
+  const username = useStore(state => (state.loggedUser = name))
+  const setUser = useStore(state => state.setUser)
+  console.log(username)
+
 
   useEffect(() => {
     let decoded = jwt_decode(token);
@@ -33,13 +39,12 @@ function UserProfile() {
 
     setLoading(true);
 
-    axios
-      .get(`${API}/users/${ID}?populate=*`)
-      .then((data) => {
+    axios.get(`${API}/users/${ID}?populate=*`).then((data) => {
         console.log(data);
 
         setEmail(data.data.email);
         setName(data.data.username);
+        localStorage.setItem("username", data.data.username);
         setPhone(data.data.cellphone);
         setFirstname(data.data.firstname);
         setLastname(data.data.lastname);
@@ -67,6 +72,7 @@ function UserProfile() {
         .put(`${API}/users/${userI}`, data)
         .then((data) => {
           SUCCESS("Profile updated.");
+          
         })
         .catch((error) => {
           ERROR(error.response.data.error.message);
@@ -204,7 +210,7 @@ function UserProfile() {
                   />
                 </label>
                 <label className="btn btn-primary radius mt-2" onClick={()=>{
-                  navigate('../history')
+                  navigate('../history'); setUser()
                 }}>
                   booking history
                 </label>

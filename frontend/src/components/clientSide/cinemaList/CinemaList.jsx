@@ -83,7 +83,7 @@ function CinemaList() {
                     {element.attributes.name}
                   </h2>
 
-                  <div className="card-actions">
+                  <div className="card-actions w-fit">
                     <button
                       className="btn btn-primary radius"
                       onClick={() => {
@@ -99,6 +99,7 @@ function CinemaList() {
                     >
                       view details
                     </label>
+                   
                     {/* 
                     <label
                       onClick={addReview}
